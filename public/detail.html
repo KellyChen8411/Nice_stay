@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Nice Stay</title>
+        <link rel="stylesheet" href="./css/basic_nav_footer.css">
+        <link rel="stylesheet" href="./css/detail.css">
+        <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+        </script>
+        <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+        <script src="./js/showPersonalList.js"></script>
+    </head>
+    <body>
+        <nav>
+            <div class="logoContainer"><img src="./images/Logo.png"></div>
+            <div class="landlordContainer">成為房東</div>
+            <div id="hamburgerContainer" class="hamburgerContainer"><img src="./images/hamburger_icon.png"></div>
+            <div id="personalArea" class="personalArea PAHide">
+                <div><a>訊息</a></div>
+                <div><a>旅程</a></div>
+                <div><a>心願單</a></div>
+                <div><a>登出</a></div>
+            </div>
+        </nav>
+        <hr> 
+        
+        <div id="outter_div" class="outter_div">
+            <div class="title_con">
+                <h2>台北心享庭園民宿</h2>
+                <i class="star icon"></i><span id="room_rate">4.9</span>&nbsp&nbsp<span>/</span>&nbsp&nbsp<span id="comment_count">2則評價</span><span> . </span><span>台北、大同</span>
+                <p>8位.4間臥室.4張床.2間衛浴</p>
+            </div>
+            <div id="image_con" class="image_con">
+                <div class="main_image">
+                    <img class="image1" src="./tempPic/main_1655537652969.jpg">
+                </div>
+                <div class="side_image">
+                    <div class="side1">
+                        <img class="image2" src="./tempPic/220515849.jpg">
+                    </div>
+                    <div class="side2">
+                        <img class="image3" src="./tempPic/236007803.jpg">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="detail_outter">
+                <div class="detail_con">
+                    <div class="feature_outter">
+                        <h2>特色</h2>
+                        <div class="feature_con">
+                            <img src="./images/landlord.png">
+                            <h4>蓓蓓是超讚房東</h4>
+                        </div>
+                        <div class="feature_con">
+                            <img src="./images/calendar.png">
+                            <h4>入住前3天可免費取消</h4>
+                        </div>
+                    </div>
+
+                    <div class="introduce_con">
+                        <h2>關於</h2>
+                        <p>最遠的 不是如何遠離現實生活的塵囂 而是如何淡忘放不下的牽絆 或許應該輕撫去自限的範疇 用最單純的方式 換得簡單的美好</p>
+                    </div>
+
+                    <div class="facility_outter">
+                        <h2>有提供的設備與服務</h2>
+                        <div class="facility_inner">
+                            <div class="facility_con">
+                                <img src="./images/air-conditioner.png">
+                                <h4>空調</h4>
+                            </div>
+                            <div class="facility_con">
+                                <img src="./images/babybed.png">
+                                <h4>嬰兒床</h4>
+                            </div>
+                            <div class="facility_con">
+                                <img src="./images/bathtub.png">
+                                <h4>浴缸</h4>
+                            </div>
+                            <div class="facility_con">
+                                <img src="./images/kitchen.png">
+                                <h4>廚房</h4>
+                            </div>
+                            <div class="facility_con">
+                                <img src="./images/television.png">
+                                <h4>電視</h4>
+                            </div>
+                            <div class="facility_con">
+                                <img src="./images/washing-machine.png">
+                                <h4>洗衣機</h4>
+                            </div>
+                            <div class="facility_con">
+                                <img src="./images/wifi.png">
+                                <h4>WiFi</h4>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="ckeck_con">
+                    <form>
+                        <h3>$12000 TWD／晚</h3>
+                        <div class="book_date">
+                            <div class="checkin_date">  
+                                <p>入住</p>
+                                <input type="text" name="checkin_date" value="2022-06-23">
+                            </div>
+                            <div class="checkout_date">  
+                                <p>退房</p>
+                                <input type="text" name="checkin_date" value="2022-06-25">
+                            </div>
+                        </div>
+                        <button>預定</button>
+                        <div class="fee_con">
+                            <div>
+                                <p>訂房費(2晚)</p>
+                                <p>24000 TWD</p>
+                            </div>
+                            <div>
+                                <p>清潔費</p>
+                                <p>1920 TWD</p>
+                            </div>
+                            <div>
+                                <p>稅金</p>
+                                <p>2400 TWD</p>
+                            </div>
+                            <hr>
+                            <div>
+                                <p>總價</p>
+                                <p class="amount_fee">28320 TWD</p>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- <footer>
+            <div>
+                <p><small>&copy 2022 Nice Stay,Inc</small></p>
+            </div>
+            <p>.</p>
+            <div>
+                <p>隱私</p>
+            </div>
+            <p>.</p>
+            <div>
+                <p>相關條款</p>
+            </div>
+        </footer> -->
+
+    </body>
+</html>
