@@ -13,6 +13,7 @@
         </script>
         <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
         <script src="./js/showPersonalList.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     </head>
     <body>
         <nav>
@@ -40,10 +41,10 @@
                 </div>
                 <div class="side_image">
                     <div class="side1">
-                        <img class="image2" src="./tempPic/220515849.jpg">
+                        <img class="image2" src="./tempPic/1655652802.jpg">
                     </div>
                     <div class="side2">
-                        <img class="image3" src="./tempPic/236007803.jpg">
+                        <img class="image3" src="./tempPic/1655652918.jpg">
                     </div>
                 </div>
             </div>
@@ -61,12 +62,12 @@
                             <h4>入住前3天可免費取消</h4>
                         </div>
                     </div>
-
+                    <hr>
                     <div class="introduce_con">
                         <h2>關於</h2>
                         <p>最遠的 不是如何遠離現實生活的塵囂 而是如何淡忘放不下的牽絆 或許應該輕撫去自限的範疇 用最單純的方式 換得簡單的美好</p>
                     </div>
-
+                    <hr>
                     <div class="facility_outter">
                         <h2>有提供的設備與服務</h2>
                         <div class="facility_inner">
@@ -138,11 +139,46 @@
                     </form>
                 </div>
             </div>
+            <hr>
+            <div class="comment_outter">
+                <div class="comment_summary">
+                    <i class=" large star icon"></i>
+                    <h2>4.9 (2則評價)</h2>
+                </div>
+                <div class="comment_con">
+                    <div>
+                        <h4>叮叮</h4>
+                        <small>2018年9月</small>
+                        <p>房東人很好 住宿環境有電梯可以上下樓 對於行李重且不少的我們 方便許多 B1有健身房 很可惜沒有時間使用到 房型跟床的大小3個女生睡也剛剛好！</p>
+                     </div>
+                     <div>
+                         <h4>Iteng</h4>
+                         <small>2018年9月</small>
+                         <p>超漂亮的房間！和我們想像中完全一樣，房間設備完善，甚至還有冰箱和投影儀。唯一的缺點應該是真的比較遠，出市中心要比較久的時間，但我們來之前己經做好心理準備了所以也還好~</p>
+                     </div>
+                </div>
+            </div>
+            <hr>
+            <div class="location_outter">
+                <h2>位置</h2>
+                <div class="nearby_con">
+                    <button>大眾運輸</button>
+                    <button>餐廳</button>
+                    <button>便利商點</button>
+                </div>
+                <div id="map" class="map"></div>
+            </div>
+            <hr>
+            <div class="landlord_outter">
+                <h2>房東:蓓蓓</h2>
+                <i class="star icon"></i><sapn>4.5</sapn>
+                <p>語言: 中文、English、日本語</p>
+                <button>連絡房東</button>
+            </div>
+            
         </div>
 
-
-
-        <!-- <footer>
+        <footer>
             <div>
                 <p><small>&copy 2022 Nice Stay,Inc</small></p>
             </div>
@@ -154,7 +190,12 @@
             <div>
                 <p>相關條款</p>
             </div>
-        </footer> -->
+        </footer>
 
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC-DBhG_HrDgT9BGrAt5-QhgFRG5rskpLA&callback=initMap&v=weekly"
+            defer
+        ></script>
+        <script src="./js/map.js"></script>
     </body>
 </html>

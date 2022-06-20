@@ -14,3 +14,5 @@ app.use('/api/' + process.env.API_VERSION, [
 app.listen(3000, async () => {
     console.log('Application is now running')
 })
+
+// https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=25.041038%2C121.551513&radius=1000&type=restaurant&key=AIzaSyC-DBhG_HrDgT9BGrAt5-QhgFRG5rskpLA
