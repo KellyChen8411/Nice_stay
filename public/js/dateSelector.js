@@ -70,9 +70,19 @@ $( function() {
       $('#houseArea').click(addToFavorite);
 
       function addToFavorite(e){
-        e.target.classList.toggle("grey");
-        e.target.classList.toggle("red");
-        console.log(e.target.parentElement.dataset.id);
+        console.log(e.target.nodeName);
+        if(e.target.nodeName === "I"){
+          e.target.classList.toggle("grey");
+          e.target.classList.toggle("red");
+          console.log(e.target.parentElement.dataset.id);
+        }
+        if(e.target.nodeName === "IMG"){
+          let house_id = e.target.dataset.id;
+          let startDate = $('#startDate').val();
+          let endDate = $('#endDate').val();
+          let peopleCount = $('#people').val().split(',')[0];
+          window.open(`/detail.html?id=${house_id}&startDate=${startDate}&endDate=${endDate}&people_count=${peopleCount}`, 'Nice Stay')
+        }
       }
 
       $( "#price_range" ).slider({

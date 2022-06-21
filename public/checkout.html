@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Nice Stay</title>
+        <link rel="stylesheet" href="./css/basic_nav_footer.css">
+        <link rel="stylesheet" href="./css/checkout.css">
+        <!-- <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/smoothness/jquery-ui.css"> -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+        <script
+            src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+            crossorigin="anonymous">
+        </script>
+        <!-- <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script> -->
+    </head>
+    <body>
+        <nav>
+            <div class="logoContainer"><a href="/"><img src="./images/Logo.png"></a></div>
+        </nav>
+        <hr> 
+        
+        <div class="checkout_outter">
+            <div class="checkout_inner">
+                <div>
+                    <h2>預定詳情</h2>
+                    <div class="ckeck_con">
+                        <form>
+                            <h3 id="people_count"></h3>
+                            <div class="book_date">
+                                <div class="checkin_date">  
+                                    <p>入住</p>
+                                    <input type="text" name="checkin_date" id="checkin_date" placeholder="請選擇入住日期">
+                                </div>
+                                <div class="checkout_date">  
+                                    <p>退房</p>
+                                    <input type="text" name="checkout_date" id="checkout_date" placeholder="請選擇結束日期">
+                                </div>
+                            </div>
+                            <div class="fee_con">
+                                <div>
+                                    <p id="room_fee_title">訂房費</p>
+                                    <p id="room_fee"></p>
+                                </div>
+                                <div>
+                                    <p>清潔費</p>
+                                    <p id="clean_fee"></p>
+                                </div>
+                                <div>
+                                    <p>稅金</p>
+                                    <p id="tax_fee"></p>
+                                </div>
+                                <hr>
+                                <div>
+                                    <p>總價</p>
+                                    <p id="amount_fee" class="amount_fee"></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+                <div class="email_outter">
+                    <h2>寄送email</h2>
+                    <!-- <small>收件人:</small> -->
+                    <h4>收件人</h4>
+                    <div class="ui large input email_con">
+                        <input type="text" id="email" placeholder="email...">
+                    </div>
+                </div>
+                <hr>
+                <div class="cancel_outter">
+                    <h2>退訂政策</h2>
+                    <h4 id="cancel_plan"></h4>
+                </div>
+                <hr>
+                <div class="creditcard_outter">
+                    <h2>付款</h2>
+                    <form class="ui form checkoutForm">
+                        <div class="field">
+                          <label>卡號</label>
+                          <input type="text" name="card_num" placeholder="請輸入卡號">
+                        </div>
+                        <div class="field">
+                          <label>到期日</label>
+                          <input type="text" name="card_duedate" placeholder="請輸入到期日">
+                        </div>
+                        <div class="field">
+                            <label>安全碼</label>
+                            <input type="text" name="card_code" placeholder="請輸入安全碼">
+                          </div>
+                        <button class="checkout_btn" type="submit">確認預定</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+
+        <footer>
+            <div>
+                <p><small>&copy 2022 Nice Stay,Inc</small></p>
+            </div>
+            <p>.</p>
+            <div>
+                <p>隱私</p>
+            </div>
+            <p>.</p>
+            <div>
+                <p>相關條款</p>
+            </div>
+        </footer>
+        
+        <script src="./js/checkout.js"></script>
+    </body>
+</html>

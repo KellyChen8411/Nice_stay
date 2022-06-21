@@ -16,20 +16,18 @@
     </head>
     <body>
         <nav>
-            <div class="logoContainer"><img src="./images/Logo.png"></div>
+            <div class="logoContainer"><a href="/"><img src="./images/Logo.png"></a></div>
             <div id="mainSearch" class="mainSearch">
                     <select name="area" id="area">
                         <option value="0">請選擇地區</option>
                     </select>
                     <p>|</p>
-                    <input id="startDate" name="startDate" placeholder="開始日期">
+                    <input id="startDate" name="startDate" placeholder="開始日期" autocomplete="off">
                     <p>|</p>
-                    <input id="endDate" name="endDate" placeholder="結束日期">
+                    <input id="endDate" name="endDate" placeholder="結束日期" autocomplete="off">
                     <p>|</p>
-                    <input id="people" name="people" placeholder="人數">
+                    <input id="people" name="people" placeholder="人數" autocomplete="off">
                     <div id="searchIcon" class="searchIcon"><img src="./images/search.png" style="width: 30px;"></div>
-                
-                <!-- <div id="searchIcon" class="searchIcon"><img src="./images/search.png" style="width: 30px;"></div> -->
             </div>
             <div id="detailSearch" class="detailSearch"><a>細部篩選</a></div>
             <div class="landlordContainer">成為房東</div>
@@ -152,15 +150,15 @@
         
         <div id="houseArea" class="houseArea">
             <div id="houseItem" class="houseItem" style="display: none;">
-                <div class="houseImgContainer">
-                    <img src="./images/house.jpg">
-                    <a id="like" class="like" data-id="1">
-                        <i class="large link grey heart icon"></i>
-                    </a>
-                </div>
-                <p id="houseTitle"></p>
-                <p id="housePrice"></p>
-                <p id="houseConfig"></p>
+                    <div class="houseImgContainer">
+                        <img class="house_image" src="./images/house.jpg">
+                        <a id="like" class="like" data-id="1">
+                            <i class="large link grey heart icon"></i>
+                        </a>
+                    </div>
+                    <p id="houseTitle"></p>
+                    <p id="housePrice"></p>
+                    <p id="houseConfig"></p>
             </div>
         </div>
 
@@ -179,7 +177,6 @@
         </footer>
 
         <script src="./js/renderHouse.js"></script>
-        <!-- <script src="./js/renderCity.js"></script> -->
         <script src="./js/search.js"></script>
     </body>
 </html>

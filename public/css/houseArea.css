@@ -20,6 +20,7 @@ p{
     column-gap: 16px;
 }
 
+
 .houseItem{
     display: flex;
     flex-direction: column;
@@ -39,6 +40,7 @@ p{
     border-radius: 25px;
     width: 100%;
     height: 100%;
+    cursor: pointer;
 }
 
 .like{

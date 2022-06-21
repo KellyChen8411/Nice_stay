@@ -1,5 +1,6 @@
 require('dotenv').config();
 const houseQuery = require('../models/house_model');
+const axios = require('axios');
 
 
 const createHouse = async (req, res) => {
@@ -43,7 +44,7 @@ const createHouse = async (req, res) => {
 
 const selectAllHouse = async (req, res) => {
     const houses = await houseQuery.selectAllHouse();
-    const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN + 'main/'
+    const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN + '/main/'
     houses.forEach(house=>{
         house.image_url = imageURL_prefix + house.image_url;
     })
@@ -52,22 +53,68 @@ const selectAllHouse = async (req, res) => {
 }
 
 const houseSearch = async (req, res) => {
-    // console.log(req.query);
-    // console.log(Object.entries(req.query));
     let queryTest = Object.entries(req.query);
     let houses = await houseQuery.houseSearch(queryTest);
-    // console.log(queryTest[3][1].split(','));
-    // const houses = await houseSearch(req.query);
-    // const houses = await houseQuery.houseSearch();
-    const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN + 'main/'
+    const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN + '/main/'
     houses.forEach(house=>{
         house.image_url = imageURL_prefix + house.image_url;
     })
     res.json(houses);
 }
 
+const houseDatail = async (req, res) => {
+    const {id} = req.params;
+    //get house data
+    const houses = await houseQuery.houseDatail(id);
+    houses[0].sideImages_url = [];
+    houses.forEach(house=>{
+        house.image_url = process.env.CLOUDFRONT_DOMAIN + '/main/' + house.image_url;
+        houses[0].sideImages_url.push(process.env.CLOUDFRONT_DOMAIN + '/side_image/' + house.sideImage_url);
+    })
+    let houseData = houses[0];
+    //get amenity
+    const amenityData = await houseQuery.houseAmentity(id);
+    amenityData.forEach(amenity=>{
+        amenity[1] = process.env.CLOUDFRONT_DOMAIN + amenity[1];
+    })
+    //get review
+    const reviewData = await houseQuery.houseReview([id, houseData.landlord_id, id]);
+
+    res.json({house: houseData, amenity: amenityData, review: reviewData});
+}
+
+const houseNearby = async (req, res) => {
+    let { lat, lon, type } = req.query;
+    let URL;
+    if(type === "traffic"){
+        URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat}%2C${lon}&radius=1000&type=bus_station&key=${process.env.GOOGLEAPI_KEY}`;
+    }else if(type === "restaurant"){
+        URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat}%2C${lon}&radius=1000&type=restaurant&key=${process.env.GOOGLEAPI_KEY}`;
+    }else if(type === "store"){
+        URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat}%2C${lon}&radius=1000&type=convenience_store&key=${process.env.GOOGLEAPI_KEY}`;
+    }
+
+    var config = {
+        method: 'get',
+        url: URL,
+        headers: { }
+    };
+
+    let nearbyLocations = await axios(config);
+    let nearbyLocationsData = nearbyLocations.data;
+    let nearbyLocationSet = [];
+    nearbyLocationsData.results.forEach(element => {
+        let placeGro = element.geometry.location
+        nearbyLocationSet.push({lat: placeGro.lat, lon: placeGro.lng , name: element.name})
+    });
+    console.log(nearbyLocationSet);
+    res.json(nearbyLocationSet);
+}
+
 module.exports = {
     createHouse,
     selectAllHouse,
-    houseSearch
+    houseSearch,
+    houseDatail,
+    houseNearby
 }

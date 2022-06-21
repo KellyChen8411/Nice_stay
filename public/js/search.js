@@ -9,12 +9,11 @@ async function submitMainSearch(){
     // renderHouseData(houseDatas);
 
     //check select condition
-    const serchItems = ['area', 'startDate', 'endDate', 'people'];
+    const serchItems = ['startDate', 'endDate', 'area', 'people'];
     let searchURL = '/api/1.0/houses/search?';
     serchItems.forEach(item => {
         let value = $(`#${item}`).val()
         if(item === 'area'){
-            console.log('enter');
             if(value != '0'){
                 searchURL += `${item}=${value}&`
             }

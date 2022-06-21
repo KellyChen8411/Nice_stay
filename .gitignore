@@ -3,6 +3,7 @@
 **/*.jpge
 **/*.png
 **/*.jpg
+test.js
 
 # Prerequisites
 *.d
