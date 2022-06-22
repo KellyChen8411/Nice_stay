@@ -9,7 +9,7 @@ houseQuery.createHouse = async (values)=>{
 }
 
 houseQuery.selectAllHouse = async ()=>{
-    let sql = "SELECT a.id, a.title, a.people_count, a.room_count, a.bed_count, a.bathroom_count, b.name as city_name, a.price, a.image_url FROM house a left join city b on a.city_id = b.id"
+    let sql = "SELECT a.id, a.title, a.people_count, a.room_count, a.bed_count, a.created_at , a.bathroom_count, b.name as city_name, a.price, a.image_url FROM house a left join city b on a.city_id = b.id"
     const [result] = await pool.query(sql);
     return result;
 }
@@ -89,10 +89,9 @@ houseQuery.houseSearch = async (selectConditions)=>{
         }
     }
     let sql = prefix_sql+middle_sql+suffix_sql;
-    console.log(sql);
-    console.log(sql_binding);
+    // console.log(sql);
+    // console.log(sql_binding);
     const [result] = await pool.query(sql, sql_binding);
-    console.log(result);
     return result;
 }
 

@@ -4,6 +4,7 @@
 **/*.png
 **/*.jpg
 test.js
+date.html
 
 # Prerequisites
 *.d

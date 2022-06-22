@@ -38,7 +38,7 @@ const createHouse = async (req, res) => {
     ];
     
     const result = await houseQuery.createHouse(insertValues);
-    console.log(result);
+
     res.send('test');
 }
 
@@ -107,7 +107,7 @@ const houseNearby = async (req, res) => {
         let placeGro = element.geometry.location
         nearbyLocationSet.push({lat: placeGro.lat, lon: placeGro.lng , name: element.name})
     });
-    console.log(nearbyLocationSet);
+    
     res.json(nearbyLocationSet);
 }
 

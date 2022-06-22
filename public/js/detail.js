@@ -8,6 +8,7 @@ let taxFee;
 let amountFee;
 let is_refund=0;
 let refund_duedate;
+let refund_duedate_timestamp;
 const params = new URLSearchParams(window.location.search);
 let house_id = params.get('id');
 let startDate = params.get('startDate');
@@ -25,6 +26,10 @@ function computeDueDate(startDate, duration){
     let today_date = dateTime.setDate(dateTime.getDate()-duration);
     today_date = new Date(today_date).toISOString().split('T')[0];
     return today_date;
+}
+function covertToISOtime(dateString){
+    let time_ISO = dateString + "T23:59:00+0800";
+    return time_ISO;
 }
 
 async function rederData(){
@@ -56,14 +61,34 @@ async function rederData(){
     }
     if(houseData.refund_type === 1){
         //計算離入住前剩餘幾天
-        const today_date = new Date(Date.now() + (8*60*60*1000)).toISOString().split('T')[0];
-        const duration = diffDays(new Date(today_date), new Date(startDate));
+        // const today_date = new Date(Date.now() + (8*60*60*1000)).toISOString().split('T')[0];
+        // const duration = diffDays(new Date(today_date), new Date(startDate));
+        const today_date_moment = moment().tz('Asia/Taipei').format('YYYY-MM-DD');
+        const checkinDate_moment = moment(startDate)
+        const duration = checkinDate_moment.diff(today_date_moment, 'days');
         if(duration>=houseData.refund_duration){
             is_refund = 1;
             //計算取消期限的日期
-            let dueDate = computeDueDate(startDate, houseData.refund_duration);
-            dueDate = dueDate.split('-');
-            refund_duedate = `${dueDate[1]}/${dueDate[2]}`;
+            // let dueDate = computeDueDate(startDate, houseData.refund_duration);
+            // console.log(moment(startDate).format());
+            let dueDate = moment(startDate).subtract(houseData.refund_duration, 'days').format('YYYY-MM-DD');
+            // console.log(startDate);
+            // console.log(houseData.refund_duration);
+            // console.log(dueDate);
+            // console.log(dueDate.format('YYYY-MM-DD'));
+            let dueDate_ISO = covertToISOtime(dueDate);
+            console.log(dueDate_ISO);
+            refund_duedate = moment(dueDate_ISO).format('YYYY-MM-DD HH:mm:ss');
+            refund_duedate_timestamp = moment(dueDate_ISO).valueOf();
+            // console.log(startDate);
+            // console.log(dueDate);
+            // console.log(covertToISOtime(dueDate));
+            // console.log(moment(covertToISOtime(dueDate)).format());
+            // console.log(moment(covertToISOtime(dueDate)).format('YYYY-MM-DD HH:mm:ss'));
+            // console.log(moment(covertToISOtime(dueDate)).valueOf());
+            // console.log(moment(moment(covertToISOtime(dueDate)).format()).valueOf());
+            // console.log(refund_duedate_timestamp);
+    
             //render data
             let clone = $('#feature_con').clone().appendTo($('#feature_outter'));
             clone.find('img').attr('src', "./images/calendar.png");
@@ -178,5 +203,5 @@ async function getNearbyInfo(e){
 $('#checkout_btn').click(gotoCheckout);
 
 function gotoCheckout(){
-    window.location.href = `/checkout.html?startDate=${startDate}&endDate=${endDate}&roomfee=${roomfee}&cleanFee=${cleanFee}&taxFee=${taxFee}&amountFee=${amountFee}&people_count=${people_count}&is_refund=${is_refund}&refund_duedate=${refund_duedate}`;
+    window.location.href = `/checkout.html?startDate=${startDate}&endDate=${endDate}&roomfee=${roomfee}&cleanFee=${cleanFee}&taxFee=${taxFee}&amountFee=${amountFee}&people_count=${people_count}&is_refund=${is_refund}&refund_duedate=${refund_duedate}&refund_duedate_timestamp=${refund_duedate_timestamp}`;
 }
