@@ -12,10 +12,11 @@ nav{
     display: flex !important;
     /* align-items: center; */
     padding: 20px;
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 1;
     background-color: white;
+    width: 100%;
 }
 
 nav>div{
@@ -245,12 +246,9 @@ footer{
     display: flex !important;
     justify-content: center;
     align-items: center;
-    /* position: sticky;
-    bottom: 0; */
-    position: fixed;/*To make it always be at that point.*/
-    top: 100%;/*to make it 100% at the bottom*/
-    transform: translate(0%, -100%);/*To make sure it will calculate from the bottom*/
-    z-index: 2;
+    position: fixed;
+    bottom: 0;
+   
 }
 
 footer>p{

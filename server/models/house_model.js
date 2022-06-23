@@ -3,15 +3,22 @@ const { pool } = require('./mysqlcon');
 const houseQuery = {};
 
 houseQuery.createHouse = async (values)=>{
-    let sql = "INSERT INTO house (title, category_id, description, price, tax_percentage, cleanfee_percentage, people_count, room_count, bed_count, bathroom_count, landlord_id, city_id, region, address, latitude, longitude, refund_type, refund_duration, image_url, created_at, updated_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,CONVERT_TZ(NOW(3),'SYSTEM','Asia/Taipei'),CONVERT_TZ(NOW(3),'SYSTEM','Asia/Taipei'))"
-    const [result] = await pool.query(sql, values);
+    let sql = "INSERT INTO house (title, category_id, description, price, tax_percentage, cleanfee_percentage, people_count, room_count, bed_count, bathroom_count, landlord_id, city_id, region, address, latitude, longitude, refund_type, refund_duration, image_url, created_at, updated_at, pet) VALUES ?";
+    const [result] = await pool.query(sql, [values]);
     return result;
 }
 
-houseQuery.selectAllHouse = async ()=>{
-    let sql = "SELECT a.id, a.title, a.people_count, a.room_count, a.bed_count, a.created_at , a.bathroom_count, b.name as city_name, a.price, a.image_url FROM house a left join city b on a.city_id = b.id"
-    const [result] = await pool.query(sql);
+houseQuery.selectAllHouse = async (paging, itemNum)=>{
+    let itemStartNum = paging * 6;
+    let sql = `SELECT a.id, a.title, a.people_count, a.room_count, a.bed_count, a.created_at , a.bathroom_count, b.name as city_name, a.price, a.image_url FROM house a left join city b on a.city_id = b.id LIMIT ?, ?`;
+    const [result] = await pool.query(sql, [itemStartNum, itemNum]);
     return result;
+}
+
+houseQuery.allHouseCount = async ()=>{
+    let sql = "SELECT COUNT(*) as total_count FROM house";
+    const [result] = await pool.query(sql);
+    return result[0].total_count;
 }
 
 houseQuery.checkBooking = async (dates) => {
@@ -21,33 +28,51 @@ houseQuery.checkBooking = async (dates) => {
     return bookedHouseID;
 }
 
-houseQuery.houseSearch = async (selectConditions)=>{
+houseQuery.checkAmentity = async (amenity_id) => {
+    let sql = "SELECT house_id, json_arrayagg(amenity_id) as amenity_array FROM house_amenity WHERE amenity_id IN (?) GROUP BY house_id; ";
+    const [result] = await pool.query(sql, [amenity_id]);
+    console.log('amenity search');
+    console.log(result);
+    const house_id = [];
+    result.forEach(item => {
+        if(item.amenity_array.length === amenity_id.length){
+            house_id.push(item.house_id);
+        }
+    })
+    return house_id;
+}
+
+houseQuery.houseSearch = async (selectConditions, queryCondition, paging, itemNum)=>{
     let prefix_sql = "SELECT a.*, b.name as city_name FROM  (";
-    let suffix_sql = ") a left join city b on a.city_id = b.id;";
+    let suffix_sql = ") a left join city b on a.city_id = b.id";
     let middle_sql = "SELECT * FROM house ";
     let sql_binding = [];
     let condition_count = selectConditions.length - 1;
     let startDate;
     let endDate;
+    let startPrice;
+    let endPrice;
+    let itemStartNum = paging * 6;
     let count=0;
     for(let i=0; i<selectConditions.length; i++){
-        switch (selectConditions[i][0]){
+        let selectionCondition = selectConditions[i];
+        switch (selectionCondition[0]){
             case 'area':
                 if(count == 0){
                     middle_sql += "WHERE "
                 }
                 middle_sql += 'city_id=?';
-                sql_binding.push(selectConditions[i][1]);
+                sql_binding.push(selectionCondition[1]);
                 count ++;
                 if(i !== condition_count){
                     middle_sql += ' AND ';
                 }
                 break;
             case 'startDate':
-                startDate = selectConditions[i][1];
+                startDate = selectionCondition[1];
                 break;
             case 'endDate':
-                endDate = selectConditions[i][1];
+                endDate = selectionCondition[1];
                 const bookHouseID = await houseQuery.checkBooking([startDate, endDate, startDate, endDate, startDate, endDate]);
                 if(bookHouseID.length !== 0){
                     if(count == 0){
@@ -62,12 +87,12 @@ houseQuery.houseSearch = async (selectConditions)=>{
                 }
                 break;
             case 'people':
-                if(selectConditions[i][1] != 0){
+                if(selectionCondition[1] != 0){
                     if(count == 0){
                         middle_sql += "WHERE "
                     }
                     middle_sql += 'people_count>=?';
-                    sql_binding.push(selectConditions[i][1]);
+                    sql_binding.push(selectionCondition[1]);
                     count ++;
                     if(i !== condition_count){
                         middle_sql += ' AND ';
@@ -84,15 +109,72 @@ houseQuery.houseSearch = async (selectConditions)=>{
                     middle_sql += ' AND ';
                 }
                 break;
+            case 'start_price':
+                startPrice = selectionCondition[1];
+                break;
+            case 'end_price':
+                endPrice = selectionCondition[1];
+                if(count == 0){
+                    middle_sql += "WHERE "
+                }
+                middle_sql += '(price BETWEEN ? AND ?)';
+                sql_binding.push(startPrice);
+                sql_binding.push(endPrice);
+                count ++;
+                if(i !== condition_count){
+                    middle_sql += ' AND ';
+                }
+                break;
+            case 'house_type':
+                if(count == 0){
+                    middle_sql += "WHERE "
+                }
+                middle_sql += 'category_id IN (?)';
+                sql_binding.push(selectionCondition[1]);
+                count ++;
+                if(i !== condition_count){
+                    middle_sql += ' AND ';
+                }
+                break;
+            case 'amenity':
+                const house_id = await houseQuery.checkAmentity(selectionCondition[1]);
+                if(house_id.length !== 0){
+                    if(count == 0){
+                        middle_sql += "WHERE "
+                    }
+                    middle_sql += 'id in (?)';
+                    sql_binding.push(house_id);
+                    count ++;
+                    if(i !== condition_count){
+                        middle_sql += ' AND ';
+                    }
+                }
+                break;
             default:
                 break;
         }
     }
+    
+
     let sql = prefix_sql+middle_sql+suffix_sql;
+
+    //check if order consition is needed
+    if(queryCondition === 1){
+        sql += " ORDER BY price DESC, id";
+    }else if(queryCondition === 2){
+        sql += " ORDER BY price ASC, id";
+    }
+    const [houseSelect] = await pool.query(sql, sql_binding);
+    let houseCount = houseSelect.length;
+    sql += " LIMIT ?, ?";
+    sql_binding.push(itemStartNum);
+    sql_binding.push(itemNum);
     // console.log(sql);
     // console.log(sql_binding);
     const [result] = await pool.query(sql, sql_binding);
-    return result;
+
+    let searchData = {data:result, houseCount}
+    return searchData;
 }
 
 houseQuery.houseDatail = async (house_id) => {
@@ -112,6 +194,18 @@ houseQuery.houseReview = async (values) =>{
     const [result] = await pool.query(sql, values); 
     return result;
 }
+
+houseQuery.getHouseID = async ()=>{
+    let sql = "SELECT id FROM house";
+    const [result] = await pool.query({sql, rowsAsArray: true}); 
+    return result;
+}
+
+houseQuery.insertAmenity = async (values)=>{
+    let sql = "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?"
+    await pool.query(sql, [values]);
+}
+
 
 module.exports = houseQuery;
 

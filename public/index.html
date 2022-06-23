@@ -60,90 +60,94 @@
                         <i id="close_icon" class="link close icon"></i>
                     </div>
                     <div class="detailconditions">
-                        <section class="condition_1">
-                            <h2>價格範圍</h2>
-                            <div id="price_range"></div>
-                            <div class="price_container_outer">
-                                <div class="price_container">
-                                    <small for="start_price">最低價格</small>
-                                    <input id="start_price" name="start_price">
+                        <form id="detailSearchForm" action="/api/1.0/houses/test" method="post" enctype="multipart/form-data">
+                            <section class="condition_1">
+                                <h2>價格範圍</h2>
+                                <div id="price_range"></div>
+                                <div class="price_container_outer">
+                                    <div class="price_container">
+                                        <small for="start_price">最低價格</small>
+                                        <input id="start_price" name="start_price" value="300">
+                                    </div>
+                                    <div>
+                                        <p>-</p>
+                                    </div>
+                                    <div class="price_container">
+                                        <small>最高價格</small>
+                                        <input id="end_price" name="end_price" value="100000">
+                                    </div>
+                                </div>
+                            </section>
+                            <hr>
+                            <section>
+                                <h2>價格排序</h2>
+                                <div>
+                                    <div class="ui form">
+                                        <div class="grouped fields">
+                                          <div class="field">
+                                            <div class="ui radio checkbox">
+                                              <input type="radio" name="price_order" value="1">
+                                              <label>高到低</label>
+                                            </div>
+                                          </div>
+                                          <div class="field">
+                                            <div class="ui radio checkbox">
+                                              <input type="radio" name="price_order" value="2">
+                                              <label>低到高</label>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                </div>
+                            </section>
+                            <hr>
+                            <section class="condition_2">
+                                <h2>房源類型</h2>
+                                <div class="housetype_list">
+                                    <div>
+                                        <input type="checkbox" name="house_type" value=1>
+                                        <label for="whole">獨棟</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="house_type" value=2>
+                                        <label for="floor">整層</label>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" name="house_type" value=3>
+                                        <label for="room">套房</label>
+                                    </div>
+                                </div>
+                            </section>
+                            <hr>
+                            <!-- <section class="condition_3">
+                                <h2>臥室和床舖</h2>
+                                <div>
+                                    <p>臥室</p>
+                                    <input type="number" name="room" min="1" max="8">
                                 </div>
                                 <div>
-                                    <p>-</p>
+                                    <p>床位</p>
+                                    <input type="number" name="bed" min="1" max="8">
                                 </div>
-                                <div class="price_container">
-                                    <small>最高價格</small>
-                                    <input id="end_price" name="end_price">
+                                <div>
+                                    <p>衛浴</p>
+                                    <input type="number" name="bathroom" min="1" max="8">
                                 </div>
+                            </section>
+                            <hr> -->
+                            <section class="condition_4">
+                                <h2>設備與服務</h2>
+                                <div id="infer_list" class="infer_list">
+                                    <div id="infer_item" style="display:none">
+                                        <input type="checkbox" name="amenity">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </section>
+                            <div class="detailsearchBtn_con">
+                                <button id="detailsearchBtn" type="submit">查詢</button>
                             </div>
-                        </section>
-                        <hr>
-                        <section class="condition_2">
-                            <h2>房源類型</h2>
-                            <div class="housetype_list">
-                                <div>
-                                    <input type="checkbox" name="house_type" value="whole">
-                                    <label for="whole">獨棟</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="house_type" value="floor">
-                                    <label for="floor">整層</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="house_type" value="room">
-                                    <label for="room">套房</label>
-                                </div>
-                            </div>
-                        </section>
-                        <hr>
-                        <section class="condition_3">
-                            <h2>臥室和床舖</h2>
-                            <div>
-                                <p>臥室</p>
-                                <input type="number" name="room" min="1" max="8">
-                            </div>
-                            <div>
-                                <p>床位</p>
-                                <input type="number" name="bed" min="1" max="8">
-                            </div>
-                            <div>
-                                <p>衛浴</p>
-                                <input type="number" name="bathroom" min="1" max="8">
-                            </div>
-                        </section>
-                        <hr>
-                        <section class="condition_4">
-                            <h2>設備與服務</h2>
-                            <div class="infer_list">
-                                <div>
-                                    <input type="checkbox" name="amenity" value="wifi">
-                                    <label for="wifi">WiFi</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="amenity" value="aircon">
-                                    <label for="aircon">空調</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="amenity" value="cleantool">
-                                    <label for="cleantool">盥洗用具</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="amenity" value="hair_dryer">
-                                    <label for="hair_dryer">吹風機</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="amenity" value="refrigerator">
-                                    <label for="refrigerator">冰箱</label>
-                                </div>
-                                <div>
-                                    <input type="checkbox" name="amenity" value="television">
-                                    <label for="television">電視</label>
-                                </div>
-                            </div>
-                        </section>
-                        <div class="detailsearchBtn_con">
-                            <button id="detailsearchBtn">查詢</button>
-                        </div>
+                    </form>
                     </div>
                 </div>
                 
@@ -154,14 +158,26 @@
         <div id="houseArea" class="houseArea">
             <div id="houseItem" class="houseItem" style="display: none;">
                     <div class="houseImgContainer">
-                        <img class="house_image" src="./images/house.jpg">
-                        <a id="like" class="like" data-id="1">
+                        <img class="house_image">
+                        <a id="like" class="like">
                             <i class="large link grey heart icon"></i>
                         </a>
                     </div>
                     <p id="houseTitle"></p>
                     <p id="housePrice"></p>
                     <p id="houseConfig"></p>
+            </div>
+        </div>
+
+        <div class="changePage_outter">
+            <div id="changePage_con" class="ui borderless menu changePage_con">
+                <!-- <a class="item active" data-page="0">1</a> -->
+                <!-- <a class="item" data-page="1">2</a>
+                <a class="item">3</a>
+                <a class="item">4</a>
+                <a class="item">5</a>
+                <a class="item">6</a>
+                <a class="item">7</a> -->
             </div>
         </div>
 
@@ -178,6 +194,7 @@
                 <p>相關條款</p>
             </div>
         </footer>
+
 
         <script src="./js/renderHouse.js"></script>
         <script src="./js/search.js"></script>

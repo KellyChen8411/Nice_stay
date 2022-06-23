@@ -12,12 +12,17 @@ p{
     margin-top: 50px;
     margin-right: 80px;
     margin-left: 80px;
+    padding-top: 50px;
+    padding-bottom: 50px;  
     /* background-color: aqua; */
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     /* gap: 24px; */
     row-gap: 24px;
     column-gap: 16px;
+    height: 900px;
+    /* overflow: auto; */
+    
 }
 
 
@@ -47,6 +52,14 @@ p{
     position: absolute;
     top: 15px;
     right: 15px;
+}
+
+.changePage_con{
+    justify-content: center;
+}
+
+.changePage_outter{
+    padding-bottom: 50px;
 }
 
 
