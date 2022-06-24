@@ -12,10 +12,11 @@ nav{
     display: flex !important;
     /* align-items: center; */
     padding: 20px;
-    position: sticky;
+    position: fixed;
     top: 0;
     z-index: 1;
     background-color: white;
+    width: 100%;
 }
 
 nav>div{
@@ -75,6 +76,10 @@ nav>div{
     border-radius: 20px;
 }
 
+.dummyDiv{
+    height: 87px;
+}
+
 /* footer */
 footer{
     background-color: #f2f0eb;
@@ -84,6 +89,8 @@ footer{
     justify-content: center;
     align-items: center;
     z-index: 2;
+    position: fixed;
+    bottom: 0;
 }
 
 footer>p{

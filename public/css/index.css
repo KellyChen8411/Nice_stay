@@ -238,6 +238,10 @@ nav>div{
     height: 36px;
 }
 
+.dummyDiv{
+    height: 90px;
+}
+
 /* footer */
 footer{
     background-color: #f2f0eb;
