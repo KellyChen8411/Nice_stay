@@ -1,13 +1,17 @@
+$("html,body").scrollTop(0);
+
 const params = new URLSearchParams(window.location.search);
-let startDate = params.get("startDate");
-let endDate = params.get("endDate");
-let roomfee = params.get("roomfee");
-let cleanFee = params.get("cleanFee");
-let taxFee = params.get("taxFee");
-let amountFee = params.get("amountFee");
+let house_id = params.get("id");
+let checkin_date = params.get("startDate");
+let checkout_date = params.get("endDate");
+let room_price = params.get("roomfee");
+let clean_fee = params.get("cleanFee");
+let tax_fee = params.get("taxFee");
+let amount_fee = params.get("amountFee");
 let people_count = params.get("people_count");
-let is_refund = params.get("is_refund");
+let refundable = params.get("refund_type");
 let refund_duedate = params.get("refund_duedate");
+let refund_duetime = params.get("refund_duedate_timestamp");
 
 //預定詳情
 if (people_count === "") {
@@ -15,18 +19,71 @@ if (people_count === "") {
 } else {
   $("#people_count").text(`${people_count}位旅客`);
 }
-$("#checkin_date").val(startDate);
-$("#checkout_date").val(endDate);
-$("#room_fee").text(`${roomfee} TWD`);
-$("#clean_fee").text(`${cleanFee} TWD`);
-$("#tax_fee").text(`${taxFee} TWD`);
-$("#amount_fee").text(`${amountFee} TWD`);
+$("#checkin_date").val(checkin_date);
+$("#checkout_date").val(checkout_date);
+$("#room_fee").text(`${room_price} TWD`);
+$("#clean_fee").text(`${clean_fee} TWD`);
+$("#tax_fee").text(`${tax_fee} TWD`);
+$("#amount_fee").text(`${amount_fee} TWD`);
 
 //退訂政策
-if (is_refund === "1") {
+if (refundable === "1") {
   $("#cancel_plan").text(`${refund_duedate}前可免費取消`);
-} else if (is_refund === "2") {
-  $("#cancel_plan").text(`${refund_duedate}小時內可免費取消`);
 } else {
   $("#cancel_plan").text("無");
+}
+
+// http://localhost:3000/checkout.html?id=1&startDate=2022-07-06&endDate=2022-07-09&roomfee=36000&cleanFee=2880&taxFee=3600&amountFee=42480&people_count=&refund_type=1&refund_duedate=2022-07-02%2015:59:00&refund_duedate_timestamp=1656777540000
+
+$("#checkout_btn").click(checkOut);
+
+async function checkOut() {
+  //get token and put in header
+  let token = localStorage.getItem("token");
+  let headers = {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+    Authorization: `Bearer ${token}`,
+  };
+  let bookoingInfo = {
+    house_id,
+    checkin_date,
+    checkout_date,
+    room_price,
+    tax_fee,
+    clean_fee,
+    amount_fee,
+    refundable,
+    refund_duetime,
+  };
+
+  bookoingInfo = JSON.stringify(bookoingInfo);
+  let resultFetch = await fetch("/api/1.0/checkout/checkout", {
+    method: "POST",
+    headers,
+    body: bookoingInfo,
+  });
+  let fetchStatus = resultFetch.status;
+  let finalResult = await resultFetch.json();
+  if (fetchStatus === 200) {
+    let sendEmailInfo = finalResult;
+    sendEmailInfo = JSON.stringify(sendEmailInfo);
+    // console.log('email')
+    // console.log(sendEmailInfo);
+    let headers = {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    };
+    let resultFetch = await fetch("/api/1.0/checkout/email", {
+      method: "POST",
+      headers,
+      body: sendEmailInfo,
+    });
+    alert(
+      `您的預訂編號為${finalResult.orderNum}, 已將預訂詳情寄至您的email\n感謝預定`
+    );
+  } else {
+    alert(finalResult.error);
+    window.location.href = `/login.html?checkout=${true}`;
+  }
 }

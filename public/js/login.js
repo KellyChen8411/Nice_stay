@@ -1,3 +1,6 @@
+const params = new URLSearchParams(window.location.search);
+let checkout = params.get("checkout");
+
 let submitForm = $("#submitform");
 $("#SignIn_btn").click(showSignInForm);
 $("#SignUp_btn").click(showSignUpForm);
@@ -40,10 +43,12 @@ async function getToken(e) {
   let finalResult = await fetchResult.json();
   let fetchStatus = fetchResult.status;
   if (fetchStatus === 200) {
-    console.log("enter");
-    console.log(finalResult);
     localStorage.setItem("token", finalResult.token);
-    window.location.href = "/";
+    if (checkout === "true") {
+      window.history.go(-1);
+    } else {
+      window.location.href = "/";
+    }
   } else if (fetchStatus === 400) {
     let errorArray = finalResult.error;
     let errorMsgString = "";

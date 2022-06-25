@@ -12,3 +12,4 @@ moment.min.js
 moment-timezone-with-date.js
 jquery-ui.min.css
 semantic.min.css
+./views/booking.pug

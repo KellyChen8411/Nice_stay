@@ -1,9 +1,9 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
-const { compareSync } = require("bcryptjs");
 const app = express();
 
+app.set("view engine", "pug");
 app.use(express.static("public"));
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -15,6 +15,7 @@ app.use("/api/" + process.env.API_VERSION, [
   require("./server/routes/city_route"),
   require("./server/routes/amenity_route"),
   require("./server/routes/user_route"),
+  require("./server/routes/checkout_route"),
 ]);
 
 app.use((error, req, res, next) => {
@@ -22,6 +23,8 @@ app.use((error, req, res, next) => {
   console.log(error);
   if (error.type === "userExist") {
     return res.status(404).json({ error: error.message });
+  } else if (error.type === "tokenExpire") {
+    return res.status(404).json({ error: "token過期,請重新登入" });
   } else {
     res.status(500).json({ error: "internal server error" });
   }
