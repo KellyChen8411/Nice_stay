@@ -1,24 +1,32 @@
-require('dotenv').config();
-const express = require('express');
-const bodyParser = require('body-parser');
+require("dotenv").config();
+const express = require("express");
+const bodyParser = require("body-parser");
+const { compareSync } = require("bcryptjs");
 const app = express();
 
+app.use(express.static("public"));
 
-
-app.use(express.static('public'));
-
-app.use(bodyParser.urlencoded( { extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // API routes
-app.use('/api/' + process.env.API_VERSION, [
-    require('./server/routes/house_route'),
-    require('./server/routes/city_route'),
-    require('./server/routes/amenity_route')
+app.use("/api/" + process.env.API_VERSION, [
+  require("./server/routes/house_route"),
+  require("./server/routes/city_route"),
+  require("./server/routes/amenity_route"),
+  require("./server/routes/user_route"),
 ]);
 
-app.listen(3000, async () => {
-    console.log('Application is now running')
-})
+app.use((error, req, res, next) => {
+  console.log("Enter express error handling Middleware");
+  console.log(error);
+  if (error.type === "userExist") {
+    return res.status(404).json({ error: error.message });
+  } else {
+    res.status(500).json({ error: "internal server error" });
+  }
+});
 
-// https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=25.041038%2C121.551513&radius=1000&type=restaurant&key=${process.env.GOOGLEAPI_KEY}
+app.listen(3000, async () => {
+  console.log("Application is now running");
+});

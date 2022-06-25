@@ -1,62 +1,103 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Page Title</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
-        <link href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@600&family=Baloo+Bhaijaan+2:wght@500&family=Supermercado+One&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="./css/basic_nav_footer.css">
-        <link href="./css/login.css"rel="stylesheet">
-        <script src="./js/jquery-3.6.0.min.js"></script>
-    </head>
+  <head>
+    <title>Page Title</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@600&family=Baloo+Bhaijaan+2:wght@500&family=Supermercado+One&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./css/basic_nav_footer.css" />
+    <link href="./css/login.css" rel="stylesheet" />
+    <script src="./js/jquery-3.6.0.min.js"></script>
+  </head>
 
-    <body>
-
-
-        <div class="signinForm_outter">
-            <div class="signinForm_con">
-                <form method="post" action="/" id="submitform" class="ui form checkoutForm" data-type="signin">
-                    <div class="change_type_con">
-                        <button id="SignIn_btn" type="button" class="btnClick">Sign In</button>
-                        <button id="SignUp_btn" type="button">Sign Up</button>
-                    </div>
-                    <p id="title" class="title">Sign in</p>
-                    <div id="signup_content" class="content_area hide">
-                        <div class="field">
-                            <label>姓名</label>
-                            <input type="text" name="signup_name" placeholder="請輸入姓名">
-                        </div>
-                        <div class="field">
-                            <label>信箱</label>
-                            <input type="email" name="signup_email" placeholder="請輸入信箱">
-                        </div>
-                        <div class="field">
-                            <label>密碼</label>
-                            <input type="password" name="signup_password" placeholder="請輸入密碼">
-                        </div>
-                        <div class="field">
-                            <label>確認密碼</label>
-                            <input type="password" name="signup_confirmPass" placeholder="請再次輸入密碼">
-                        </div>
-                    </div>
-                    <div id="signin_content" class="content_area">
-                        <div class="field">
-                            <label>信箱</label>
-                            <input type="email" name="signin_email" placeholder="請輸入信箱">
-                        </div>
-                        <div class="field">
-                            <label>密碼</label>
-                            <input type="password" name="signin_password" placeholder="請輸入密碼">
-                        </div>
-                    </div>
-                    <div class="btn_con">
-                        <a href="/">back to home</a>
-                        <button class="checkout_btn" type="submit">送出</button>
-                    </div>
-                </form>
+  <body>
+    <div class="signinForm_outter">
+      <div class="signinForm_con">
+        <form
+          method="post"
+          action="/"
+          id="submitform"
+          class="ui form checkoutForm"
+          data-type="signin"
+        >
+          <div class="change_type_con">
+            <button id="SignIn_btn" type="button" class="btnClick">
+              Sign In
+            </button>
+            <button id="SignUp_btn" type="button">Sign Up</button>
+          </div>
+          <p id="title" class="title">Sign in</p>
+          <div id="signup_content" class="content_area hide">
+            <div class="field">
+              <label>姓名</label>
+              <input
+                type="text"
+                name="signup_name"
+                placeholder="請輸入姓名"
+                autocomplete="off"
+              />
             </div>
-        </div>
+            <div class="field">
+              <label>信箱</label>
+              <input
+                type="email"
+                name="signup_email"
+                placeholder="請輸入信箱"
+                autocomplete="off"
+              />
+            </div>
+            <div class="field">
+              <label>密碼</label>
+              <input
+                type="password"
+                name="signup_password"
+                placeholder="請輸入密碼"
+                autocomplete="off"
+              />
+            </div>
+            <div class="field">
+              <label>確認密碼</label>
+              <input
+                type="password"
+                name="signup_confirmPass"
+                placeholder="請再次輸入密碼"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+          <div id="signin_content" class="content_area">
+            <div class="field">
+              <label>信箱</label>
+              <input
+                type="email"
+                name="signin_email"
+                placeholder="請輸入信箱"
+                autocomplete="off"
+              />
+            </div>
+            <div class="field">
+              <label>密碼</label>
+              <input
+                type="password"
+                name="signin_password"
+                placeholder="請輸入密碼"
+                autocomplete="off"
+              />
+            </div>
+          </div>
+          <div class="btn_con">
+            <a href="/">back to home</a>
+            <button class="checkout_btn" type="submit">送出</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-        <script src="./js/login.js"></script>
-
-    </body>
+    <script src="./js/login.js"></script>
+  </body>
 </html>

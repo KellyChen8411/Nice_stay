@@ -1,164 +1,178 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Nice Stay</title>
-        <link rel="stylesheet" href="./css/basic_nav_footer.css">
-        <link rel="stylesheet" href="./css/detail.css">
-        <link rel="stylesheet" href="./css/semantic.min.css">
-        <script src="./js/jquery-3.6.0.min.js"></script>
-        <script src="./js/showPersonalList.js"></script>
-        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    </head>
-    <body>
-        <nav>
-            <div class="logoContainer"><a href="/"><img src="./images/Logo.png"></a></div>
-            <div class="landlordContainer">成為房東</div>
-            <div id="hamburgerContainer" class="hamburgerContainer"><img src="./images/hamburger_icon.png"></div>
-            <div id="personalArea" class="personalArea PAHide">
-                <div><a>訊息</a></div>
-                <div><a>旅程</a></div>
-                <div><a>心願單</a></div>
-                <div><a>登出</a></div>
-            </div>
-        </nav>
-        <div class="dummyDiv"></div>
-        <hr>
-        <div id="outter_div" class="outter_div">
-            <div class="title_con">
-                <h2 id="house_title"></h2>
-                <i class="star icon"></i><span id="room_rate"></span>&nbsp&nbsp<span>/</span>&nbsp&nbsp<span id="comment_count"></span><span> . </span><span id="city_region"></span>
-                <p id="house_config"></p>
-            </div>
-            <div id="image_con" class="image_con">
-                <div class="main_image">
-                    <img id="image1" class="image1">
-                </div>
-                <div class="side_image">
-                    <div class="side1">
-                        <img id="image2" class="image2">
-                    </div>
-                    <div class="side2">
-                        <img id="image3" class="image3">
-                    </div>
-                </div>
-            </div>
-            <hr>
-            <div class="detail_outter">
-                <div class="detail_con">
-                    <div id="feature_outter" class="feature_outter">
-                        <h2>特色</h2>
-                        <div id="feature_con" class="feature_con" style="display:none">
-                            <img>
-                            <h4></h4>
-                        </div>
-                    </div>
-                    <hr>
-                    <div id="introduce_con" class="introduce_con">
-                        <h2>關於</h2>
-                        <p></p>
-                    </div>
-                    <hr>
-                    <div class="facility_outter">
-                        <h2>有提供的設備與服務</h2>
-                        <div id="facility_inner" class="facility_inner">
-                            <div id="facility_con" class="facility_con" style="display: none;">
-                                <img>
-                                <h4></h4>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-                <div class="ckeck_con">
-                    
-                        <h3 id="fee_perNight">$0 TWD／晚</h3>
-                        <div class="book_date">
-                            <div class="checkin_date">  
-                                <p>入住</p>
-                                <input type="text" name="checkin_date" id="checkin_date" placeholder="請選擇入住日期">
-                            </div>
-                            <div class="checkout_date">  
-                                <p>退房</p>
-                                <input type="text" name="checkout_date" id="checkout_date" placeholder="請選擇結束日期">
-                            </div>
-                        </div>
-                        <button id="checkout_btn">預定</button>
-                        <div class="fee_con">
-                            <div>
-                                <p id="room_fee_title">訂房費</p>
-                                <p id="room_fee">0 TWD</p>
-                            </div>
-                            <div>
-                                <p>清潔費</p>
-                                <p id="clean_fee">0 TWD</p>
-                            </div>
-                            <div>
-                                <p>稅金</p>
-                                <p id="tax_fee">0 TWD</p>
-                            </div>
-                            <hr>
-                            <div>
-                                <p>總價</p>
-                                <p id="amount_fee" class="amount_fee">0 TWD</p>
-                            </div>
-                        </div>
-                    
-                </div>
-            </div>
-            <hr>
-            <div class="comment_outter">
-                <div id="comment_summary" class="comment_summary">
-                    <i class=" large star icon"></i>
-                    <h2></h2>
-                </div>
-                <div id="comment_con" class="comment_con">
-                    <div id="comment_item" style="display: none;">
-                        <h4></h4>
-                        <small></small>
-                        <p></p>
-                     </div>
-                </div>
-            </div>
-            <hr>
-            <div class="location_outter">
-                <h2>位置</h2>
-                <div id="nearby_con" class="nearby_con">
-                    <button data-type="traffic">大眾運輸</button>
-                    <button data-type="restaurant">餐廳</button>
-                    <button data-type="store">便利商店</button>
-                </div>
-                <div id="map" class="map"></div>
-            </div>
-            <hr>
-            <div id="landlord_outter" class="landlord_outter">
-                <h2></h2>
-                <i class="star icon"></i><sapn></sapn>
-                <!-- <p>語言: 中文、English、日本語</p> -->
-                <button>連絡房東</button>
-            </div>
-            
+  <head>
+    <title>Nice Stay</title>
+    <link rel="stylesheet" href="./css/basic_nav_footer.css" />
+    <link rel="stylesheet" href="./css/detail.css" />
+    <link rel="stylesheet" href="./css/semantic.min.css" />
+    <script src="./js/jquery-3.6.0.min.js"></script>
+    <script src="./js/showPersonalList.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+  </head>
+  <body>
+    <nav>
+      <div class="logoContainer">
+        <a href="/"><img src="./images/Logo.png" /></a>
+      </div>
+      <div class="landlordContainer">成為房東</div>
+      <div id="hamburgerContainer" class="hamburgerContainer">
+        <img src="./images/hamburger_icon.png" />
+      </div>
+      <div id="personalArea" class="personalArea PAHide">
+        <div><a>訊息</a></div>
+        <div><a>旅程</a></div>
+        <div><a>心願單</a></div>
+        <div><a>登出</a></div>
+      </div>
+    </nav>
+    <div class="dummyDiv"></div>
+    <hr />
+    <div id="outter_div" class="outter_div">
+      <div class="title_con">
+        <h2 id="house_title"></h2>
+        <i class="star icon"></i
+        ><span id="room_rate"></span>&nbsp&nbsp<span>/</span>&nbsp&nbsp<span
+          id="comment_count"
+        ></span
+        ><span> . </span><span id="city_region"></span>
+        <p id="house_config"></p>
+      </div>
+      <div id="image_con" class="image_con">
+        <div class="main_image">
+          <img id="image1" class="image1" />
         </div>
+        <div class="side_image">
+          <div class="side1">
+            <img id="image2" class="image2" />
+          </div>
+          <div class="side2">
+            <img id="image3" class="image3" />
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="detail_outter">
+        <div class="detail_con">
+          <div id="feature_outter" class="feature_outter">
+            <h2>特色</h2>
+            <div id="feature_con" class="feature_con" style="display: none">
+              <img />
+              <h4></h4>
+            </div>
+          </div>
+          <hr />
+          <div id="introduce_con" class="introduce_con">
+            <h2>關於</h2>
+            <p></p>
+          </div>
+          <hr />
+          <div class="facility_outter">
+            <h2>有提供的設備與服務</h2>
+            <div id="facility_inner" class="facility_inner">
+              <div id="facility_con" class="facility_con" style="display: none">
+                <img />
+                <h4></h4>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ckeck_con">
+          <h3 id="fee_perNight">$0 TWD／晚</h3>
+          <div class="book_date">
+            <div class="checkin_date">
+              <p>入住</p>
+              <input
+                type="text"
+                name="checkin_date"
+                id="checkin_date"
+                placeholder="請選擇入住日期"
+              />
+            </div>
+            <div class="checkout_date">
+              <p>退房</p>
+              <input
+                type="text"
+                name="checkout_date"
+                id="checkout_date"
+                placeholder="請選擇結束日期"
+              />
+            </div>
+          </div>
+          <button id="checkout_btn">預定</button>
+          <div class="fee_con">
+            <div>
+              <p id="room_fee_title">訂房費</p>
+              <p id="room_fee">0 TWD</p>
+            </div>
+            <div>
+              <p>清潔費</p>
+              <p id="clean_fee">0 TWD</p>
+            </div>
+            <div>
+              <p>稅金</p>
+              <p id="tax_fee">0 TWD</p>
+            </div>
+            <hr />
+            <div>
+              <p>總價</p>
+              <p id="amount_fee" class="amount_fee">0 TWD</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="comment_outter">
+        <div id="comment_summary" class="comment_summary">
+          <i class="large star icon"></i>
+          <h2></h2>
+        </div>
+        <div id="comment_con" class="comment_con">
+          <div id="comment_item" style="display: none">
+            <h4></h4>
+            <small></small>
+            <p></p>
+          </div>
+        </div>
+      </div>
+      <hr />
+      <div class="location_outter">
+        <h2>位置</h2>
+        <div id="nearby_con" class="nearby_con">
+          <button data-type="traffic">大眾運輸</button>
+          <button data-type="restaurant">餐廳</button>
+          <button data-type="store">便利商店</button>
+        </div>
+        <div id="map" class="map"></div>
+      </div>
+      <hr />
+      <div id="landlord_outter" class="landlord_outter">
+        <h2></h2>
+        <i class="star icon"></i><sapn></sapn>
+        <!-- <p>語言: 中文、English、日本語</p> -->
+        <button>連絡房東</button>
+      </div>
+    </div>
 
-        <footer>
-            <div>
-                <p><small>&copy 2022 Nice Stay,Inc</small></p>
-            </div>
-            <p>.</p>
-            <div>
-                <p>隱私</p>
-            </div>
-            <p>.</p>
-            <div>
-                <p>相關條款</p>
-            </div>
-        </footer>
+    <footer>
+      <div>
+        <p><small>&copy 2022 Nice Stay,Inc</small></p>
+      </div>
+      <p>.</p>
+      <div>
+        <p>隱私</p>
+      </div>
+      <p>.</p>
+      <div>
+        <p>相關條款</p>
+      </div>
+    </footer>
 
-        <script src="./js/moment.min.js"></script>
-        <script src="./js/moment-timezone-with-date.js"></script>
-        <script
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxu6um8A2SR1WZhJCok6BGpaPHHJGUwGI&v=weekly"
-            defer
-        ></script>
-        <script src="./js/detail.js"></script>
-    </body>
+    <script src="./js/moment.min.js"></script>
+    <script src="./js/moment-timezone-with-date.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxu6um8A2SR1WZhJCok6BGpaPHHJGUwGI&v=weekly"
+      defer
+    ></script>
+    <script src="./js/detail.js"></script>
+  </body>
 </html>

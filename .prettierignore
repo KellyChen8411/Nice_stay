@@ -1,0 +1,14 @@
+.dockerignore
+.env
+.gitignore
+Dockerfile
+LICENSE
+package-lock.json
+package.json
+README.md
+jquery-3.6.0.min.js
+jquery-ui.min.js
+moment.min.js
+moment-timezone-with-date.js
+jquery-ui.min.css
+semantic.min.css

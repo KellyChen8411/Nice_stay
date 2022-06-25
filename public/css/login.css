@@ -1,102 +1,100 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
+  box-sizing: border-box;
+  margin: 0;
 }
 
-.signinForm_outter{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100vw;
-    height: 100vh;
-    position: relative;
+.signinForm_outter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  position: relative;
 }
 
 .signinForm_outter::after {
-    content: "";
-    background: url('../images/NiceStayBP2.jpg');
-    background-repeat: no-repeat;
-    background-size: cover;
-    opacity: 0.5;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    position: absolute;
-    z-index: -1;   
-  }
-
-.signinForm_con{
-    opacity: 1;
-    padding: 0 20px;
-    background-color: white;
-    border: 1px solid black;
-    border-radius: 10px;
-    width: 350px;
+  content: "";
+  background: url("../images/NiceStayBP2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
 }
 
-.content_area{
-    margin: 20px 0;
+.signinForm_con {
+  opacity: 1;
+  padding: 0 20px;
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 10px;
+  width: 350px;
 }
 
-.title{
-    font-family: 'Baloo Bhaijaan 2', cursive !important;
-    font-size: 36px;
-    color: rgb(195, 201, 196);
+.content_area {
+  margin: 20px 0;
 }
 
-.btn_con{
-    padding-left: 10px;
-    padding-right: 10px;
-    display: flex;
-    align-items: center;
-    justify-content:space-between;
+.title {
+  font-family: "Baloo Bhaijaan 2", cursive !important;
+  font-size: 36px;
+  color: rgb(195, 201, 196);
 }
 
-.btn_con>a{
-    cursor: pointer;
+.btn_con {
+  padding-left: 10px;
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.btn_con>button{
-    width: 120px;
-    margin: 20px 0;
-    padding: 0 24px;
-    border: 0;
-    background: #b3225c;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    height: 36px;  
+.btn_con > a {
+  cursor: pointer;
 }
 
-.change_type_con{
-    display: flex;
-    justify-content: center;
+.btn_con > button {
+  width: 120px;
+  margin: 20px 0;
+  padding: 0 24px;
+  border: 0;
+  background: #b3225c;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 36px;
 }
 
-.change_type_con>button{
-    margin: 20px 5px;
-    width: 120px;
-    padding: 0 24px;
-    border: 1px solid rgb(195, 201, 196);
-    background: white;
-    color: black;
-    
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    height: 36px;
-    border-radius: 50px;  
+.change_type_con {
+  display: flex;
+  justify-content: center;
 }
 
-.btnClick{
-    background: #b3225c !important;
-    color: #fff !important;
+.change_type_con > button {
+  margin: 20px 5px;
+  width: 120px;
+  padding: 0 24px;
+  border: 1px solid rgb(195, 201, 196);
+  background: white;
+  color: black;
+
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 36px;
+  border-radius: 50px;
 }
 
-.hide{
-    display: none;
+.btnClick {
+  background: #b3225c !important;
+  color: #fff !important;
 }
 
-
+.hide {
+  display: none;
+}

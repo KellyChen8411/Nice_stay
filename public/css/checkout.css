@@ -1,79 +1,82 @@
-.checkout_outter{
-    margin-left: auto;
-    margin-right: auto;
-    padding: 25px 0;
-    width: 1120px;
+.checkout_outter {
+  margin-left: auto;
+  margin-right: auto;
+  padding: 25px 0;
+  width: 1120px;
 }
 
-.checkout_inner{
-    width: 730px;
+.checkout_inner {
+  width: 730px;
 }
 
-.ckeck_con{
-    margin-top: 20px;
-    margin-bottom: 40px;
-    padding: 20px 30px;
-    width: 370px;
-    border: 1px solid black;
-    border-radius: 10px;
+.ckeck_con {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  padding: 20px 30px;
+  width: 370px;
+  border: 1px solid black;
+  border-radius: 10px;
 }
 
-.book_date{
-    display: flex;
-    border: 1px solid gray;
-    border-radius:5px;
+.book_date {
+  display: flex;
+  border: 1px solid gray;
+  border-radius: 5px;
 }
 
-.checkin_date, .checkout_date{
-    margin-left: 10px;
-    flex: 1;
+.checkin_date,
+.checkout_date {
+  margin-left: 10px;
+  flex: 1;
 }
 
-.checkin_date{
-    border-right: 1px solid gray;
+.checkin_date {
+  border-right: 1px solid gray;
 }
 
-.checkin_date>input, .checkout_date>input{
-    border: 0;
-    outline: none;
-    width: 120px;
+.checkin_date > input,
+.checkout_date > input {
+  border: 0;
+  outline: none;
+  width: 120px;
 }
 
-.fee_con>div{
-    margin: 15px 0;
-    display: flex;
-    justify-content: space-between;
+.fee_con > div {
+  margin: 15px 0;
+  display: flex;
+  justify-content: space-between;
 }
 
-.amount_fee{
-    font-weight:bold;
+.amount_fee {
+  font-weight: bold;
 }
 
-.email_outter, .cancel_outter, .creditcard_outter{
-    margin: 40px 0;
-    width: 370px;
+.email_outter,
+.cancel_outter,
+.creditcard_outter {
+  margin: 40px 0;
+  width: 370px;
 }
 
-.email_outter>h4, .cancel_outter>h4{
-    margin-top: 20px !important;
-    margin-bottom: 10px !important;
+.email_outter > h4,
+.cancel_outter > h4 {
+  margin-top: 20px !important;
+  margin-bottom: 10px !important;
 }
 
-.checkoutForm{
-    margin-top: 20px;
+.checkoutForm {
+  margin-top: 20px;
 }
 
-.checkout_btn{
-    width: 100%;
-    margin: 20px 0;
-    padding: 0 24px;
-    border: 0;
-    background: #b3225c;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    height: 36px;
+.checkout_btn {
+  width: 100%;
+  margin: 20px 0;
+  padding: 0 24px;
+  border: 0;
+  background: #b3225c;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 36px;
 }
-
-
