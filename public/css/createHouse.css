@@ -1,0 +1,298 @@
+h2 {
+  margin-top: 20px !important;
+  margin-bottom: 20px !important;
+}
+
+.createHouse_outter {
+  margin-left: auto;
+  margin-right: auto;
+
+  padding: 25px 0 80px 0;
+  width: 1120px;
+}
+
+.createHouse_inner {
+  width: 730px;
+}
+
+.houseDatail_con {
+  width: 370px;
+}
+
+.houseDatail_item {
+  margin: 40px 0;
+}
+
+.title_field {
+  height: 200px;
+}
+
+textarea {
+  width: 100%;
+  height: 100%;
+  font-size: 16px !important;
+}
+
+/* .city_region{
+  display: flex !important;
+} */
+
+.config_con,
+.price_con {
+  border: 1px solid #dedbd5;
+  border-radius: 10px;
+}
+
+.config_con {
+  margin-bottom: 14px;
+}
+
+.config_item,
+.price_item {
+  padding: 0 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.config_item {
+  margin: 10px 0;
+}
+
+.config_select {
+  display: flex;
+}
+
+.subtract_btn,
+.add_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+  border: 1px solid black;
+  border-radius: 50px;
+}
+
+.subtract_btn {
+  font-size: 20px;
+}
+
+.config_input {
+  margin: 0 5px !important;
+  width: 50px !important;
+  height: 18px;
+  border: 0 !important;
+  outline: none !important;
+  text-align: center;
+}
+
+/* price area */
+.first_mainprice {
+  margin-top: 10px;
+}
+
+.roomprice_input {
+  width: 100px !important;
+  height: 18px;
+  border: 0 !important;
+  outline: none !important;
+  text-align: center;
+}
+
+.priceSlider_con {
+  margin: 0 auto 20px;
+  width: 330px;
+}
+
+.clean_slider {
+  margin-bottom: 40px !important;
+}
+
+/* facility area */
+.amenity_con {
+  margin: 40px 0;
+}
+
+.facility_outer {
+  width: 500px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: center !important;
+  align-content: center;
+}
+
+.facility_con {
+  margin: 20px 0;
+  width: 100px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #dedbd5;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.clickFacility {
+  border: 1px solid black;
+}
+
+.feature_con > img,
+.facility_con > img {
+  margin-top: 5px;
+  display: block;
+  width: 64px;
+  height: 64px;
+}
+
+.facility_con > h4 {
+  margin: 5px !important;
+}
+
+.refundDuration_con {
+  margin-top: 20px !important;
+  width: 120px;
+}
+
+/* image area */
+.image_con {
+  margin: 40px 0;
+}
+
+.main_imge {
+  width: 100%;
+  height: 518px;
+}
+
+.sideImage_con {
+  display: flex;
+}
+
+.sideImage1,
+.sideImage2 {
+  width: 360px;
+  height: 254px;
+}
+
+.sideImage2 {
+  margin-left: auto;
+}
+
+.file-upload {
+  background-color: #ffffff;
+  /* width: 100%; */
+  height: 518px;
+  /* width: 600px; */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.file-upload-content {
+  display: none;
+  text-align: center;
+}
+
+.file-upload-input {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.image-upload-wrap {
+  width: 100%;
+  height: 100%;
+  border: 4px dashed #b3225c;
+  position: relative;
+}
+
+.image-dropping,
+.image-upload-wrap:hover {
+  background-color: #b3225c;
+  border: 4px dashed #ffffff;
+}
+
+.image-title-wrap {
+  padding: 0 15px 15px 15px;
+  color: #222;
+}
+
+.drag-text {
+  padding-top: 50px;
+  text-align: center;
+}
+
+.drag-text h3 {
+  font-weight: 100;
+  text-transform: uppercase;
+  color: #c92846;
+}
+
+.file-upload-image {
+  width: 600px;
+  height: 420px;
+  margin: auto;
+  padding: 20px;
+}
+
+.remove-image {
+  width: 200px;
+  margin: 0;
+  color: #fff;
+  background: #cd4535;
+  border: none;
+  padding: 10px;
+  border-radius: 4px;
+  border-bottom: 4px solid #b02818;
+  transition: all 0.2s ease;
+  outline: none;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.remove-image:hover {
+  background: #c13b2a;
+  color: #ffffff;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.remove-image:active {
+  border: 0;
+  transition: all 0.2s ease;
+}
+
+.file-upload-image-side {
+  width: 231px;
+  height: 159px;
+  margin: auto;
+  padding: 20px;
+}
+
+.file-upload-side {
+  background-color: #ffffff;
+  /* width: 100%; */
+  height: 254px;
+  /* width: 600px; */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.create_btn {
+  width: 100%;
+  margin: 20px 0;
+  padding: 0 24px;
+  border: 0;
+  background: #b3225c;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 36px;
+}

@@ -49,7 +49,7 @@ util.sendBookingEmail = async (renter_name, renter_email, bookingInfo) => {
     service: "Gmail",
     host: "smtp.ethereal.email",
     port: 587,
-    secure: false, // true for 465, false for other ports
+    secure: false,
     auth: {
       type: "OAuth2",
       user: process.env.ACCOUNT,

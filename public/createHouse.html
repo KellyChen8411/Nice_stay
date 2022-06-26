@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nice Stay</title>
+    <link rel="stylesheet" href="./css/basic_nav_footer.css" />
+    <link rel="stylesheet" href="./css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="./css/semantic.min.css" />
+    <link rel="stylesheet" href="./css/createHouse.css" />
+    <script src="./js/jquery-3.6.0.min.js"></script>
+    <script src="./js/jquery-ui.min.js"></script>
+  </head>
+  <body>
+    <nav>
+      <div class="logoContainer">
+        <a href="/"><img src="./images/Logo.png" /></a>
+      </div>
+    </nav>
+    <div class="dummyDiv"></div>
+    <hr />
+
+    <div class="createHouse_outter">
+      <div class="createHouse_inner">
+        <form class="ui form">
+          <div class="houseDatail_con">
+            <h2>房源細節</h2>
+
+            <div class="houseDatail_item">
+              <h4>標題</h4>
+              <div class="field">
+                <input type="text" name="title" />
+              </div>
+            </div>
+
+            <div class="houseDatail_item">
+              <h4>類型</h4>
+              <div class="field">
+                <select name="category" class="ui fluid dropdown">
+                  <option value="0">type</option>
+                  <option value="1">獨棟</option>
+                  <option value="2">整層</option>
+                  <option value="3">套房</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="houseDatail_item">
+              <h4>地址</h4>
+              <div class="two fields city_region">
+                <div class="field">
+                  <label>城市</label>
+                  <select name="city" class="ui fluid dropdown">
+                    <option value="">城市</option>
+                    <option value="1">台北</option>
+                    <option value="2">高雄</option>
+                    <option value="3">花蓮</option>
+                    <option value="4">宜蘭</option>
+                    <option value="5">南投</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>地區</label>
+                  <input type="text" name="region" />
+                </div>
+              </div>
+
+              <div class="field">
+                <input type="text" name="address" />
+              </div>
+            </div>
+
+            <div class="houseDatail_item">
+              <h4>描述</h4>
+              <div id="title_field" class="field title_field">
+                <textarea
+                  name="description"
+                  row="10"
+                  col="50"
+                  wrap="hard"
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="houseDatail_item">
+              <h4>內部配置</h4>
+              <div class="config_con">
+                <div class="config_item">
+                  <p>房客人數</p>
+                  <div class="config_select">
+                    <div class="subtract_btn">-</div>
+                    <input name="people_count" class="config_input" value="1" />
+                    <div class="add_btn">+</div>
+                  </div>
+                </div>
+                <div class="config_item">
+                  <p>床位</p>
+                  <div class="config_select">
+                    <div class="subtract_btn">-</div>
+                    <input name="bed_count" class="config_input" value="1" />
+                    <div class="add_btn">+</div>
+                  </div>
+                </div>
+                <div class="config_item">
+                  <p>臥室</p>
+                  <div class="config_select">
+                    <div class="subtract_btn">-</div>
+                    <input name="room_count" class="config_input" value="1" />
+                    <div class="add_btn">+</div>
+                  </div>
+                </div>
+                <div class="config_item">
+                  <p>衛浴</p>
+                  <div class="config_select">
+                    <div class="subtract_btn">-</div>
+                    <input
+                      name="bathroom_count"
+                      class="config_input"
+                      value="1"
+                    />
+                    <div class="add_btn">+</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="houseDatail_item">
+              <h4>價格</h4>
+              <div class="price_con">
+                <div class="first_mainprice">
+                  <div class="price_item">
+                    <p>每晚房價</p>
+                    <input
+                      name="room_price"
+                      id="room_price"
+                      class="roomprice_input"
+                    />
+                  </div>
+                  <div class="priceSlider_con">
+                    <div id="price_slider" class="price_slider"></div>
+                  </div>
+                </div>
+                <div class="main_price">
+                  <div class="price_item">
+                    <p>稅金</p>
+                    <input
+                      name="tax_fee"
+                      id="tax_fee"
+                      class="roomprice_input"
+                    />
+                  </div>
+                  <div class="priceSlider_con">
+                    <div id="tax_slider" class="price_slider"></div>
+                  </div>
+                </div>
+                <div class="main_price">
+                  <div class="price_item">
+                    <p>清潔費</p>
+                    <input
+                      name="clean_fee"
+                      id="clean_fee"
+                      class="roomprice_input"
+                    />
+                  </div>
+                  <div class="priceSlider_con">
+                    <div id="clean_slider" class="clean_slider"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="houseDatail_item">
+              <h2>取消政策</h2>
+
+              <div class="grouped fields">
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input
+                      type="radio"
+                      id="enableRefund"
+                      name="refund_type"
+                      value="1"
+                      checked="checked"
+                    />
+                    <label>啟用</label>
+                  </div>
+                </div>
+                <div id="refund_con" class="field">
+                  <div class="ui radio checkbox">
+                    <input
+                      type="radio"
+                      id="disableRefund"
+                      name="refund_type"
+                      value="0"
+                    />
+                    <label>不啟用</label>
+                  </div>
+                </div>
+                <div id="refundDuration_con" class="field refundDuration_con">
+                  <label>入住前幾天可取消</label>
+                  <input
+                    id="refund_duration"
+                    type="number"
+                    name="refund_duration"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="houseDatail_item">
+              <h2>寵物友善</h2>
+              <div class="grouped fields">
+                <div class="field">
+                  <div class="ui radio checkbox">
+                    <input
+                      type="radio"
+                      id="enableRefund"
+                      name="pet"
+                      value="1"
+                      checked="checked"
+                    />
+                    <label>是</label>
+                  </div>
+                </div>
+                <div id="refund_con" class="field">
+                  <div class="ui radio checkbox">
+                    <input
+                      type="radio"
+                      id="disableRefund"
+                      name="pet"
+                      value="0"
+                    />
+                    <label>否</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
+          <div class="amenity_con">
+            <h2>設施</h2>
+            <div id="facility_outer" class="facility_outer">
+              <div id="facility_con" class="facility_con" data-id="1">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/air-conditioner.png"
+                />
+                <h4>空調</h4>
+              </div>
+
+              <div id="facility_con" class="facility_con" data-id="2">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/babybed.png"
+                />
+                <h4>嬰兒床</h4>
+              </div>
+
+              <div id="facility_con" class="facility_con" data-id="3">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/bathtub.png"
+                />
+                <h4>浴缸</h4>
+              </div>
+
+              <div id="facility_con" class="facility_con" data-id="4">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/kitchen.png"
+                />
+                <h4>廚房</h4>
+              </div>
+
+              <div id="facility_con" class="facility_con" data-id="5">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/television.png"
+                />
+                <h4>電視</h4>
+              </div>
+
+              <div id="facility_con" class="facility_con" data-id="6">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/washing-machine.png"
+                />
+                <h4>洗衣機</h4>
+              </div>
+
+              <div id="facility_con" class="facility_con" data-id="7">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/wifi.png"
+                />
+                <h4>WiFi</h4>
+              </div>
+
+              <div id="facility_con" class="facility_con" data-id="8">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/clothes-hanger.png"
+                />
+                <h4>衣架</h4>
+              </div>
+
+              <div id="facility_con" class="facility_con" data-id="9">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/toiletries.png"
+                />
+                <h4>盥洗用具</h4>
+              </div>
+
+              <div id="facility_con" class="facility_con" data-id="10">
+                <img
+                  src="https://d278985kbhjfo4.cloudfront.net/Nice_stay/icon/refrigerator.png"
+                />
+                <h4>冰箱</h4>
+              </div>
+            </div>
+          </div>
+
+          <hr />
+
+          <div class="image_con">
+            <h2>照片</h2>
+            <div class="main_imge">
+              <div class="file-upload">
+                <div id="image-upload-wrap0" class="image-upload-wrap">
+                  <input
+                    id="file-upload-input0"
+                    class="file-upload-input"
+                    type="file"
+                    onchange="readURL(this, 0);"
+                    accept="image/*"
+                  />
+                  <div class="drag-text">
+                    <h3>封面照片</h3>
+                    <h3>拖拉或選擇檔案</h3>
+                  </div>
+                </div>
+                <div id="file-upload-content0" class="file-upload-content">
+                  <img
+                    id="file-upload-image0"
+                    class="file-upload-image"
+                    src="#"
+                    alt="your image"
+                  />
+                  <div class="image-title-wrap">
+                    <button
+                      type="button"
+                      onclick="removeUpload(0)"
+                      class="remove-image"
+                    >
+                      Remove
+                      <span id="image-title0" class="image-title"
+                        >Uploaded Image</span
+                      >
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="sideImage_con">
+              <div class="sideImage1">
+                <div class="file-upload-side">
+                  <div id="image-upload-wrap1" class="image-upload-wrap">
+                    <input
+                      id="file-upload-input1"
+                      class="file-upload-input"
+                      type="file"
+                      onchange="readURL(this, 1);"
+                      accept="image/*"
+                    />
+                    <div class="drag-text">
+                      <h3>拖拉或選擇檔案</h3>
+                    </div>
+                  </div>
+                  <div id="file-upload-content1" class="file-upload-content">
+                    <img
+                      id="file-upload-image1"
+                      class="file-upload-image-side"
+                      src="#"
+                      alt="your image"
+                    />
+                    <div class="image-title-wrap">
+                      <button
+                        type="button"
+                        onclick="removeUpload(1)"
+                        class="remove-image"
+                      >
+                        Remove
+                        <span id="image-title1" class="image-title"
+                          >Uploaded Image</span
+                        >
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="sideImage2">
+                <div class="file-upload-side">
+                  <div id="image-upload-wrap2" class="image-upload-wrap">
+                    <input
+                      id="file-upload-input2"
+                      class="file-upload-input"
+                      type="file"
+                      onchange="readURL(this, 2);"
+                      accept="image/*"
+                    />
+                    <div class="drag-text">
+                      <h3>拖拉或選擇檔案</h3>
+                    </div>
+                  </div>
+                  <div id="file-upload-content2" class="file-upload-content">
+                    <img
+                      id="file-upload-image2"
+                      class="file-upload-image-side"
+                      src="#"
+                      alt="your image"
+                    />
+                    <div class="image-title-wrap">
+                      <button
+                        type="button"
+                        onclick="removeUpload(2)"
+                        class="remove-image"
+                      >
+                        Remove
+                        <span id="image-title2" class="image-title"
+                          >Uploaded Image</span
+                        >
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <button class="create_btn">建立房源</button>
+        </form>
+      </div>
+    </div>
+
+    <footer>
+      <div>
+        <p><small>&copy 2022 Nice Stay,Inc</small></p>
+      </div>
+      <p>.</p>
+      <div>
+        <p>隱私</p>
+      </div>
+      <p>.</p>
+      <div>
+        <p>相關條款</p>
+      </div>
+    </footer>
+
+    <script src="./js/createHouse.js"></script>
+    <script src="./js/dropImage.js"></script>
+  </body>
+</html>
