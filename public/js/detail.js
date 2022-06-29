@@ -38,13 +38,24 @@ async function rederData() {
   let amenityData = detailData.amenity;
   let reviewData = detailData.review;
   let reviewCount = reviewData.length;
+  let landLordRate = detailData.landLordRate;
+
+  console.log(houseData);
+  console.log(landLordRate);
 
   house_lat = houseData.latitude;
   house_lon = houseData.longitude;
   //title area
   $("#house_title").text(houseData.title);
-  $("#room_rate").text(reviewData[0].house_ave);
-  $("#comment_count").text(`${reviewCount}則評價`);
+
+  if (!(reviewData.length === 0)) {
+    $("#room_rate").text(reviewData[0].house_ave);
+    $("#comment_count").text(`${reviewCount}則評價`);
+  } else {
+    $("#room_rate").text("暫無評分");
+    $("#comment_count").text(`0則評價`);
+  }
+
   $("#city_region").text(`${houseData.city_name}、${houseData.region}`);
   $("#house_config").text(
     `${houseData.category_name}-${houseData.people_count}位.${houseData.room_count}間臥室.${houseData.bed_count}張床.${houseData.bathroom_count}間衛浴`
@@ -54,10 +65,10 @@ async function rederData() {
   $("#image2").attr("src", houseData.sideImages_url[0]);
   $("#image3").attr("src", houseData.sideImages_url[1]);
   //feature area
-  if (reviewData[0].landlord_ave > 4.5) {
+  if (landLordRate.length !== 0 && landLordRate[0].ave_landload_rate > 4.5) {
     let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
     clone.find("img").attr("src", "./images/landlord.png");
-    clone.find("h4").text(`${reviewData[0].landlord_name}是超讚房東`);
+    clone.find("h4").text(`${landLordRate[0].name}是超讚房東`);
     clone.removeAttr("style");
   }
   if (houseData.refund_type === 1) {
@@ -137,20 +148,31 @@ async function rederData() {
     $("#amount_fee").text(`${amountFee} TWD`);
   }
   //comment area
-  $("#comment_summary>h2").text(
-    `${reviewData[0].house_ave} (${reviewCount}則評價)`
-  );
-  reviewData.forEach((review) => {
-    let clone = $("#comment_item").clone().appendTo($("#comment_con"));
-    clone.find("h4").text(review.renter_name);
-    let comment_date = review.created_at.substr(0, 10);
-    clone.find("small").text(comment_date);
-    clone.find("p").text(review.comment);
-    clone.removeAttr("style");
-  });
+
+  if (!(reviewData.length === 0)) {
+    $("#comment_summary>h2").text(
+      `${reviewData[0].house_ave} (${reviewCount}則評價)`
+    );
+    reviewData.forEach((review) => {
+      let clone = $("#comment_item").clone().appendTo($("#comment_con"));
+      clone.find("h4").text(review.renter_name);
+      let comment_date = review.created_at.substr(0, 10);
+      clone.find("small").text(comment_date);
+      clone.find("p").text(review.comment);
+      clone.removeAttr("style");
+    });
+  } else {
+    $("#comment_summary>h2").text(`暫無評價`);
+    // $("<div>無</div>").appendTo($("#comment_con"));
+  }
+
   //landlord area
-  $("#landlord_outter>h2").text(`房東:${reviewData[0].landlord_name}`);
-  $("#landlord_outter>sapn").text(reviewData[0].landlord_ave);
+  $("#landlord_outter>h2").text(`房東:${houseData.landlord_name}`);
+  if (landLordRate.length !== 0) {
+    $("#landlord_outter>sapn").text(landLordRate[0].ave_landload_rate);
+  } else {
+    $("#landlord_outter>sapn").text("暫無評分");
+  }
 
   //map area
   window.initMap = initMap(house_lat, house_lon);
@@ -186,7 +208,6 @@ async function getNearbyInfo(e) {
       `/api/1.0/houses/nearby?lat=${house_lat}&lon=${house_lon}&type=${e.target.dataset.type}`
     );
     nearbyLocations = await nearbyLocations.json();
-    // console.log(nearbyLocations);
     if (markers.length !== 0) {
       for (i = 0; i < markers.length; i++) {
         markers[i].setMap(null);
@@ -194,7 +215,6 @@ async function getNearbyInfo(e) {
       markers = [];
     }
     for (var i = 0; i < nearbyLocations.length; i++) {
-      console.log(nearbyLocations[i]);
       var position = new google.maps.LatLng(
         nearbyLocations[i].lat,
         nearbyLocations[i].lon

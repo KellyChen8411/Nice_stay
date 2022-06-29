@@ -33,8 +33,6 @@ if (refundable === "1") {
   $("#cancel_plan").text("無");
 }
 
-// http://localhost:3000/checkout.html?id=1&startDate=2022-07-06&endDate=2022-07-09&roomfee=36000&cleanFee=2880&taxFee=3600&amountFee=42480&people_count=&refund_type=1&refund_duedate=2022-07-02%2015:59:00&refund_duedate_timestamp=1656777540000
-
 $("#checkout_btn").click(checkOut);
 
 async function checkOut() {
@@ -74,11 +72,11 @@ async function checkOut() {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
-    let resultFetch = await fetch("/api/1.0/checkout/email", {
-      method: "POST",
-      headers,
-      body: sendEmailInfo,
-    });
+    // let resultFetch = await fetch("/api/1.0/checkout/email", {
+    //   method: "POST",
+    //   headers,
+    //   body: sendEmailInfo,
+    // });
     alert(
       `您的預訂編號為${finalResult.orderNum}, 已將預訂詳情寄至您的email\n感謝預定`
     );

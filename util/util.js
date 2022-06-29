@@ -2,6 +2,7 @@ require("dotenv").config();
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const pug = require("pug");
+const s3 = require("./S3");
 
 const util = {};
 
@@ -17,16 +18,17 @@ util.checkLogin = (req, res, next) => {
   let AuthorizationHeader = req.get("Authorization");
   const token = AuthorizationHeader.split(" ")[1];
   const payload = jwt.verify(token, `${process.env.jwtsecret}`);
-  let { role } = payload;
-  res.json({ role });
+  res.json(payload);
 };
 
 util.checkLoginMiddleware = (req, res, next) => {
   try {
     let AuthorizationHeader = req.get("Authorization");
     const token = AuthorizationHeader.split(" ")[1];
+    console.log(token);
     const payload = jwt.verify(token, `${process.env.jwtsecret}`);
     req.user = payload;
+    console.log(payload);
     return next();
   } catch (err) {
     const error = Error("token過期,請重新登入");
@@ -77,6 +79,33 @@ util.sendBookingEmail = async (renter_name, renter_email, bookingInfo) => {
   });
 
   console.log("Message sent: %s", info.messageId);
+};
+
+util.uplaodImageToS3 = async (files, imageFieldName) => {
+  console.log(files[imageFieldName]);
+  let fileExtend = files[imageFieldName][0].originalname.split(".")[1];
+  let uploadPath;
+
+  if (imageFieldName === "mainImg") {
+    uploadPath = `Nice_stay/main/main_${Date.now()}.${fileExtend}`;
+  } else if (imageFieldName === "sideImg1") {
+    uploadPath = `Nice_stay/side_image/${Date.now()}_1.${fileExtend}`;
+  } else if (imageFieldName === "sideImg2") {
+    uploadPath = `Nice_stay/side_image/${Date.now()}_2.${fileExtend}`;
+  }
+
+  const params = {
+    Bucket: process.env.AWS_BUCKET_NAME,
+    Key: uploadPath, // File name you want to save as in S3
+    ContentType: files[imageFieldName][0].minetype,
+    Body: files[imageFieldName][0].buffer,
+  };
+
+  const uploadedImage = await s3.upload(params).promise();
+  const uploadFilename = uploadedImage.key;
+
+  return uploadFilename;
+  return "test";
 };
 
 module.exports = util;

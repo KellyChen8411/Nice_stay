@@ -92,8 +92,8 @@ footer {
   justify-content: center;
   align-items: center;
   z-index: 2;
-  position: fixed;
-  bottom: 0;
+  /* position: fixed;
+  bottom: 0; */
 }
 
 footer > p {
@@ -102,4 +102,13 @@ footer > p {
 
 footer a {
   cursor: pointer;
+}
+
+.DSHide {
+  display: none;
+}
+
+.footerFix{
+  position: fixed;
+  bottom: 0;
 }

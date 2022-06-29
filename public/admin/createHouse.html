@@ -2,17 +2,18 @@
 <html>
   <head>
     <title>Nice Stay</title>
-    <link rel="stylesheet" href="./css/basic_nav_footer.css" />
-    <link rel="stylesheet" href="./css/jquery-ui.min.css" />
-    <link rel="stylesheet" href="./css/semantic.min.css" />
-    <link rel="stylesheet" href="./css/createHouse.css" />
-    <script src="./js/jquery-3.6.0.min.js"></script>
-    <script src="./js/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="../css/basic_nav_footer.css" />
+    <link rel="stylesheet" href="../css/jquery-ui.min.css" />
+    <link rel="stylesheet" href="../css/semantic.min.css" />
+    <link rel="stylesheet" href="../css/createHouse.css" />
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script src="../js/jquery-ui.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   </head>
   <body>
     <nav>
       <div class="logoContainer">
-        <a href="/"><img src="./images/Logo.png" /></a>
+        <a href="/"><img src="../images/Logo.png" /></a>
       </div>
     </nav>
     <div class="dummyDiv"></div>
@@ -20,21 +21,27 @@
 
     <div class="createHouse_outter">
       <div class="createHouse_inner">
-        <form class="ui form">
+        <form
+          id="submitForm"
+          class="ui form"
+          method="post"
+          action="/"
+          enctype="multipart/form-data"
+        >
           <div class="houseDatail_con">
             <h2>房源細節</h2>
 
             <div class="houseDatail_item">
               <h4>標題</h4>
               <div class="field">
-                <input type="text" name="title" />
+                <input type="text" name="title" value="溫馨小窩" />
               </div>
             </div>
 
             <div class="houseDatail_item">
               <h4>類型</h4>
               <div class="field">
-                <select name="category" class="ui fluid dropdown">
+                <select name="category_id" class="ui fluid dropdown">
                   <option value="0">type</option>
                   <option value="1">獨棟</option>
                   <option value="2">整層</option>
@@ -48,8 +55,8 @@
               <div class="two fields city_region">
                 <div class="field">
                   <label>城市</label>
-                  <select name="city" class="ui fluid dropdown">
-                    <option value="">城市</option>
+                  <select name="city_id" id="city" class="ui fluid dropdown">
+                    <option value="0">城市</option>
                     <option value="1">台北</option>
                     <option value="2">高雄</option>
                     <option value="3">花蓮</option>
@@ -59,12 +66,12 @@
                 </div>
                 <div class="field">
                   <label>地區</label>
-                  <input type="text" name="region" />
+                  <input type="text" name="region" value="大同" />
                 </div>
               </div>
 
               <div class="field">
-                <input type="text" name="address" />
+                <input type="text" name="address" value="長安西路124號" />
               </div>
             </div>
 
@@ -76,47 +83,64 @@
                   row="10"
                   col="50"
                   wrap="hard"
+                  valeu="環境清幽\r\n價格親民"
                 ></textarea>
               </div>
             </div>
 
             <div class="houseDatail_item">
               <h4>內部配置</h4>
-              <div class="config_con">
+              <div id="config_con" class="config_con">
                 <div class="config_item">
                   <p>房客人數</p>
                   <div class="config_select">
-                    <div class="subtract_btn">-</div>
-                    <input name="people_count" class="config_input" value="1" />
-                    <div class="add_btn">+</div>
+                    <div class="subtract_btn" data-type="0">-</div>
+                    <input
+                      id="count_0"
+                      name="people_count"
+                      class="config_input"
+                      value="1"
+                    />
+                    <div class="add_btn" data-type="0">+</div>
                   </div>
                 </div>
                 <div class="config_item">
                   <p>床位</p>
                   <div class="config_select">
-                    <div class="subtract_btn">-</div>
-                    <input name="bed_count" class="config_input" value="1" />
-                    <div class="add_btn">+</div>
+                    <div class="subtract_btn" data-type="1">-</div>
+                    <input
+                      id="count_1"
+                      name="bed_count"
+                      class="config_input"
+                      value="1"
+                    />
+                    <div class="add_btn" data-type="1">+</div>
                   </div>
                 </div>
                 <div class="config_item">
                   <p>臥室</p>
                   <div class="config_select">
-                    <div class="subtract_btn">-</div>
-                    <input name="room_count" class="config_input" value="1" />
-                    <div class="add_btn">+</div>
+                    <div class="subtract_btn" data-type="2">-</div>
+                    <input
+                      id="count_2"
+                      name="room_count"
+                      class="config_input"
+                      value="1"
+                    />
+                    <div class="add_btn" data-type="2">+</div>
                   </div>
                 </div>
                 <div class="config_item">
                   <p>衛浴</p>
                   <div class="config_select">
-                    <div class="subtract_btn">-</div>
+                    <div class="subtract_btn" data-type="3">-</div>
                     <input
+                      id="count_3"
                       name="bathroom_count"
                       class="config_input"
                       value="1"
                     />
-                    <div class="add_btn">+</div>
+                    <div class="add_btn" data-type="3">+</div>
                   </div>
                 </div>
               </div>
@@ -129,7 +153,7 @@
                   <div class="price_item">
                     <p>每晚房價</p>
                     <input
-                      name="room_price"
+                      name="price"
                       id="room_price"
                       class="roomprice_input"
                     />
@@ -142,7 +166,7 @@
                   <div class="price_item">
                     <p>稅金</p>
                     <input
-                      name="tax_fee"
+                      name="tax_percentage"
                       id="tax_fee"
                       class="roomprice_input"
                     />
@@ -155,7 +179,7 @@
                   <div class="price_item">
                     <p>清潔費</p>
                     <input
-                      name="clean_fee"
+                      name="cleanfee_percentage"
                       id="clean_fee"
                       class="roomprice_input"
                     />
@@ -200,6 +224,7 @@
                     id="refund_duration"
                     type="number"
                     name="refund_duration"
+                    value="3"
                   />
                 </div>
               </div>
@@ -320,6 +345,7 @@
               <div class="file-upload">
                 <div id="image-upload-wrap0" class="image-upload-wrap">
                   <input
+                    name="mainImg"
                     id="file-upload-input0"
                     class="file-upload-input"
                     type="file"
@@ -358,6 +384,7 @@
                 <div class="file-upload-side">
                   <div id="image-upload-wrap1" class="image-upload-wrap">
                     <input
+                      name="sideImg1"
                       id="file-upload-input1"
                       class="file-upload-input"
                       type="file"
@@ -395,6 +422,7 @@
                 <div class="file-upload-side">
                   <div id="image-upload-wrap2" class="image-upload-wrap">
                     <input
+                      name="sideImg2"
                       id="file-upload-input2"
                       class="file-upload-input"
                       type="file"
@@ -430,7 +458,7 @@
             </div>
           </div>
 
-          <button class="create_btn">建立房源</button>
+          <button class="create_btn" type="submit">建立房源</button>
         </form>
       </div>
     </div>
@@ -448,8 +476,11 @@
         <p>相關條款</p>
       </div>
     </footer>
-
-    <script src="./js/createHouse.js"></script>
-    <script src="./js/dropImage.js"></script>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxu6um8A2SR1WZhJCok6BGpaPHHJGUwGI&v=weekly"
+      defer
+    ></script>
+    <script src="../js/createHouse.js"></script>
+    <script src="../js/dropImage.js"></script>
   </body>
 </html>

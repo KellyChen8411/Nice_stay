@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Nice Stay</title>
+    <link rel="stylesheet" href="./css/basic_nav_footer.css" />
+    <link rel="stylesheet" href="./css/trip.css" />
+    <link rel="stylesheet" href="./css/semantic.min.css" />
+    <script src="./js/jquery-3.6.0.min.js"></script>
+    <script src="./js/showPersonalList.js"></script>
+  </head>
+  <body>
+    <nav>
+      <div class="logoContainer">
+        <a href="/"><img src="./images/Logo.png" /></a>
+      </div>
+      <div class="landlordContainer">成為房東</div>
+      <div id="hamburgerContainer" class="hamburgerContainer">
+        <img src="./images/hamburger_icon.png" />
+      </div>
+      <div id="personalArea" class="personalArea PAHide">
+        <div><a>訊息</a></div>
+        <div><a>旅程</a></div>
+        <div><a>心願單</a></div>
+        <div id="loginBtn"><a href="/login.html">登入</a></div>
+        <div id="logoutBtn" class="DSHide"><a>登出</a></div>
+      </div>
+    </nav>
+    <div class="dummyDiv"></div>
+    <hr />
+
+    <div id="myModal" class="modal">
+
+      <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="submitForm" class="ui form submitForm" method="post" action="/"> 
+          <h3 id="review_house">溫馨小窩</h3>
+          <h3 id="review_landlord">房東: 東東</h3>
+          <div class="sartRate">
+            <span>房東評分</span>&nbsp&nbsp<div id="rater_landlord"></div>
+          </div>
+          <div class="sartRate">
+            <span>房源評分</span>&nbsp&nbsp<div id="rater_house"></div>
+          </div>
+          <div>
+            <span>分享住宿心得 (字數限制: 200)</span>
+            <br>
+            <div id="title_field" class="field title_field">
+              <textarea
+                name="description"
+                row="30"
+                col="100"
+                wrap="hard"
+                required
+              ></textarea>
+            </div>
+          </div>
+          <button class="review_btn" type="submit">送出</button>
+        </form>
+        
+      </div>
+    
+    </div>
+
+
+
+    <div class="trip_outter">
+      <div id="trip_inner" class="trip_inner">
+        <div id="trip_con" class="trip_con" style="display: none">
+          <div class="image_area">
+            <img
+              class="trip_image"
+            />
+          </div>
+          <div id="content_area" class="content_area">
+            <div class="content">
+              <h4></h4>
+              <p id="landlord"></p>
+              <p></p>
+              <p class="cancle_date"></p>
+            </div>
+          </div>
+          <div class="btn_area">
+            <button type="button"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  
+
+    <footer>
+      <div>
+        <p><small>&copy 2022 Nice Stay,Inc</small></p>
+      </div>
+      <p>.</p>
+      <div>
+        <p>隱私</p>
+      </div>
+      <p>.</p>
+      <div>
+        <p>相關條款</p>
+      </div>
+    </footer>
+
+    <script src="./js/moment.min.js"></script>
+    <script src="./js/moment-timezone-with-date.js"></script>
+    <script src="./js/star.js"></script>
+    <script src="./js/trip.js"></script>
+  </body>
+</html>

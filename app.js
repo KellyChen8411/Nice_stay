@@ -20,12 +20,14 @@ app.use("/api/" + process.env.API_VERSION, [
 
 app.use((error, req, res, next) => {
   console.log("Enter express error handling Middleware");
-  console.log(error);
   if (error.type === "userExist") {
     return res.status(404).json({ error: error.message });
   } else if (error.type === "tokenExpire") {
     return res.status(404).json({ error: "token過期,請重新登入" });
+  } else if (error.type === "userInput") {
+    return res.status(400).json({ error: error.message });
   } else {
+    console.log(error);
     res.status(500).json({ error: "internal server error" });
   }
 });

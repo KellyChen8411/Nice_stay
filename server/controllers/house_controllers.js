@@ -1,113 +1,44 @@
 require("dotenv").config();
 const houseQuery = require("../models/house_model");
 const axios = require("axios");
+const AWS = require("aws-sdk");
+const util = require("../../util/util");
+const { validationResult } = require("express-validator");
+const moment = require("moment-timezone");
 
 const createHouse = async (req, res) => {
-  // const insertValues = [
-  //     "唯樂米窩", 3,
-  //     "最遠的 不是如何遠離現實生活的塵囂 而是如何淡忘放不下的牽絆 或許應該輕撫去自限的範疇 用最單純的方式 換得簡單的美好",
-  //     3200, 10, 8, 4, 1, 2, 1, 1, 1, "萬華", "臺北市萬華區成都路101、103號1-6樓", 25.043258, 121.50437, null, null , `main_${Date.now()}.jpg`
+  //validate user input
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    // console.log('Validation Error');
+    // console.log(errors.array());
+    return res.status(400).json({ error: errors.array() });
+  }
 
-  // ];
-  // const insertValues = [
-  //     "小橋好宅", 3,
-  //     "最遠的 不是如何遠離現實生活的塵囂 而是如何淡忘放不下的牽絆 或許應該輕撫去自限的範疇 用最單純的方式 換得簡單的美好",
-  //     2800, 10, 8, 2, 1, 1, 1, 2, 1, "中山", "臺北市中山區林森北路369號", 25.057948, 121.525709, 2, 24 , `main_${Date.now()}.jpg`
+  const house_data = req.body;
+  let amenityList = JSON.parse(house_data.amenity);
+  delete house_data.amenity;
+  house_data.landlord_id = req.user.id;
+  if (house_data.refund_type === "0") {
+    delete house_data.refund_duration;
+  }
 
-  // ];
-  // const insertValues = [
-  //     "松河璞旅", 2,
-  //     "最遠的 不是如何遠離現實生活的塵囂 而是如何淡忘放不下的牽絆 或許應該輕撫去自限的範疇 用最單純的方式 換得簡單的美好",
-  //     5600, 10, 8, 4, 1, 2, 1, 2, 2, "三民", "高雄市三民區博愛一路287號10樓", 22.649068, 120.300873, 2, 48 , `main_${Date.now()}.jpg`
+  // upload Image
+  const mainImg_url = await util.uplaodImageToS3(req.files, "mainImg");
+  const sideImg1_url = await util.uplaodImageToS3(req.files, "sideImg1");
+  const sideImg2_url = await util.uplaodImageToS3(req.files, "sideImg2");
 
-  // ];
-  // const insertValues = [
+  house_data.image_url = mainImg_url;
+  const image_data = [sideImg1_url, sideImg2_url];
 
-  //     "白墅", 1,
-  //     "最遠的 不是如何遠離現實生活的塵囂 而是如何淡忘放不下的牽絆 或許應該輕撫去自限的範疇 用最單純的方式 換得簡單的美好",
-  //     15000, 10, 8, 10, 5, 5, 3, 1, 2, "苓雅", "高雄市苓雅區建民路37號", 22.628559, 120.332979, 1, 7 , `main_${Date.now()}.jpg`
+  const createResult = await houseQuery.createHouse(
+    house_data,
+    image_data,
+    amenityList
+  );
+  // console.log(createResult);
 
-  // ];
-  const insertValues1 = [
-    "簡單生活",
-    3,
-    "最遠的 不是如何遠離現實生活的塵囂 而是如何淡忘放不下的牽絆 或許應該輕撫去自限的範疇 用最單純的方式 換得簡單的美好",
-    3490,
-    10,
-    8,
-    2,
-    1,
-    1,
-    1,
-    2,
-    3,
-    "花蓮",
-    "花蓮縣花蓮市國富里國富十街39號",
-    23.989245,
-    121.596774,
-    0,
-    null,
-    `main_${Date.now()}.jpg`,
-    `${Date.now()}`,
-    `${Date.now()}`,
-    0,
-  ];
-
-  const insertValues2 = [
-    "星湖．森活",
-    1,
-    "最遠的 不是如何遠離現實生活的塵囂 而是如何淡忘放不下的牽絆 或許應該輕撫去自限的範疇 用最單純的方式 換得簡單的美好",
-    15000,
-    10,
-    8,
-    2,
-    12,
-    5,
-    6,
-    2,
-    4,
-    "冬山",
-    "宜蘭縣冬山鄉梅花路567之1號",
-    24.662389,
-    121.737551,
-    1,
-    5,
-    `main_${Date.now()}.jpg`,
-    `${Date.now()}`,
-    `${Date.now()}`,
-    1,
-  ];
-
-  const insertValues3 = [
-    "貓步民宿",
-    2,
-    "最遠的 不是如何遠離現實生活的塵囂 而是如何淡忘放不下的牽絆 或許應該輕撫去自限的範疇 用最單純的方式 換得簡單的美好",
-    6000,
-    10,
-    8,
-    6,
-    3,
-    3,
-    2,
-    1,
-    5,
-    "埔里",
-    "南投縣埔里鎮大湳里虎山路17號",
-    23.975021,
-    120.978999,
-    1,
-    10,
-    `main_${Date.now()}.jpg`,
-    `${Date.now()}`,
-    `${Date.now()}`,
-    1,
-  ];
-
-  const insertDate = [insertValues1, insertValues2, insertValues3];
-
-  const result = await houseQuery.createHouse(insertDate);
-
-  res.send("test");
+  res.json({ house_id: createResult });
 };
 
 const selectAllHouse = async (req, res) => {
@@ -121,7 +52,7 @@ const selectAllHouse = async (req, res) => {
     APIData.next_paging = paging + 1;
     houses.pop();
   }
-  const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN + "/main/";
+  const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN;
   houses.forEach((house) => {
     house.image_url = imageURL_prefix + house.image_url;
   });
@@ -160,7 +91,7 @@ const houseSearch = async (req, res) => {
     houses.pop();
   }
   // console.log(houses);
-  const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN + "/main/";
+  const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN;
   houses.forEach((house) => {
     house.image_url = imageURL_prefix + house.image_url;
   });
@@ -205,10 +136,9 @@ const houseDatail = async (req, res) => {
   const houses = await houseQuery.houseDatail(id);
   houses[0].sideImages_url = [];
   houses.forEach((house) => {
-    house.image_url =
-      process.env.CLOUDFRONT_DOMAIN + "/main/" + house.image_url;
+    house.image_url = process.env.CLOUDFRONT_DOMAIN + house.image_url;
     houses[0].sideImages_url.push(
-      process.env.CLOUDFRONT_DOMAIN + "/side_image/" + house.sideImage_url
+      process.env.CLOUDFRONT_DOMAIN + house.sideImage_url
     );
   });
   let houseData = houses[0];
@@ -220,15 +150,31 @@ const houseDatail = async (req, res) => {
   //get review
   const reviewData = await houseQuery.houseReview([
     id,
-    houseData.landlord_id,
+    // houseData.landlord_id,
     id,
   ]);
 
-  res.json({ house: houseData, amenity: amenityData, review: reviewData });
+  //get landlordRate
+  let landLordRate = await houseQuery.landLordRate(houseData.landlord_id);
+
+  if (landLordRate.length === 0) {
+    landLordRate = [];
+  }
+  console.log(landLordRate);
+
+  res.json({
+    house: houseData,
+    amenity: amenityData,
+    review: reviewData,
+    landLordRate,
+  });
 };
 
 const houseNearby = async (req, res) => {
   let { lat, lon, type } = req.query;
+  console.log(lat);
+  console.log(lon);
+  console.log(type);
   let URL;
   if (type === "traffic") {
     URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat}%2C${lon}&radius=1000&type=bus_station&key=${process.env.GOOGLEAPI_KEY}`;
@@ -256,8 +202,52 @@ const houseNearby = async (req, res) => {
     });
   });
 
+  console.log(nearbyLocationsData);
+
   res.json(nearbyLocationSet);
 };
+
+const selectTrip = async (req, res) => {
+  const user_id = req.query.userID;
+  const userTrip = await houseQuery.selectTrip(user_id);
+
+  // mysql2 會轉date時間，將時間轉回台灣日期
+  userTrip.forEach((trip) => {
+    trip.checkin_date = moment(trip.checkin_date)
+      .tz("Asia/Taipei")
+      .format("YYYY-MM-DD");
+    trip.checkout_date = moment(trip.checkout_date)
+      .tz("Asia/Taipei")
+      .format("YYYY-MM-DD");
+    trip.image_url = process.env.CLOUDFRONT_DOMAIN + trip.image_url;
+  });
+  console.log(userTrip);
+  res.json(userTrip);
+};
+
+const checkRefund = async (req, res) => {
+  const booking_id = req.query.booking_id;
+  const requestCancelTime = parseInt(req.query.requestCancelTime);
+  let dueTime = await houseQuery.getRefundDue(booking_id);
+  dueTime = parseInt(dueTime);
+  console.log(requestCancelTime);
+  console.log(dueTime);
+  if(dueTime>=requestCancelTime){
+    await houseQuery.updateBooking(booking_id);
+    return res.json({cancel: true});
+  }else{
+    res.json({cancel: false});
+  }
+  
+}
+
+const leftreview = async (req, res) => {
+  let reviewInfo = req.body;
+  await houseQuery.leftreview(reviewInfo);
+  res.json({status: 'succeed'})
+}
+
+
 
 module.exports = {
   createHouse,
@@ -266,4 +256,7 @@ module.exports = {
   houseDatail,
   houseNearby,
   houseTest,
+  selectTrip,
+  checkRefund,
+  leftreview
 };
