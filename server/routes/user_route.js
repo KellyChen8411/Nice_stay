@@ -4,7 +4,7 @@ const multer = require("multer");
 const upload = multer();
 const { body } = require("express-validator");
 
-const { userSignUp, userSignIn } = require("../controllers/user_controller");
+const { userSignUp, userSignIn, addBlackList } = require("../controllers/user_controller");
 
 router.route("/users/signup").post(
   upload.array(),
@@ -44,5 +44,7 @@ router
   );
 
 router.route("/users/checkLogin").get(util.checkLogin);
+
+router.route("/users/blacklist").post(util.wrapAsync(addBlackList));
 
 module.exports = router;

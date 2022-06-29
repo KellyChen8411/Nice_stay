@@ -84,7 +84,14 @@ const userSignIn = async (req, res) => {
   res.json({ token });
 };
 
+const addBlackList = async (req, res) => {
+  let blacklistInfo = req.body;
+  await userQuery.addBlackList(blacklistInfo);
+  res.json({status: "succeed"});
+}
+
 module.exports = {
   userSignUp,
   userSignIn,
+  addBlackList
 };

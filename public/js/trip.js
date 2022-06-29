@@ -20,11 +20,11 @@ async function checkForLogin() {
     //fetch trip data
     renter_id = finalResult.id;
     const tripsRes = await fetch(
-      `/api/1.0/houses/trip?userID=${finalResult.id}`
+      `/api/1.0/houses/trip`,
+       { headers }
     );
     const trips = await tripsRes.json();
     const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
-    console.log(trips);
 
     let now_trip = []; //type 0
     let future_trip = []; //type 1

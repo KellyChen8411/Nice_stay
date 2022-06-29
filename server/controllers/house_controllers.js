@@ -208,8 +208,20 @@ const houseNearby = async (req, res) => {
 };
 
 const selectTrip = async (req, res) => {
-  const user_id = req.query.userID;
-  const userTrip = await houseQuery.selectTrip(user_id);
+  let requestType = "trip";
+  //for managebooking page
+  if(req.url === "/houses/booking"){
+    if(req.user.role !== 2){
+      const err = new Error("權限不足");
+      err.type = "forbidden"
+      throw err;
+    }else{
+      requestType = "booking";
+    }
+  }
+
+  const user_id = req.user.id;
+  const userTrip = await houseQuery.selectTrip(user_id, requestType);
 
   // mysql2 會轉date時間，將時間轉回台灣日期
   userTrip.forEach((trip) => {
@@ -223,6 +235,8 @@ const selectTrip = async (req, res) => {
   });
   console.log(userTrip);
   res.json(userTrip);
+
+  // res.json({test: 'test'});
 };
 
 const checkRefund = async (req, res) => {
@@ -258,5 +272,5 @@ module.exports = {
   houseTest,
   selectTrip,
   checkRefund,
-  leftreview
+  leftreview,
 };

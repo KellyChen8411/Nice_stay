@@ -13,7 +13,7 @@ const {
   houseTest,
   selectTrip,
   checkRefund,
-  leftreview
+  leftreview,
 } = require("../controllers/house_controllers");
 
 router.route("/houses/create").post(
@@ -74,10 +74,13 @@ router.route("/houses/nearby").get(util.wrapAsync(houseNearby));
 // router.route('/houses/test')
 //     .get(upload.array(), util.wrapAsync(houseTest));
 
-router.route("/houses/trip").get(util.wrapAsync(selectTrip));
+router.route("/houses/trip").get(util.checkLoginMiddleware, util.wrapAsync(selectTrip));
+
+router.route("/houses/booking").get(util.checkLoginMiddleware, util.wrapAsync(selectTrip));
 
 router.route("/houses/checkRefund").get(util.wrapAsync(checkRefund));
 
 router.route("/houses/review").post(util.wrapAsync(leftreview));
+
 
 module.exports = router;

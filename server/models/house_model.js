@@ -277,10 +277,16 @@ houseQuery.landLordRate = async (landlord_id) => {
 //   await pool.query(sql, [values]);
 // };
 
-houseQuery.selectTrip = async (renter_id) => {
-  let sql =
-    "SELECT d.id AS booking_id, d.landlord_id,d.checkin_date, d.checkout_date, d.refund_duetime, d.is_refund, d.renter_id , e.* FROM booking d left join (SELECT a.id as house_id, a.title, a.image_url, b.name AS city_name, c.name AS landloard_name FROM house a left join city b ON a.city_id=b.id left join user c ON a.landlord_id=c.id) e ON d.house_id=e.house_id WHERE d.renter_id=? order by d.checkin_date;";
-  const [result] = await pool.query(sql, renter_id);
+houseQuery.selectTrip = async (user_id, requestType) => {
+  let sql;
+  if(requestType === "trip"){
+    sql = 
+    "SELECT d.id AS booking_id, d.landlord_id,d.checkin_date, d.checkout_date, d.refund_duetime, d.is_refund, d.renter_id , e.* FROM booking d left join (SELECT a.id as house_id, a.title, a.image_url, b.name AS city_name, c.name AS landloard_name FROM house a left join city b ON a.city_id=b.id left join user c ON a.landlord_id=c.id) e ON d.house_id=e.house_id WHERE d.renter_id=? order by d.checkin_date";
+  }else{
+    sql = 
+    "SELECT d.id AS booking_id, d.landlord_id,d.checkin_date, d.checkout_date, d.refund_duetime, d.is_refund, d.renter_id , e.*, f.name as renter_name FROM booking d left join (SELECT a.id as house_id, a.title, a.image_url, b.name AS city_name, c.name AS landloard_name FROM house a left join city b ON a.city_id=b.id left join user c ON a.landlord_id=c.id) e ON d.house_id=e.house_id left join user f ON d.renter_id=f.id WHERE d.landlord_id=? order by d.checkin_date";
+  }
+  const [result] = await pool.query(sql, user_id);
   return result;
 };
 
