@@ -1,3 +1,5 @@
+let userFavoriteList; //存user收藏房源的全域變數
+
 let token = localStorage.getItem("token");
 let headers = {
   "Content-Type": "application/json",
@@ -14,6 +16,8 @@ async function checkForLogin() {
     if (finalResult.role === 2) {
       $("#landlordContainer").text("切換至出租模式");
     }
+    //update token
+    localStorage.setItem("token", finalResult.new_token);
   }
 }
 

@@ -20,6 +20,7 @@ app.use("/api/" + process.env.API_VERSION, [
 
 app.use((error, req, res, next) => {
   console.log("Enter express error handling Middleware");
+  console.log(error);
   if (error.type === "userExist") {
     return res.status(404).json({ error: error.message });
   } else if (error.type === "tokenExpire") {

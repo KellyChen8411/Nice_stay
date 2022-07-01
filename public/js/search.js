@@ -53,6 +53,17 @@ async function submitMainSearch() {
     houseArea_container.empty();
     houseItemClone.appendTo(houseArea_container);
     renderHouseData(houseDatas.data);
+    ////////////////////////////////////////////////////////////////////////////
+    //get user favorite house and render
+    let houseThisPage = houseDatas.data.map( house => house.id)
+    let favoriteRes= await fetch("/api/1.0/houses/favorite", { headers });
+    let favoriteData = await favoriteRes.json();
+    if(favoriteRes.status === 200){
+      userFavoriteList = favoriteData;
+      let FavoriteForPage = userFavoriteList.filter(element => houseThisPage.includes(element));
+      renderLikeIcon(FavoriteForPage);
+    }
+    
     $("html,body").scrollTop(0);
 
     //render page selector
@@ -111,13 +122,23 @@ async function detailSearch(e) {
   const req = new Request(URL, { method: "POST", body: data });
   let houseDatas = await fetch(req);
   let status = houseDatas.status;
-  console.log(status);
   if (status === 200) {
     selectType = "detailSearch";
     houseDatas = await houseDatas.json();
     houseArea_container.empty();
     houseItemClone.appendTo(houseArea_container);
     renderHouseData(houseDatas.data);
+    ////////////////////////////////////////////////////////////////////////////
+    //get user favorite house and render
+    let houseThisPage = houseDatas.data.map( house => house.id)
+    let favoriteRes= await fetch("/api/1.0/houses/favorite", { headers });
+    let favoriteData = await favoriteRes.json();
+    if(favoriteRes.status === 200){
+      userFavoriteList = favoriteData;
+      let FavoriteForPage = userFavoriteList.filter(element => houseThisPage.includes(element));
+      renderLikeIcon(FavoriteForPage);
+    }
+
     $("html,body").scrollTop(0);
 
     //render page selector

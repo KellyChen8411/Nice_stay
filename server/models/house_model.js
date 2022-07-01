@@ -344,4 +344,28 @@ houseQuery.deleteAmenity = async (house_id) => {
   return result;
 };
 
+houseQuery.likeHouse = async (user_id, house_id) => {
+  let sql = "INSERT INTO favorite (renter_id, house_id) VALUES (?, ?)";
+  const [result] = await pool.query(sql, [user_id,house_id]);
+  return result;
+}
+
+houseQuery.findFavoriteID = async (user_id, house_id) => {
+  let sql = "SELECT id FROM favorite WHERE renter_id=? AND house_id=?";
+  const [result] = await pool.query(sql, [user_id,house_id]);
+  return result[0].id;
+}
+
+houseQuery.dislikeHouse = async (favorite_id) => {
+  let sql = "DELETE FROM favorite WHERE id=?";
+  const [result] = await pool.query(sql, favorite_id);
+  return result;
+}
+
+houseQuery.selectUserFavoriteHouse = async (user_id) => {
+  let sql = "SELECT json_arrayagg(house_id) AS id_list FROM nice_stay.favorite WHERE renter_id=?";
+  const [result] = await pool.query(sql, user_id);
+  return result[0].id_list;
+}
+
 module.exports = houseQuery;

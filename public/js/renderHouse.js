@@ -13,6 +13,17 @@ async function fetchHouseData() {
   houseDatas = await houseDatas.json();
   renderHouseData(houseDatas.data);
 
+  ////////////////////////////////////////////////////////////////////////////
+  //get user favorite house and render
+  let houseThisPage = houseDatas.data.map( house => house.id)
+  let favoriteRes= await fetch("/api/1.0/houses/favorite", { headers });
+  let favoriteData = await favoriteRes.json();
+  if(favoriteRes.status === 200){
+    userFavoriteList = favoriteData;
+    let FavoriteForPage = userFavoriteList.filter(element => houseThisPage.includes(element));
+    renderLikeIcon(FavoriteForPage);
+  }
+
   //render page selector
   let pageSelectorCon = $("#changePage_con");
   for (let i = 1; i <= houseDatas.totalPage; i++) {
@@ -71,6 +82,17 @@ async function changePage(e) {
       houseArea_container.empty();
       houseItemClone.appendTo(houseArea_container);
       renderHouseData(houseDatas.data);
+      /////////////////////////////////////////////////////////////
+      //get user favorite house and render
+      let houseThisPage = houseDatas.data.map( house => house.id)
+      let favoriteRes= await fetch("/api/1.0/houses/favorite", { headers });
+      let favoriteData = await favoriteRes.json();
+      if(favoriteRes.status === 200){
+        userFavoriteList = favoriteData;
+        let FavoriteForPage = userFavoriteList.filter(element => houseThisPage.includes(element));
+        renderLikeIcon(FavoriteForPage);
+      }
+
       $("html,body").scrollTop(0);
     }
   }
@@ -115,10 +137,10 @@ function renderHouseData(datas) {
   });
 }
 
-let ele = document.getElementById("houseArea");
-ele.addEventListener("scroll", function () {
-  console.log(ele.scrollTop);
-});
+// let ele = document.getElementById("houseArea");
+// ele.addEventListener("scroll", function () {
+//   console.log(ele.scrollTop);
+// });
 
 function renderCityData(datas) {
   datas.map((data, index) => {
@@ -139,4 +161,12 @@ function renderAmenityData(datas) {
     clone.find("input").attr("value", data.id);
     clone.removeAttr("style");
   });
+}
+
+function renderLikeIcon(houseIDList){
+  houseIDList.forEach( houseID => {
+    let iconTag = $(`a[data-id=${houseID}]>i`)[0];
+    iconTag.classList.toggle("grey");
+    iconTag.classList.toggle("red");
+  })
 }

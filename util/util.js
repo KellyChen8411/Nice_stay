@@ -18,7 +18,14 @@ util.checkLogin = (req, res, next) => {
   let AuthorizationHeader = req.get("Authorization");
   const token = AuthorizationHeader.split(" ")[1];
   const payload = jwt.verify(token, `${process.env.jwtsecret}`);
-  res.json(payload);
+  let user_id = payload.id;
+  //update token for user
+  delete payload.iat;
+  delete payload.exp;
+  const new_token = jwt.sign(payload, process.env.JWTSECRET, {
+    expiresIn: "180d",
+  });
+  res.json({ new_token, user_id });
 };
 
 util.checkLoginMiddleware = (req, res, next) => {

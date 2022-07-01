@@ -444,6 +444,32 @@ const deleteHouse = async (req, res) => {
   }
 };
 
+const likeHouse = async (req, res) => {
+  const user_id = req.user.id;
+  const house_id = req.query.id;
+  await houseQuery.likeHouse(user_id, house_id);
+  const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
+  console.log(favoriteList);
+  res.json(favoriteList);
+}
+
+const dislikeHouse = async (req, res) => {
+  const user_id = req.user.id;
+  const house_id = req.query.id;
+  const favorite_id = await houseQuery.findFavoriteID(user_id, house_id);
+  console.log('favorite_id');
+  console.log(favorite_id);
+  await houseQuery.dislikeHouse(favorite_id);
+  const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
+  res.json(favoriteList);
+}
+
+const getUserFavorite = async (req, res) => {
+  const user_id = req.user.id;
+  const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
+  res.json(favoriteList);
+}
+
 module.exports = {
   createHouse,
   selectAllHouse,
@@ -458,4 +484,7 @@ module.exports = {
   houseHistroyData,
   updateHouse,
   deleteHouse,
+  likeHouse,
+  dislikeHouse,
+  getUserFavorite
 };

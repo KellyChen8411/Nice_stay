@@ -37,9 +37,9 @@ const userSignUp = async (req, res) => {
     role: 1,
   };
   const token = jwt.sign(userInfo, process.env.JWTSECRET, {
-    expiresIn: "1d",
+    expiresIn: "180d",
   });
-  console.log(token);
+  // console.log(token);
 
   res.json({ token });
 };
@@ -77,7 +77,7 @@ const userSignIn = async (req, res) => {
 
   //generate token
   const token = jwt.sign(userInfo, process.env.JWTSECRET, {
-    expiresIn: "1d",
+    expiresIn: "180d",
   });
   console.log(token);
 
