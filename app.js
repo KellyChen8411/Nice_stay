@@ -26,9 +26,11 @@ app.use((error, req, res, next) => {
     return res.status(404).json({ error: "token過期,請重新登入" });
   } else if (error.type === "userInput") {
     return res.status(400).json({ error: error.message });
-  } else if(error.type === "forbidden"){
+  } else if (error.type === "forbidden") {
     return res.status(403).json({ error: error.message });
-  }else {
+  } else if (error.type === "S3error") {
+    return res.status(500).json({ error: error.message });
+  } else {
     console.log(error);
     res.status(500).json({ error: "internal server error" });
   }

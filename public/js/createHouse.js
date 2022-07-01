@@ -56,7 +56,6 @@ $(function () {
 });
 
 //facility area
-let facilityList = new Map();
 let facilityCon = $("#facility_outer");
 
 facilityCon.click(checkFacility);
@@ -89,7 +88,7 @@ function alertStatus() {
   }
 }
 
-//send data to server
+//送出建立資料
 
 let submitForm = $("#submitForm");
 
@@ -163,4 +162,51 @@ async function createHouse(e) {
       }
     }
   );
+}
+
+//送出編輯資料
+
+$("#edit_btn").click(sendEditData);
+
+async function sendEditData(e) {
+  let lackOfUpload = false;
+  e.preventDefault();
+
+  //確認被刪除的照片是否上傳
+  let deleteImgIndex = Object.keys(deleteImgList);
+  deleteImgIndex.forEach((imgindex, index) => {
+    imgindex = parseInt(imgindex);
+    let uploadNewImg = $(`#file-upload-input${imgindex}`)[0].files;
+    if (uploadNewImg.length === 0) {
+      alert(`請上傳第${imgindex + 1}張照片`);
+      lackOfUpload = true;
+    }
+  });
+
+  if (lackOfUpload === false) {
+    let data = new FormData(submitForm[0]);
+    data.append("deleteImg", JSON.stringify(deleteImgList));
+    data.append("amenity", JSON.stringify([...facilityList.keys()]));
+    //clean unit for price
+    data.set("price", data.get("price").slice(1));
+    data.set("tax_percentage", data.get("tax_percentage").slice(0, -1));
+    data.set(
+      "cleanfee_percentage",
+      data.get("cleanfee_percentage").slice(0, -1)
+    );
+
+    let URL = `/api/1.0/houses/updateHouse?id=${house_id}`;
+    let featchResponse = await fetch(URL, {
+      method: "PATCH",
+      body: data,
+    });
+    let fetchStatus = featchResponse.status;
+    let fetchData = await featchResponse.json();
+    if (fetchStatus === 200) {
+      alert("編輯成功");
+      window.location.href = "/admin/manageHouse.html";
+    } else {
+      alert(`編輯失敗,原因: ${fetchData.error}`);
+    }
+  }
 }

@@ -29,22 +29,28 @@
     <hr />
 
     <div id="myModal" class="modal">
-
       <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
-        <form id="submitForm" class="ui form submitForm" method="post" action="/"> 
+        <form
+          id="submitForm"
+          class="ui form submitForm"
+          method="post"
+          action="/"
+        >
           <h3 id="review_house">溫馨小窩</h3>
           <h3 id="review_landlord">房東: 東東</h3>
           <div class="sartRate">
-            <span>房東評分</span>&nbsp&nbsp<div id="rater_landlord"></div>
+            <span>房東評分</span>&nbsp&nbsp
+            <div id="rater_landlord"></div>
           </div>
           <div class="sartRate">
-            <span>房源評分</span>&nbsp&nbsp<div id="rater_house"></div>
+            <span>房源評分</span>&nbsp&nbsp
+            <div id="rater_house"></div>
           </div>
           <div>
             <span>分享住宿心得 (字數限制: 200)</span>
-            <br>
+            <br />
             <div id="title_field" class="field title_field">
               <textarea
                 name="description"
@@ -57,20 +63,14 @@
           </div>
           <button class="review_btn" type="submit">送出</button>
         </form>
-        
       </div>
-    
     </div>
-
-
 
     <div class="trip_outter">
       <div id="trip_inner" class="trip_inner">
         <div id="trip_con" class="trip_con" style="display: none">
           <div class="image_area">
-            <img
-              class="trip_image"
-            />
+            <img class="trip_image" />
           </div>
           <div id="content_area" class="content_area">
             <div class="content">
@@ -86,8 +86,6 @@
         </div>
       </div>
     </div>
-
-  
 
     <footer>
       <div>

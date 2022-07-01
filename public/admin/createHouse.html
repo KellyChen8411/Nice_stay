@@ -9,6 +9,7 @@
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script src="../js/jquery-ui.min.js"></script>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="../js/checkEdit.js"></script>
   </head>
   <body>
     <nav>
@@ -34,14 +35,18 @@
             <div class="houseDatail_item">
               <h4>標題</h4>
               <div class="field">
-                <input type="text" name="title" value="溫馨小窩" />
+                <input id="title" type="text" name="title" />
               </div>
             </div>
 
             <div class="houseDatail_item">
               <h4>類型</h4>
               <div class="field">
-                <select name="category_id" class="ui fluid dropdown">
+                <select
+                  id="category"
+                  name="category_id"
+                  class="ui fluid dropdown"
+                >
                   <option value="0">type</option>
                   <option value="1">獨棟</option>
                   <option value="2">整層</option>
@@ -66,12 +71,12 @@
                 </div>
                 <div class="field">
                   <label>地區</label>
-                  <input type="text" name="region" value="大同" />
+                  <input id="region" type="text" name="region" />
                 </div>
               </div>
 
               <div class="field">
-                <input type="text" name="address" value="長安西路124號" />
+                <input type="text" name="address" id="address" />
               </div>
             </div>
 
@@ -83,7 +88,7 @@
                   row="10"
                   col="50"
                   wrap="hard"
-                  valeu="環境清幽\r\n價格親民"
+                  id="description"
                 ></textarea>
               </div>
             </div>
@@ -224,7 +229,6 @@
                     id="refund_duration"
                     type="number"
                     name="refund_duration"
-                    value="3"
                   />
                 </div>
               </div>
@@ -237,7 +241,6 @@
                   <div class="ui radio checkbox">
                     <input
                       type="radio"
-                      id="enableRefund"
                       name="pet"
                       value="1"
                       checked="checked"
@@ -247,12 +250,7 @@
                 </div>
                 <div id="refund_con" class="field">
                   <div class="ui radio checkbox">
-                    <input
-                      type="radio"
-                      id="disableRefund"
-                      name="pet"
-                      value="0"
-                    />
+                    <input type="radio" id="disablepet" name="pet" value="0" />
                     <label>否</label>
                   </div>
                 </div>
@@ -369,6 +367,8 @@
                       type="button"
                       onclick="removeUpload(0)"
                       class="remove-image"
+                      id="removeImgBtn0"
+                      data-type="create"
                     >
                       Remove
                       <span id="image-title0" class="image-title"
@@ -407,6 +407,8 @@
                         type="button"
                         onclick="removeUpload(1)"
                         class="remove-image"
+                        id="removeImgBtn1"
+                        data-type="create"
                       >
                         Remove
                         <span id="image-title1" class="image-title"
@@ -445,6 +447,8 @@
                         type="button"
                         onclick="removeUpload(2)"
                         class="remove-image"
+                        id="removeImgBtn2"
+                        data-type="create"
                       >
                         Remove
                         <span id="image-title2" class="image-title"
@@ -458,7 +462,17 @@
             </div>
           </div>
 
-          <button class="create_btn" type="submit">建立房源</button>
+          <button id="create_btn" class="create_btn" type="submit">
+            建立房源
+          </button>
+          <button
+            id="edit_btn"
+            class="edit_btn"
+            type="submit"
+            style="display: none"
+          >
+            確認編輯
+          </button>
         </form>
       </div>
     </div>

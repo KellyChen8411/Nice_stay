@@ -5,6 +5,7 @@ const AWS = require("aws-sdk");
 const util = require("../../util/util");
 const { validationResult } = require("express-validator");
 const moment = require("moment-timezone");
+const { pool } = require("../models/mysqlcon");
 
 const createHouse = async (req, res) => {
   //validate user input
@@ -103,7 +104,6 @@ const houseSearch = async (req, res) => {
 const houseTest = async (req, res) => {
   // const house_id = await houseQuery.getHouseID();
   // const amenity_id = [1,2,3,4,5,6,7,8,9,10];
-
   // function getRandomSubarray(arr, size) {
   //     var shuffled = arr.slice(0), i = arr.length, temp, index;
   //     while (i--) {
@@ -114,7 +114,6 @@ const houseTest = async (req, res) => {
   //     }
   //     return shuffled.slice(0, size);
   // }
-
   // let insertData = [];
   // house_id.forEach(house => {
   //     let arrayNum = Math.floor(Math.random() * (10- 6 + 1)) + 6;
@@ -127,7 +126,39 @@ const houseTest = async (req, res) => {
   // // console.log(insertData);
   // await houseQuery.insertAmenity(insertData);
   // res.send('test');
-  res.json({ test: "test" });
+  // let newAmenityList = [1,2,3,4,7,8,10];
+  // let new_id_list = [];
+  // for(let i=0; i<newAmenityList.length; i++){
+  //   let temp = [1, newAmenityList[i]];
+  //   new_id_list.push(temp);
+  // }
+  // let house_id = 1;
+  // const conn = await pool.getConnection();
+  // try {
+  //   // await conn.query("START TRANSACTION");
+  //   // await conn.query( "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?", [ new_id_list ] );
+  //   const [result] = await conn.query( "SELECT JSON_ARRAYAGG(id) AS id_list FROM house_amenity WHERE house_id=?", house_id );
+  //   let id_list = result[0].id_list;
+  //   console.log(id_list);
+  //   // let new_id_list = [];
+  //   // for(let i=0; i<id_list.length; i++){
+  //   //   let temp = [];
+  //   //   temp.push(id_list[i]);
+  //   //   new_id_list.push(temp);
+  //   // }
+  //   // console.log(new_id_list);
+  //   // const [result2] = await conn.query( "SELECT * FROM house_amenity WHERE id in (?)", [ id_list ] );
+  //   const [result2] = await conn.query( "DELETE FROM house_amenity WHERE id in (?)",  [ id_list ]   );
+  //   console.log(result2);
+  //   res.json({ test: "test" });
+  //   await conn.query("COMMIT");
+  // } catch (error) {
+  //   await conn.query("ROLLBACK");
+  //   console.log(error);
+  //   return -1;
+  // } finally {
+  //   await conn.release();
+  // }
 };
 
 const houseDatail = async (req, res) => {
@@ -210,12 +241,12 @@ const houseNearby = async (req, res) => {
 const selectTrip = async (req, res) => {
   let requestType = "trip";
   //for managebooking page
-  if(req.url === "/houses/booking"){
-    if(req.user.role !== 2){
+  if (req.url === "/houses/booking") {
+    if (req.user.role !== 2) {
       const err = new Error("權限不足");
-      err.type = "forbidden"
+      err.type = "forbidden";
       throw err;
-    }else{
+    } else {
       requestType = "booking";
     }
   }
@@ -246,22 +277,172 @@ const checkRefund = async (req, res) => {
   dueTime = parseInt(dueTime);
   console.log(requestCancelTime);
   console.log(dueTime);
-  if(dueTime>=requestCancelTime){
+  if (dueTime >= requestCancelTime) {
     await houseQuery.updateBooking(booking_id);
-    return res.json({cancel: true});
-  }else{
-    res.json({cancel: false});
+    return res.json({ cancel: true });
+  } else {
+    res.json({ cancel: false });
   }
-  
-}
+};
 
 const leftreview = async (req, res) => {
   let reviewInfo = req.body;
   await houseQuery.leftreview(reviewInfo);
-  res.json({status: 'succeed'})
-}
+  res.json({ status: "succeed" });
+};
 
+const landlordHouse = async (req, res) => {
+  if (req.user.role !== 2) {
+    const err = new Error("權限不足");
+    err.type = "forbidden";
+    throw err;
+  }
+  let landlord_id = req.user.id;
+  const houses = await houseQuery.landlordHouse(landlord_id);
+  houses.forEach((house) => {
+    house.image_url = process.env.CLOUDFRONT_DOMAIN + house.image_url;
+  });
+  res.json(houses);
+};
 
+const houseHistroyData = async (req, res) => {
+  const landlord_id = req.user.id;
+  const house_id = req.query.id;
+  console.log(`landlord: ${landlord_id}`);
+  console.log(`house: ${house_id}`);
+  const house = await houseQuery.houseHistroyData(landlord_id, house_id);
+  console.log(house);
+  if (house.length === 0) {
+    const err = new Error("權限不足");
+    err.type = "forbidden";
+    throw err;
+  }
+
+  house[0].image_url = process.env.CLOUDFRONT_DOMAIN + house[0].image_url;
+
+  house[0].sideimage_list = house[0].sideimage_list.map(
+    (sideimage_url) => process.env.CLOUDFRONT_DOMAIN + sideimage_url
+  );
+
+  console.log(house);
+  res.json(house);
+};
+
+const updateHouse = async (req, res) => {
+  const conn = await pool.getConnection();
+  try {
+    let house_id = req.query.id;
+    let { deleteImg, amenity } = req.body;
+    deleteImg = JSON.parse(deleteImg);
+    let amenityList = JSON.parse(amenity);
+    //delete redundant data in house data
+    delete req.body.deleteImg;
+    delete req.body.city_id;
+    delete req.body.region;
+    delete req.body.address;
+    delete req.body.amenity;
+    req.body.updated_at = Date.now();
+    const updateHouseData = req.body;
+
+    //upload all uploaded image and update image(side) table and delete side image in S3
+    let deleteImgIndex = Object.keys(deleteImg);
+    let imageUploadType = ["mainImg", "sideImg1", "sideImg2"];
+    if (deleteImgIndex.length !== 0) {
+      for (let i = 0; i < deleteImgIndex.length; i++) {
+        let ImgIndex = deleteImgIndex[i];
+        let uploadFileName = await util.uplaodImageToS3(
+          req.files,
+          imageUploadType[ImgIndex]
+        );
+        console.log("Upload image new name");
+        console.log(uploadFileName);
+        if (ImgIndex === "0") {
+          updateHouseData.image_url = uploadFileName;
+        } else {
+          let oldSideImgUrl = deleteImg[`${ImgIndex}`].slice(38);
+          await conn.query("UPDATE image SET image_url=? WHERE image_url=?", [
+            uploadFileName,
+            oldSideImgUrl,
+          ]);
+          await util.deleteImageFromS3(oldSideImgUrl);
+        }
+      }
+    }
+
+    //insert data into house table and delete main image in S3
+    await conn.query("UPDATE house SET ? WHERE id=?", [
+      updateHouseData,
+      house_id,
+    ]);
+    if ("image_url" in updateHouseData) {
+      console.log("original main image has been delete and new is updated");
+      await util.deleteImageFromS3(deleteImg["0"].slice(38));
+    }
+
+    //delete house amenity and reinsert data
+    //delete
+    let [id_list] = await conn.query(
+      "SELECT JSON_ARRAYAGG(id) AS id_list FROM house_amenity WHERE house_id=?",
+      house_id
+    );
+    id_list = id_list[0].id_list;
+    await conn.query("DELETE FROM house_amenity WHERE id in (?)", [id_list]);
+    //reinsert
+    let newAmenityList = [];
+    for (let i = 0; i < amenityList.length; i++) {
+      let temp = [house_id, amenityList[i]];
+      newAmenityList.push(temp);
+    }
+    const [amenityResult] = await conn.query(
+      "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?",
+      [newAmenityList]
+    );
+
+    await conn.query("COMMIT");
+    return res.json({ status: "succeed" });
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
+
+const deleteHouse = async (req, res) => {
+  const house_id = req.query.id;
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("START TRANSACTION");
+    //delete data from image table
+    let [id_list_image] = await conn.query(
+      "SELECT JSON_ARRAYAGG(id) AS id_list FROM image WHERE house_id=?",
+      house_id
+    );
+    id_list_image = id_list_image[0].id_list;
+    await conn.query("DELETE FROM image WHERE id in (?)", [id_list_image]);
+    //delete data from amenity table
+    let [id_list_amenity] = await conn.query(
+      "SELECT JSON_ARRAYAGG(id) AS id_list FROM house_amenity WHERE house_id=?",
+      house_id
+    );
+    id_list_amenity = id_list_amenity[0].id_list;
+    await conn.query("DELETE FROM house_amenity WHERE id in (?)", [
+      id_list_amenity,
+    ]);
+    //delete data from house table
+    await conn.query("DELETE FROM house WHERE id=?", house_id);
+
+    await conn.query("COMMIT");
+    return res.json({ status: "succeed" });
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    console.log(error);
+    return -1;
+  } finally {
+    await conn.release();
+  }
+};
 
 module.exports = {
   createHouse,
@@ -273,4 +454,8 @@ module.exports = {
   selectTrip,
   checkRefund,
   leftreview,
+  landlordHouse,
+  houseHistroyData,
+  updateHouse,
+  deleteHouse,
 };

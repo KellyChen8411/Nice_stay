@@ -14,6 +14,10 @@ const {
   selectTrip,
   checkRefund,
   leftreview,
+  landlordHouse,
+  houseHistroyData,
+  updateHouse,
+  deleteHouse,
 } = require("../controllers/house_controllers");
 
 router.route("/houses/create").post(
@@ -71,16 +75,37 @@ router.route("/houses/detail/:id").get(util.wrapAsync(houseDatail));
 
 router.route("/houses/nearby").get(util.wrapAsync(houseNearby));
 
-// router.route('/houses/test')
-//     .get(upload.array(), util.wrapAsync(houseTest));
+router.route("/houses/test").get(upload.array(), util.wrapAsync(houseTest));
 
-router.route("/houses/trip").get(util.checkLoginMiddleware, util.wrapAsync(selectTrip));
+router
+  .route("/houses/trip")
+  .get(util.checkLoginMiddleware, util.wrapAsync(selectTrip));
 
-router.route("/houses/booking").get(util.checkLoginMiddleware, util.wrapAsync(selectTrip));
+router
+  .route("/houses/booking")
+  .get(util.checkLoginMiddleware, util.wrapAsync(selectTrip));
 
 router.route("/houses/checkRefund").get(util.wrapAsync(checkRefund));
 
 router.route("/houses/review").post(util.wrapAsync(leftreview));
 
+router
+  .route("/houses/landlordHouse")
+  .get(util.checkLoginMiddleware, util.wrapAsync(landlordHouse));
+
+router
+  .route("/houses/houseHistroyData")
+  .get(util.checkLoginMiddleware, util.wrapAsync(houseHistroyData));
+
+router.route("/houses/updateHouse").patch(
+  upload.fields([
+    { name: "mainImg", maxCount: 1 },
+    { name: "sideImg1", maxCount: 1 },
+    { name: "sideImg2", maxCount: 1 },
+  ]),
+  util.wrapAsync(updateHouse)
+);
+
+router.route("/houses/deleteHouse").delete(util.wrapAsync(deleteHouse));
 
 module.exports = router;

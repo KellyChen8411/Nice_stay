@@ -15,9 +15,9 @@ userQuery.createNativeUser = async (values) => {
   return result;
 };
 
-userQuery.addBlackList = async (values)=> {
+userQuery.addBlackList = async (values) => {
   let sql = "INSERT INTO blacklist SET ?";
   await pool.query(sql, values);
-}
+};
 
 module.exports = userQuery;

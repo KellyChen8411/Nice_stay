@@ -251,8 +251,8 @@ houseQuery.houseAmentity = async (house_id) => {
 
 houseQuery.houseReview = async (values) => {
   let sql =
-  "SELECT a.comment, a.created_at, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT review.comment, review.house_rate, review.landlord_rate, review.created_at, booking.house_id, booking.renter_id, booking.landlord_id FROM review as review left join booking AS booking ON review.booking_id= booking.id WHERE booking.house_id=?) as a left join (SELECT g.house_id, AVG(g.house_rate) as ave_house FROM (SELECT review.comment, review.house_rate, review.landlord_rate, review.created_at, booking.house_id, booking.renter_id, booking.landlord_id FROM review as review left join booking AS booking ON review.booking_id= booking.id WHERE booking.house_id =?) g) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
-    // "SELECT a.comment, a.created_at, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT * FROM nice_stay.review WHERE house_id=?) as a left join (SELECT house_id, AVG(house_rate) as ave_house FROM nice_stay.review WHERE house_id =?) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
+    "SELECT a.comment, a.created_at, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT review.comment, review.house_rate, review.landlord_rate, review.created_at, booking.house_id, booking.renter_id, booking.landlord_id FROM review as review left join booking AS booking ON review.booking_id= booking.id WHERE booking.house_id=?) as a left join (SELECT g.house_id, AVG(g.house_rate) as ave_house FROM (SELECT review.comment, review.house_rate, review.landlord_rate, review.created_at, booking.house_id, booking.renter_id, booking.landlord_id FROM review as review left join booking AS booking ON review.booking_id= booking.id WHERE booking.house_id =?) g) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
+  // "SELECT a.comment, a.created_at, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT * FROM nice_stay.review WHERE house_id=?) as a left join (SELECT house_id, AVG(house_rate) as ave_house FROM nice_stay.review WHERE house_id =?) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
   // "SELECT a.comment, a.created_at, round(b.ave_landload_rate, 1) as landlord_ave, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT * FROM nice_stay.review WHERE house_id=?) as a left join (SELECT landlord_id, AVG(landlord_rate) as ave_landload_rate FROM nice_stay.review WHERE landlord_id=? group by landlord_id) as b on a.landlord_id = b.landlord_id left join (SELECT house_id, AVG(house_rate) as ave_house FROM nice_stay.review WHERE house_id =?) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
   const [result] = await pool.query(sql, values);
   return result;
@@ -279,37 +279,69 @@ houseQuery.landLordRate = async (landlord_id) => {
 
 houseQuery.selectTrip = async (user_id, requestType) => {
   let sql;
-  if(requestType === "trip"){
-    sql = 
-    "SELECT d.id AS booking_id, d.landlord_id,d.checkin_date, d.checkout_date, d.refund_duetime, d.is_refund, d.renter_id , e.* FROM booking d left join (SELECT a.id as house_id, a.title, a.image_url, b.name AS city_name, c.name AS landloard_name FROM house a left join city b ON a.city_id=b.id left join user c ON a.landlord_id=c.id) e ON d.house_id=e.house_id WHERE d.renter_id=? order by d.checkin_date";
-  }else{
-    sql = 
-    "SELECT d.id AS booking_id, d.landlord_id,d.checkin_date, d.checkout_date, d.refund_duetime, d.is_refund, d.renter_id , e.*, f.name as renter_name FROM booking d left join (SELECT a.id as house_id, a.title, a.image_url, b.name AS city_name, c.name AS landloard_name FROM house a left join city b ON a.city_id=b.id left join user c ON a.landlord_id=c.id) e ON d.house_id=e.house_id left join user f ON d.renter_id=f.id WHERE d.landlord_id=? order by d.checkin_date";
+  if (requestType === "trip") {
+    sql =
+      "SELECT d.id AS booking_id, d.landlord_id,d.checkin_date, d.checkout_date, d.refund_duetime, d.is_refund, d.renter_id , e.* FROM booking d left join (SELECT a.id as house_id, a.title, a.image_url, b.name AS city_name, c.name AS landloard_name FROM house a left join city b ON a.city_id=b.id left join user c ON a.landlord_id=c.id) e ON d.house_id=e.house_id WHERE d.renter_id=? order by d.checkin_date";
+  } else {
+    sql =
+      "SELECT d.id AS booking_id, d.landlord_id,d.checkin_date, d.checkout_date, d.refund_duetime, d.is_refund, d.renter_id , e.*, f.name as renter_name FROM booking d left join (SELECT a.id as house_id, a.title, a.image_url, b.name AS city_name, c.name AS landloard_name FROM house a left join city b ON a.city_id=b.id left join user c ON a.landlord_id=c.id) e ON d.house_id=e.house_id left join user f ON d.renter_id=f.id WHERE d.landlord_id=? order by d.checkin_date";
   }
   const [result] = await pool.query(sql, user_id);
   return result;
 };
 
 houseQuery.getRefundDue = async (booking_id) => {
-  let sql = "SELECT refund_duetime FROM booking WHERE id=?"
+  let sql = "SELECT refund_duetime FROM booking WHERE id=?";
   const [result] = await pool.query(sql, booking_id);
   return result[0].refund_duetime;
-}
+};
 
 houseQuery.updateBooking = async (booking_id) => {
   let sql = "UPDATE booking SET is_refund=1 WHERE id=?";
   await pool.query(sql, booking_id);
-}
+};
 
 houseQuery.leftreview = async (reviewInfo) => {
   let sql = "INSERT INTO review SET ?";
   await pool.query(sql, reviewInfo);
-}
+};
 
-houseQuery.getReview = async ()=> {
-  let sql  = "SELECT * FROM review";
+houseQuery.getReview = async () => {
+  let sql = "SELECT * FROM review";
   const [result] = await pool.query(sql);
   return result;
-}
+};
+
+houseQuery.landlordHouse = async (landlord_id) => {
+  let sql =
+    "SELECT a.*, b.name AS city_name FROM house a left join city b on a.city_id=b.id WHERE a.landlord_id=?";
+  const [result] = await pool.query(sql, landlord_id);
+  return result;
+};
+
+houseQuery.houseHistroyData = async (landlord_id, house_id) => {
+  let sql =
+    "SELECT b.*, c.amenity_list, d.sideimage_list FROM (SELECT a.* from (SELECT * FROM house WHERE landlord_id=?) a WHERE a.id=?) b left join (SELECT house_id, JSON_ARRAYAGG(amenity_id) AS amenity_list FROM house_amenity group by house_id) c on b.id=c.house_id left join (SELECT house_id, JSON_ARRAYAGG(image_url) AS sideimage_list FROM image group by house_id) d ON b.id=d.house_id;";
+  const [result] = await pool.query(sql, [landlord_id, house_id]);
+  return result;
+};
+
+houseQuery.updateHouse = async (updateHouseDate, house_id) => {
+  let sql = "UPDATE house SET ? WHERE id=?";
+  const [result] = await pool.query(sql, [updateHouseDate, house_id]);
+  return result;
+};
+
+houseQuery.updateSideImage = async (new_url, old_url) => {
+  let sql = "UPDATE image SET image_url=? WHERE image_url=?";
+  const [result] = await pool.query(sql, [new_url, old_url]);
+  return result;
+};
+
+houseQuery.deleteAmenity = async (house_id) => {
+  let sql = "DELETE FROM house_amenity WHERE house_id=?";
+  const [result] = await pool.query(sql, house_id);
+  return result;
+};
 
 module.exports = houseQuery;

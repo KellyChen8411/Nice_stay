@@ -18,6 +18,14 @@ function readURL(input, num) {
 }
 
 function removeUpload(num) {
+  console.log(num);
+  if ($(`#removeImgBtn${num}`)[0].dataset.type === "edit") {
+    console.log($(`#removeImgBtn${num}`)[0].dataset.imgurl);
+    deleteImgList[num] = $(`#removeImgBtn${num}`)[0].dataset.imgurl;
+  } else {
+    console.log(false);
+  }
+
   $(`#file-upload-input${num}`).replaceWith(
     $(`#file-upload-input${num}`).clone()
   );

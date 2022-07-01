@@ -285,7 +285,8 @@ textarea {
   padding: 20px;
 }
 
-.create_btn {
+.create_btn,
+.edit_btn {
   width: 100%;
   margin: 20px 0;
   padding: 0 24px;

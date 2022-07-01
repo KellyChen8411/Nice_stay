@@ -1,10 +1,10 @@
 class Nav extends HTMLElement {
-    constructor() {
-      super();
-    }
-  
-    connectedCallback() {
-      this.innerHTML=`
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.innerHTML = `
 
       <nav>
           <div class="logoContainer">
@@ -15,7 +15,7 @@ class Nav extends HTMLElement {
           </div>
           <div id="personalArea" class="personalArea PAHide">
               <div><a href="/admin/manageBooking.html">管理預定</a></div>
-              <div><a>管理房源</a></div>
+              <div><a href="/admin/manageHouse.html">管理房源</a></div>
               <div><a href="/admin/createHouse.html">建立房源</a></div>
               <div><a>訊息</a></div>
               <div id="loginBtn"><a href="/login.html">登入</a></div>
@@ -23,7 +23,7 @@ class Nav extends HTMLElement {
           </div>
       </nav>
       `;
-    }
   }
+}
 
-  customElements.define('nav-component', Nav);
+customElements.define("nav-component", Nav);
