@@ -17,7 +17,7 @@ util.wrapAsync = (fn) => {
 util.checkLogin = (req, res, next) => {
   let AuthorizationHeader = req.get("Authorization");
   const token = AuthorizationHeader.split(" ")[1];
-  const payload = jwt.verify(token, `${process.env.jwtsecret}`);
+  const payload = jwt.verify(token, `${process.env.JWTSECRET}`);
   let user_id = payload.id;
   let role = payload.role;
 
@@ -41,7 +41,7 @@ util.checkLoginMiddleware = (req, res, next) => {
     let AuthorizationHeader = req.get("Authorization");
     const token = AuthorizationHeader.split(" ")[1];
     // console.log(token);
-    const payload = jwt.verify(token, `${process.env.jwtsecret}`);
+    const payload = jwt.verify(token, `${process.env.JWTSECRET}`);
     req.user = payload;
     // console.log(payload);
     return next();
