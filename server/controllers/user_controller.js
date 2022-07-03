@@ -90,8 +90,22 @@ const addBlackList = async (req, res) => {
   res.json({ status: "succeed" });
 };
 
+const updateUserRole = async (req, res) => {
+  const user_id = req.user.id;
+  await userQuery.updateUserRole(user_id);
+  //regenerate token
+  delete req.user.iat;
+  delete req.user.exp;
+  req.user.role = 2;
+  const new_token = jwt.sign(req.user, process.env.JWTSECRET, {
+    expiresIn: "180d",
+  });
+  res.json({ new_token });
+};
+
 module.exports = {
   userSignUp,
   userSignIn,
   addBlackList,
+  updateUserRole,
 };

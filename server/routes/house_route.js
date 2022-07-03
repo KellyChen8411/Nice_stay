@@ -20,7 +20,8 @@ const {
   deleteHouse,
   likeHouse,
   dislikeHouse,
-  getUserFavorite
+  getUserFavorite,
+  getUserFavoriteDetail,
 } = require("../controllers/house_controllers");
 
 router.route("/houses/create").post(
@@ -111,10 +112,20 @@ router.route("/houses/updateHouse").patch(
 
 router.route("/houses/deleteHouse").delete(util.wrapAsync(deleteHouse));
 
-router.route("/houses/likeHouse").get(util.checkLoginMiddleware, util.wrapAsync(likeHouse));
+router
+  .route("/houses/likeHouse")
+  .get(util.checkLoginMiddleware, util.wrapAsync(likeHouse));
 
-router.route("/houses/dislikeHouse").get(util.checkLoginMiddleware, util.wrapAsync(dislikeHouse));
+router
+  .route("/houses/dislikeHouse")
+  .get(util.checkLoginMiddleware, util.wrapAsync(dislikeHouse));
 
-router.route("/houses/favorite").get(util.checkLoginMiddleware, util.wrapAsync(getUserFavorite));
+router
+  .route("/houses/favorite")
+  .get(util.checkLoginMiddleware, util.wrapAsync(getUserFavorite));
+
+router
+  .route("/houses/favoriteDetail")
+  .get(util.checkLoginMiddleware, util.wrapAsync(getUserFavoriteDetail));
 
 module.exports = router;

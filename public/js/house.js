@@ -16,8 +16,8 @@ async function renderHouse() {
       renderData(house);
     });
   } else {
-    alert(trips.error);
-    window.location.href = "/";
+    alert(houses.error);
+    // window.location.href = "/";
   }
 }
 

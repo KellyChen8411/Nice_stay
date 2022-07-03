@@ -14,14 +14,21 @@ p {
   margin-left: 80px;
   padding-top: 50px;
   padding-bottom: 50px;
-  /* background-color: aqua; */
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  /* gap: 24px; */
   row-gap: 24px;
   column-gap: 16px;
   height: 900px;
-  /* overflow: auto; */
+}
+
+.lackOfFavorite {
+  margin-top: 20px !important;
+  margin-right: 80px !important;
+  margin-left: 80px !important;
+  padding-top: 50px !important;
+  padding-bottom: 50px !important;
+  font-size: 36px;
+  font-weight: Bold;
 }
 
 .houseItem {

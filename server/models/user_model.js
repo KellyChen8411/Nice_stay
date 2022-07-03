@@ -20,4 +20,9 @@ userQuery.addBlackList = async (values) => {
   await pool.query(sql, values);
 };
 
+userQuery.updateUserRole = async (user_id) => {
+  let sql = "UPDATE user SET user_role=2 WHERE id=?";
+  await pool.query(sql, user_id);
+};
+
 module.exports = userQuery;

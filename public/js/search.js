@@ -55,15 +55,19 @@ async function submitMainSearch() {
     renderHouseData(houseDatas.data);
     ////////////////////////////////////////////////////////////////////////////
     //get user favorite house and render
-    let houseThisPage = houseDatas.data.map( house => house.id)
-    let favoriteRes= await fetch("/api/1.0/houses/favorite", { headers });
+    let houseThisPage = houseDatas.data.map((house) => house.id);
+    let favoriteRes = await fetch("/api/1.0/houses/favorite", { headers });
     let favoriteData = await favoriteRes.json();
-    if(favoriteRes.status === 200){
-      userFavoriteList = favoriteData;
-      let FavoriteForPage = userFavoriteList.filter(element => houseThisPage.includes(element));
-      renderLikeIcon(FavoriteForPage);
+    if (favoriteRes.status === 200) {
+      if (favoriteData !== null) {
+        userFavoriteList = favoriteData;
+        let FavoriteForPage = userFavoriteList.filter((element) =>
+          houseThisPage.includes(element)
+        );
+        renderLikeIcon(FavoriteForPage);
+      }
     }
-    
+
     $("html,body").scrollTop(0);
 
     //render page selector
@@ -130,13 +134,17 @@ async function detailSearch(e) {
     renderHouseData(houseDatas.data);
     ////////////////////////////////////////////////////////////////////////////
     //get user favorite house and render
-    let houseThisPage = houseDatas.data.map( house => house.id)
-    let favoriteRes= await fetch("/api/1.0/houses/favorite", { headers });
+    let houseThisPage = houseDatas.data.map((house) => house.id);
+    let favoriteRes = await fetch("/api/1.0/houses/favorite", { headers });
     let favoriteData = await favoriteRes.json();
-    if(favoriteRes.status === 200){
-      userFavoriteList = favoriteData;
-      let FavoriteForPage = userFavoriteList.filter(element => houseThisPage.includes(element));
-      renderLikeIcon(FavoriteForPage);
+    if (favoriteRes.status === 200) {
+      if (favoriteData !== null) {
+        userFavoriteList = favoriteData;
+        let FavoriteForPage = userFavoriteList.filter((element) =>
+          houseThisPage.includes(element)
+        );
+        renderLikeIcon(FavoriteForPage);
+      }
     }
 
     $("html,body").scrollTop(0);

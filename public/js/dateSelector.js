@@ -76,27 +76,33 @@ $(function () {
   async function addToFavorite(e) {
     console.log(e.target.nodeName);
     if (e.target.nodeName === "I") {
-      if( localStorage.getItem("token") === null ){
+      if (localStorage.getItem("token") === null) {
         alert("欲收藏房源請先登入");
-      }else{
+      } else {
         let house_id = e.target.parentElement.dataset.id;
-        if(e.target.classList.contains("grey")){
+        if (e.target.classList.contains("grey")) {
           console.log(`like house ${house_id}`);
           //收藏
-          const fetchRes = await fetch(`/api/1.0/houses/likeHouse?id=${house_id}`, { headers });
+          const fetchRes = await fetch(
+            `/api/1.0/houses/likeHouse?id=${house_id}`,
+            { headers }
+          );
           const finalResult = await fetchRes.json();
-          if(fetchRes.status === 200){
+          if (fetchRes.status === 200) {
             userFavoriteList = finalResult;
             console.log(userFavoriteList);
           }
           e.target.classList.toggle("grey");
           e.target.classList.toggle("red");
-        }else if(e.target.classList.contains("red")){
+        } else if (e.target.classList.contains("red")) {
           console.log(`dislike house ${house_id}`);
           //取消收藏
-          const fetchRes = await fetch(`/api/1.0/houses/dislikeHouse?id=${house_id}`, { headers });
+          const fetchRes = await fetch(
+            `/api/1.0/houses/dislikeHouse?id=${house_id}`,
+            { headers }
+          );
           const finalResult = await fetchRes.json();
-          if(fetchRes.status === 200){
+          if (fetchRes.status === 200) {
             userFavoriteList = finalResult;
             console.log(userFavoriteList);
           }

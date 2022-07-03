@@ -1,24 +1,23 @@
-let renter_id;
-
 let token = localStorage.getItem("token");
 let headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
   Authorization: `Bearer ${token}`,
 };
-async function checkForLogin() {
-  const resultFetch = await fetch("/api/1.0/users/checkLogin", { headers });
+
+async function fetchTripData() {
+  const resultFetch = await fetch(
+    `/api/1.0/users/checkLogin?updateToken=${false}`,
+    { headers }
+  );
   const finalResult = await resultFetch.json();
+
   if (resultFetch.status === 200) {
-    $("#logoutBtn").toggleClass("DSHide", false); //remove class
-    $("#loginBtn").toggleClass("DSHide", true); //add class
-    $("#logoutBtn").click(Logout);
     if (finalResult.role === 2) {
       $("#landlordContainer").text("切換至出租模式");
     }
 
     //fetch trip data
-    renter_id = finalResult.id;
     const tripsRes = await fetch(`/api/1.0/houses/trip`, { headers });
     const trips = await tripsRes.json();
     const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
@@ -55,7 +54,6 @@ async function checkForLogin() {
       past_trip.length === 0
     ) {
       $("<h2>暫無預定</h2>").appendTo(trip_inner);
-      $("footer").toggleClass("footerFix", true);
     } else {
       if (now_trip.length !== 0) {
         $("<h2>正在進行中的旅程</h2>").appendTo(trip_inner);
@@ -98,7 +96,7 @@ async function checkForLogin() {
   }
 }
 
-checkForLogin();
+fetchTripData();
 
 function Logout() {
   localStorage.removeItem("token");

@@ -19,13 +19,21 @@ util.checkLogin = (req, res, next) => {
   const token = AuthorizationHeader.split(" ")[1];
   const payload = jwt.verify(token, `${process.env.jwtsecret}`);
   let user_id = payload.id;
-  //update token for user
-  delete payload.iat;
-  delete payload.exp;
-  const new_token = jwt.sign(payload, process.env.JWTSECRET, {
-    expiresIn: "180d",
-  });
-  res.json({ new_token, user_id });
+  let role = payload.role;
+
+  let updateToken = JSON.parse(req.query.updateToken);
+
+  if (updateToken === true) {
+    //update token for user
+    delete payload.iat;
+    delete payload.exp;
+    const new_token = jwt.sign(payload, process.env.JWTSECRET, {
+      expiresIn: "180d",
+    });
+    return res.json({ new_token, user_id, role });
+  } else {
+    res.json({ user_id, role });
+  }
 };
 
 util.checkLoginMiddleware = (req, res, next) => {

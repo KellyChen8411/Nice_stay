@@ -7,17 +7,28 @@ let headers = {
   Authorization: `Bearer ${token}`,
 };
 async function checkForLogin() {
-  const resultFetch = await fetch("/api/1.0/users/checkLogin", { headers });
+  let URL;
+  if (window.location.pathname === "/") {
+    URL = `/api/1.0/users/checkLogin?updateToken=${true}`;
+  } else {
+    URL = `/api/1.0/users/checkLogin?updateToken=${false}`;
+  }
+  const resultFetch = await fetch(URL, { headers });
   const finalResult = await resultFetch.json();
   if (resultFetch.status === 200) {
     $("#logoutBtn").toggleClass("DSHide", false); //remove class
     $("#loginBtn").toggleClass("DSHide", true); //add class
+    $(".menberItem").toggleClass("DSHide", false); //remove class for trip message and favorite
     $("#logoutBtn").click(Logout);
+
     if (finalResult.role === 2) {
       $("#landlordContainer").text("切換至出租模式");
     }
-    //update token
-    localStorage.setItem("token", finalResult.new_token);
+    if (window.location.pathname === "/") {
+      console.log("update token");
+      //update token
+      localStorage.setItem("token", finalResult.new_token);
+    }
   }
 }
 

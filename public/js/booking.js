@@ -18,64 +18,69 @@ async function renderBooking() {
     $("#loginBtn").toggleClass("DSHide", true); //add class
     $("#logoutBtn").click(Logout);
 
+    console.log(trips);
     //存landlord id
-    landlord_id = trips[0].landlord_id;
-
-    //分類預定
-    const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
-    let now_trip = []; //type 0
-    let future_trip = []; //type 1
-    let past_trip = []; //type 2
-    let buttonName = ["連絡房客", "連絡房客", "加入黑名單"];
-
-    trips.forEach((trip, index) => {
-      if (trip.is_refund === 0) {
-        if (
-          moment(trip.checkin_date).isBefore(today) &&
-          moment(trip.checkout_date).isSameOrBefore(today)
-        ) {
-          past_trip.push(index);
-        } else if (moment(trip.checkin_date).isAfter(today)) {
-          future_trip.push(index);
-        } else {
-          now_trip.push(index);
-        }
-      }
-    });
-
-    //render預定
-    let trip_inner = $("#trip_inner");
-    if (
-      now_trip.length === 0 &&
-      future_trip.length === 0 &&
-      past_trip.length === 0
-    ) {
+    if (trips.length === 0) {
       $("<h2>暫無預定</h2>").appendTo(trip_inner);
-      $("footer").toggleClass("footerFix", true);
     } else {
-      if (now_trip.length !== 0) {
-        $("<h2>正在進行中的預定</h2>").appendTo(trip_inner);
-        now_trip.forEach((tripIndex) => {
-          let trip = trips[tripIndex];
-          renderTrip(trip, 0, buttonName);
-        });
-      }
+      landlord_id = trips[0].landlord_id;
 
-      if (future_trip.length != 0) {
-        $("<h2>即將到來的預定</h2>").appendTo(trip_inner);
-        future_trip.forEach((tripIndex) => {
-          let trip = trips[tripIndex];
-          renderTrip(trip, 1, buttonName);
-        });
-      }
+      //分類預定
+      const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
+      let now_trip = []; //type 0
+      let future_trip = []; //type 1
+      let past_trip = []; //type 2
+      let buttonName = ["連絡房客", "連絡房客", "加入黑名單"];
 
-      if (past_trip.length != 0) {
-        $("<h2>已結束的預定</h2>").appendTo(trip_inner);
-        past_trip.forEach((tripIndex) => {
-          let trip = trips[tripIndex];
-          console.log(trip);
-          renderTrip(trip, 2, buttonName);
-        });
+      trips.forEach((trip, index) => {
+        if (trip.is_refund === 0) {
+          if (
+            moment(trip.checkin_date).isBefore(today) &&
+            moment(trip.checkout_date).isSameOrBefore(today)
+          ) {
+            past_trip.push(index);
+          } else if (moment(trip.checkin_date).isAfter(today)) {
+            future_trip.push(index);
+          } else {
+            now_trip.push(index);
+          }
+        }
+      });
+
+      //render預定
+      let trip_inner = $("#trip_inner");
+      if (
+        now_trip.length === 0 &&
+        future_trip.length === 0 &&
+        past_trip.length === 0
+      ) {
+        $("<h2>暫無預定</h2>").appendTo(trip_inner);
+        $("footer").toggleClass("footerFix", true);
+      } else {
+        if (now_trip.length !== 0) {
+          $("<h2>正在進行中的預定</h2>").appendTo(trip_inner);
+          now_trip.forEach((tripIndex) => {
+            let trip = trips[tripIndex];
+            renderTrip(trip, 0, buttonName);
+          });
+        }
+
+        if (future_trip.length != 0) {
+          $("<h2>即將到來的預定</h2>").appendTo(trip_inner);
+          future_trip.forEach((tripIndex) => {
+            let trip = trips[tripIndex];
+            renderTrip(trip, 1, buttonName);
+          });
+        }
+
+        if (past_trip.length != 0) {
+          $("<h2>已結束的預定</h2>").appendTo(trip_inner);
+          past_trip.forEach((tripIndex) => {
+            let trip = trips[tripIndex];
+            console.log(trip);
+            renderTrip(trip, 2, buttonName);
+          });
+        }
       }
     }
   } else {

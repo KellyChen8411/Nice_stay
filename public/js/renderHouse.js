@@ -1,12 +1,12 @@
 // 給後續search更新版面與搜尋用的全域變數
-var houseItemClone = $("#houseItem").clone();
+let houseItemClone = $("#houseItem").clone();
 let previousSelectPage = 1;
 let selectType = "initial";
 let mainSearchFormData;
 let detailSearchFormData;
 
 //render house
-var houseArea_container = $("#houseArea");
+let houseArea_container = $("#houseArea");
 
 async function fetchHouseData() {
   let houseDatas = await fetch("/api/1.0/houses/all?paging=0");
@@ -15,13 +15,17 @@ async function fetchHouseData() {
 
   ////////////////////////////////////////////////////////////////////////////
   //get user favorite house and render
-  let houseThisPage = houseDatas.data.map( house => house.id)
-  let favoriteRes= await fetch("/api/1.0/houses/favorite", { headers });
+  let houseThisPage = houseDatas.data.map((house) => house.id);
+  let favoriteRes = await fetch("/api/1.0/houses/favorite", { headers });
   let favoriteData = await favoriteRes.json();
-  if(favoriteRes.status === 200){
-    userFavoriteList = favoriteData;
-    let FavoriteForPage = userFavoriteList.filter(element => houseThisPage.includes(element));
-    renderLikeIcon(FavoriteForPage);
+  if (favoriteRes.status === 200) {
+    if (favoriteData !== null) {
+      userFavoriteList = favoriteData;
+      let FavoriteForPage = userFavoriteList.filter((element) =>
+        houseThisPage.includes(element)
+      );
+      renderLikeIcon(FavoriteForPage);
+    }
   }
 
   //render page selector
@@ -84,13 +88,17 @@ async function changePage(e) {
       renderHouseData(houseDatas.data);
       /////////////////////////////////////////////////////////////
       //get user favorite house and render
-      let houseThisPage = houseDatas.data.map( house => house.id)
-      let favoriteRes= await fetch("/api/1.0/houses/favorite", { headers });
+      let houseThisPage = houseDatas.data.map((house) => house.id);
+      let favoriteRes = await fetch("/api/1.0/houses/favorite", { headers });
       let favoriteData = await favoriteRes.json();
-      if(favoriteRes.status === 200){
-        userFavoriteList = favoriteData;
-        let FavoriteForPage = userFavoriteList.filter(element => houseThisPage.includes(element));
-        renderLikeIcon(FavoriteForPage);
+      if (favoriteRes.status === 200) {
+        if (favoriteData !== null) {
+          userFavoriteList = favoriteData;
+          let FavoriteForPage = userFavoriteList.filter((element) =>
+            houseThisPage.includes(element)
+          );
+          renderLikeIcon(FavoriteForPage);
+        }
       }
 
       $("html,body").scrollTop(0);
@@ -118,6 +126,7 @@ async function fetchAmenityData() {
 //function area
 fetchHouseData();
 fetchCityData();
+houseArea_container;
 fetchAmenityData();
 
 function renderHouseData(datas) {
@@ -163,10 +172,10 @@ function renderAmenityData(datas) {
   });
 }
 
-function renderLikeIcon(houseIDList){
-  houseIDList.forEach( houseID => {
+function renderLikeIcon(houseIDList) {
+  houseIDList.forEach((houseID) => {
     let iconTag = $(`a[data-id=${houseID}]>i`)[0];
     iconTag.classList.toggle("grey");
     iconTag.classList.toggle("red");
-  })
+  });
 }

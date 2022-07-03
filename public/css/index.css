@@ -3,6 +3,11 @@
   margin: 0;
 }
 
+a {
+  color: black !important;
+  cursor: pointer !important;
+}
+
 p {
   margin: 0 !important;
 }

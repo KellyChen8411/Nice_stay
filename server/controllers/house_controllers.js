@@ -91,13 +91,13 @@ const houseSearch = async (req, res) => {
     APIData.next_paging = paging + 1;
     houses.pop();
   }
-  // console.log(houses);
+
   const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN;
   houses.forEach((house) => {
     house.image_url = imageURL_prefix + house.image_url;
   });
   APIData.data = houses;
-  // console.log(APIData);
+
   res.json(APIData);
 };
 
@@ -451,24 +451,33 @@ const likeHouse = async (req, res) => {
   const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
   console.log(favoriteList);
   res.json(favoriteList);
-}
+};
 
 const dislikeHouse = async (req, res) => {
   const user_id = req.user.id;
   const house_id = req.query.id;
   const favorite_id = await houseQuery.findFavoriteID(user_id, house_id);
-  console.log('favorite_id');
+  console.log("favorite_id");
   console.log(favorite_id);
   await houseQuery.dislikeHouse(favorite_id);
   const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
   res.json(favoriteList);
-}
+};
 
 const getUserFavorite = async (req, res) => {
   const user_id = req.user.id;
   const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
   res.json(favoriteList);
-}
+};
+
+const getUserFavoriteDetail = async (req, res) => {
+  const user_id = req.user.id;
+  const houseDetail = await houseQuery.selectUserFavoriteHouseDetail(user_id);
+  houseDetail.forEach((house) => {
+    house.image_url = process.env.CLOUDFRONT_DOMAIN + house.image_url;
+  });
+  res.json(houseDetail);
+};
 
 module.exports = {
   createHouse,
@@ -486,5 +495,6 @@ module.exports = {
   deleteHouse,
   likeHouse,
   dislikeHouse,
-  getUserFavorite
+  getUserFavorite,
+  getUserFavoriteDetail,
 };

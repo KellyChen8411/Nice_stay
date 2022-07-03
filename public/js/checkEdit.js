@@ -3,22 +3,22 @@ let isedit = params.get("edit");
 let house_id = params.get("id");
 let facilityList = new Map();
 let deleteImgList = {};
+let user_id;
+let user_role;
 
-// console.log(isedit);
+let token = localStorage.getItem("token");
+
+let headers = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+  Authorization: `Bearer ${token}`,
+};
 
 if (isedit !== null) {
   getHistroyData(house_id);
 }
 
 async function getHistroyData(house_id) {
-  let token = localStorage.getItem("token");
-
-  let headers = {
-    "Content-Type": "application/json",
-    Accept: "application/json",
-    Authorization: `Bearer ${token}`,
-  };
-
   const houseRes = await fetch(
     `/api/1.0/houses/houseHistroyData?id=${house_id}`,
     { headers }
@@ -27,7 +27,6 @@ async function getHistroyData(house_id) {
   let house = await houseRes.json();
   if (resStatus === 200) {
     house = house[0];
-    console.log(house);
 
     //變換表單送出按鈕
     $("#create_btn").attr("style", "display: none;");
@@ -116,3 +115,16 @@ async function getHistroyData(house_id) {
     alert(house.error);
   }
 }
+
+//get user id and role
+$(async function () {
+  const resultFetch = await fetch(
+    `/api/1.0/users/checkLogin?updateToken=${true}`,
+    { headers }
+  );
+  const finalResult = await resultFetch.json();
+  if (resultFetch.status === 200) {
+    user_id = finalResult.user_id;
+    user_role = finalResult.role;
+  }
+});

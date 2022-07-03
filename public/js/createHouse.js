@@ -128,7 +128,6 @@ async function createHouse(e) {
     async function (results, status) {
       if (status == "OK") {
         //get geolocation infomation
-        console.log(results.length);
         data.append("latitude", results[0].geometry.location.lat());
         data.append("longitude", results[0].geometry.location.lng());
 
@@ -142,8 +141,23 @@ async function createHouse(e) {
         let finalResult = await featchResponse.json();
 
         if (fetchStatus === 200) {
-          console.log("succeed");
           alert(`建立成功，您的房源編號是${finalResult.house_id}`);
+          if (user_role === 2) {
+            window.location.href = "/admin/manageHouse.html";
+          } else if (user_role === 1) {
+            //update user role to landlord
+            const userInfo = JSON.stringify({ user_id });
+            const newTokenRes = await fetch(`/api/1.0/users/updateUserRole`, {
+              method: "GET",
+              headers,
+            });
+            const newtokenResult = await newTokenRes.json();
+            console.log(newtokenResult);
+            if (newTokenRes.status === 200) {
+              localStorage.setItem("token", newtokenResult.new_token);
+            }
+            window.location.href = "/admin/manageHouse.html";
+          }
         } else if (fetchStatus === 404) {
           alert(`${finalResult.error}`);
           window.location.href = "/login.html";
@@ -207,6 +221,21 @@ async function sendEditData(e) {
       window.location.href = "/admin/manageHouse.html";
     } else {
       alert(`編輯失敗,原因: ${fetchData.error}`);
+      window.location.href = "/admin/manageHouse.html";
+    }
+  }
+}
+
+//取消建立或編輯
+$("#cancel_con").click(cancelCU);
+
+function cancelCU() {
+  let userDecision = confirm("確定取消？");
+  if (userDecision) {
+    if (user_role === 1) {
+      window.location.href = "/";
+    } else if (user_role === 2) {
+      window.location.href = "/admin/manageHouse.html";
     }
   }
 }
