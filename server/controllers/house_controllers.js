@@ -311,7 +311,6 @@ const houseHistroyData = async (req, res) => {
   console.log(`landlord: ${landlord_id}`);
   console.log(`house: ${house_id}`);
   const house = await houseQuery.houseHistroyData(landlord_id, house_id);
-  console.log(house);
   if (house.length === 0) {
     const err = new Error("權限不足");
     err.type = "forbidden";

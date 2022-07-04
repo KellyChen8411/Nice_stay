@@ -321,7 +321,7 @@ houseQuery.landlordHouse = async (landlord_id) => {
 
 houseQuery.houseHistroyData = async (landlord_id, house_id) => {
   let sql =
-    "SELECT b.*, c.amenity_list, d.sideimage_list FROM (SELECT a.* from (SELECT * FROM house WHERE landlord_id=?) a WHERE a.id=?) b left join (SELECT house_id, JSON_ARRAYAGG(amenity_id) AS amenity_list FROM house_amenity group by house_id) c on b.id=c.house_id left join (SELECT house_id, JSON_ARRAYAGG(image_url) AS sideimage_list FROM image group by house_id) d ON b.id=d.house_id;";
+    "SELECT b.*, c.amenity_list, d.sideimage_list FROM (SELECT a.* from (SELECT * FROM house WHERE landlord_id=?) a WHERE a.id=?) b left join (SELECT house_id, JSON_ARRAYAGG(amenity_id) AS amenity_list FROM house_amenity group by house_id) c on b.id=c.house_id left join (SELECT house_id, JSON_ARRAYAGG(image_url) AS sideimage_list FROM image group by house_id) d ON b.id=d.house_id";
   const [result] = await pool.query(sql, [landlord_id, house_id]);
   return result;
 };
