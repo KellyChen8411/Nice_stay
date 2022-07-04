@@ -3,7 +3,7 @@ const checkoutQuery = require("../models/checkout_model");
 const util = require("../../util/util");
 
 const checkout = async (req, res) => {
-  console.log("checkout");
+  // console.log("checkout");
   const {
     house_id,
     checkin_date,
@@ -44,7 +44,7 @@ const checkout = async (req, res) => {
 };
 
 const sendBookingEmail = async (req, res) => {
-  console.log("sendemail");
+  // console.log("sendemail");
   const renter_name = req.body.renterInfo.name;
   const renter_email = req.body.renterInfo.email;
 

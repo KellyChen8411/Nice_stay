@@ -19,8 +19,8 @@ app.use("/api/" + process.env.API_VERSION, [
 ]);
 
 app.use((error, req, res, next) => {
-  console.log("Enter express error handling Middleware");
-  console.log(error);
+  // console.log("Enter express error handling Middleware");
+  // console.log(error);
   if (error.type === "userExist") {
     return res.status(404).json({ error: error.message });
   } else if (error.type === "tokenExpire") {
@@ -32,7 +32,7 @@ app.use((error, req, res, next) => {
   } else if (error.type === "S3error") {
     return res.status(500).json({ error: error.message });
   } else {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ error: "internal server error" });
   }
 });

@@ -57,8 +57,7 @@ router.route("/houses/create").post(
     .trim()
     .custom((value, { req }) => {
       // 確認密碼欄位的值需要和密碼欄位的值相符
-      console.log("refund_duration");
-      console.log(req.body.refund_duration);
+      
       if (value === "1" && req.body.refund_duration === "") {
         // 驗證失敗時的錯誤訊息
         throw new Error("請填寫取消政策");

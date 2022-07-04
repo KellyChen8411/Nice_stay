@@ -40,10 +40,10 @@ util.checkLoginMiddleware = (req, res, next) => {
   try {
     let AuthorizationHeader = req.get("Authorization");
     const token = AuthorizationHeader.split(" ")[1];
-    // console.log(token);
+    
     const payload = jwt.verify(token, `${process.env.JWTSECRET}`);
     req.user = payload;
-    // console.log(payload);
+    
     return next();
   } catch (err) {
     const error = Error("token過期,請重新登入");
@@ -97,7 +97,7 @@ util.sendBookingEmail = async (renter_name, renter_email, bookingInfo) => {
 };
 
 util.uplaodImageToS3 = async (files, imageFieldName) => {
-  // console.log(files[imageFieldName]);
+  
   let fileExtend = files[imageFieldName][0].originalname.split(".")[1];
   let uploadPath;
 
@@ -131,10 +131,10 @@ util.deleteImageFromS3 = async (image_path) => {
 
   try {
     await s3.headObject(params).promise();
-    console.log("File Found in S3");
+    // console.log("File Found in S3");
     try {
       await s3.deleteObject(params).promise();
-      console.log("file deleted Successfully");
+      // console.log("file deleted Successfully");
     } catch (err) {
       const error = new Error("刪除照片時發生錯誤");
       error.type = "S3error";
