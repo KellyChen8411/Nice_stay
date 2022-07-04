@@ -72,7 +72,6 @@ const houseSearch = async (req, res) => {
   const paging = parseInt(req.query.paging);
   const itemNum = 7;
 
-
   const selectData = await houseQuery.houseSearch(
     queryCondition,
     orderCondition,
@@ -188,7 +187,6 @@ const houseDatail = async (req, res) => {
     landLordRate = [];
   }
 
-
   res.json({
     house: houseData,
     amenity: amenityData,
@@ -227,13 +225,10 @@ const houseNearby = async (req, res) => {
     });
   });
 
-  
-
   res.json(nearbyLocationSet);
 };
 
 const selectTrip = async (req, res) => {
-  
   let requestType = "trip";
   //for managebooking page
   if (req.url === "/houses/booking") {
@@ -270,7 +265,7 @@ const checkRefund = async (req, res) => {
   const requestCancelTime = parseInt(req.query.requestCancelTime);
   let dueTime = await houseQuery.getRefundDue(booking_id);
   dueTime = parseInt(dueTime);
-  
+
   if (dueTime >= requestCancelTime) {
     await houseQuery.updateBooking(booking_id);
     return res.json({ cancel: true });
@@ -316,7 +311,6 @@ const houseHistroyData = async (req, res) => {
     (sideimage_url) => process.env.CLOUDFRONT_DOMAIN + sideimage_url
   );
 
-
   res.json(house);
 };
 
@@ -346,7 +340,7 @@ const updateHouse = async (req, res) => {
           req.files,
           imageUploadType[ImgIndex]
         );
-        
+
         if (ImgIndex === "0") {
           updateHouseData.image_url = uploadFileName;
         } else {
@@ -366,7 +360,6 @@ const updateHouse = async (req, res) => {
       house_id,
     ]);
     if ("image_url" in updateHouseData) {
- 
       await util.deleteImageFromS3(deleteImg["0"].slice(38));
     }
 
@@ -424,6 +417,16 @@ const deleteHouse = async (req, res) => {
     //delete data from house table
     await conn.query("DELETE FROM house WHERE id=?", house_id);
 
+    //delete image in S3
+    const [result] = await pool.query(
+      "SELECT a.id, a.image_url AS mainimage_list, b.sideimage_list FROM house a left join (SELECT house_id, JSON_ARRAYAGG(image_url) AS sideimage_list FROM image group by house_id) b ON a.id=b.house_id WHERE a.id=?",
+      house_id
+    );
+    const imageList = [result[0].mainimage_list, ...result[0].sideimage_list];
+    for (let i = 0; i < imageList.length; i++) {
+      await util.deleteImageFromS3(imageList[i]);
+    }
+
     await conn.query("COMMIT");
     return res.json({ status: "succeed" });
   } catch (error) {
@@ -440,7 +443,7 @@ const likeHouse = async (req, res) => {
   const house_id = req.query.id;
   await houseQuery.likeHouse(user_id, house_id);
   const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
- 
+
   res.json(favoriteList);
 };
 

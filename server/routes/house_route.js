@@ -1,7 +1,12 @@
 const router = require("express").Router();
 const util = require("../../util/util");
 const multer = require("multer");
-let upload = multer();
+let upload = multer({
+  limits: {
+    // 限制上傳檔案的大小為 500MB
+    fileSize: 500000,
+  },
+});
 const { body } = require("express-validator");
 
 const {
@@ -57,7 +62,7 @@ router.route("/houses/create").post(
     .trim()
     .custom((value, { req }) => {
       // 確認密碼欄位的值需要和密碼欄位的值相符
-      
+
       if (value === "1" && req.body.refund_duration === "") {
         // 驗證失敗時的錯誤訊息
         throw new Error("請填寫取消政策");

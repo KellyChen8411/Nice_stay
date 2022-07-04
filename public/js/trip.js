@@ -138,21 +138,24 @@ async function buttonAction(e) {
     // let landlord_id = e.target.dataset.landlordid;
 
     if (buttonType === "取消預定") {
-      let requestCancelTime = moment().valueOf();
-      let fetchRes = await fetch(
-        `/api/1.0/houses/checkRefund?booking_id=${booking_id}&requestCancelTime=${requestCancelTime}`
-      );
-      let fetchStatus = fetchRes.status;
-      let finalData = await fetchRes.json();
-      if (fetchStatus === 200) {
-        if (finalData.cancel === true) {
-          alert("取消成功");
-          window.location.href = "/trip.html";
+      let userDecision = confirm("確定取消此預定？");
+      if (userDecision) {
+        let requestCancelTime = moment().valueOf();
+        let fetchRes = await fetch(
+          `/api/1.0/houses/checkRefund?booking_id=${booking_id}&requestCancelTime=${requestCancelTime}`
+        );
+        let fetchStatus = fetchRes.status;
+        let finalData = await fetchRes.json();
+        if (fetchStatus === 200) {
+          if (finalData.cancel === true) {
+            alert("取消成功");
+            window.location.href = "/trip.html";
+          } else {
+            alert("無法取消");
+          }
         } else {
-          alert("無法取消");
+          alert("Internal server error");
         }
-      } else {
-        alert("Internal server error");
       }
     } else if (buttonType === "留下評價") {
       let houseInfo = $(`#houseName${house_id}`).text();

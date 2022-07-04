@@ -156,7 +156,11 @@ async function rederData() {
     reviewData.forEach((review) => {
       let clone = $("#comment_item").clone().appendTo($("#comment_con"));
       clone.find("h4").text(review.renter_name);
-      let comment_date = review.created_at.substr(0, 10);
+      console.log(review.created_at);
+      let comment_date = parseInt(review.created_at);
+      comment_date = moment(comment_date)
+        .tz("Asia/Taipei")
+        .format("YYYY-MM-DD HH:MM:SS");
       clone.find("small").text(comment_date);
       clone.find("p").text(review.comment);
       clone.removeAttr("style");

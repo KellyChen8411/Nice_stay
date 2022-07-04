@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const multer = require("multer");
 const app = express();
 
 app.set("view engine", "pug");
@@ -19,8 +20,13 @@ app.use("/api/" + process.env.API_VERSION, [
 ]);
 
 app.use((error, req, res, next) => {
-  // console.log("Enter express error handling Middleware");
+  console.log("Enter express error handling Middleware");
   // console.log(error);
+  if (error instanceof multer.MulterError) {
+    console.log(error.code);
+    console.log(error.message);
+    return res.status(403).json({ error: error.message });
+  }
   if (error.type === "userExist") {
     return res.status(404).json({ error: error.message });
   } else if (error.type === "tokenExpire") {
@@ -32,7 +38,7 @@ app.use((error, req, res, next) => {
   } else if (error.type === "S3error") {
     return res.status(500).json({ error: error.message });
   } else {
-    // console.log(error);
+    console.log(error);
     res.status(500).json({ error: "internal server error" });
   }
 });

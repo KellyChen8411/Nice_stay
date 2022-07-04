@@ -35,12 +35,11 @@ houseQuery.createHouse = async (house_data, image_url, amenity_item) => {
       "INSERT INTO image (house_id, image_url) VALUES ?",
       [image_data]
     );
-    
+
     const [amenityResult] = await conn.query(
       "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?",
       [amenity_data]
     );
-   
 
     await conn.query("COMMIT");
     return houde_id;
@@ -226,7 +225,7 @@ houseQuery.houseSearch = async (
   sql += " LIMIT ?, ?";
   sql_binding.push(itemStartNum);
   sql_binding.push(itemNum);
- 
+
   const [result] = await pool.query(sql, sql_binding);
 
   let searchData = { data: result, houseCount };
