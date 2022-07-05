@@ -41,7 +41,7 @@ async function rederData() {
   let landLordRate = detailData.landLordRate;
 
   console.log(houseData);
-  console.log(landLordRate);
+  console.log(houseData.landlord_name);
 
   house_lat = houseData.latitude;
   house_lon = houseData.longitude;
@@ -68,7 +68,7 @@ async function rederData() {
   if (landLordRate.length !== 0 && landLordRate[0].ave_landload_rate > 4.5) {
     let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
     clone.find("img").attr("src", "./images/landlord.png");
-    clone.find("h4").text(`${landLordRate[0].name}是超讚房東`);
+    clone.find("h4").text(`${houseData.landlord_name}是超讚房東`);
     clone.removeAttr("style");
   }
   if (houseData.refund_type === 1) {
