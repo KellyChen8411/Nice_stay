@@ -45,4 +45,5 @@ app.use((error, req, res, next) => {
 
 app.listen(3000, async () => {
   console.log("Application is now running");
+  console.log("Github action version17");
 });

@@ -33,8 +33,6 @@ jobs:
         docker push ${{secrets.DOCKERHUB_USERNAME}}/$REPO
 
     - name: Docker Pull and Docker compose
-      env:
-          REPO: nice_stay
       uses: appleboy/ssh-action@master
       with:
         host: ${{secrets.HOST}}
@@ -43,7 +41,7 @@ jobs:
         key: ${{secrets.KEY}}
         script: |
           echo ${{secrets.DOCKERHUB_TOKEN}} | docker login -u ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
-          docker pull ${{secrets.DOCKERHUB_USERNAME}}/$REPO
+          docker pull ${{secrets.DOCKERHUB_USERNAME}}/nice_stay
           docker stop nice_stay_app
           docker rm nice_stay_app
           docker run --network my-net --name nice_stay_app -p 3000:3000 --env-file /home/ec2-user/Nice_stay/.env -d kellychen8411/nice_stay
