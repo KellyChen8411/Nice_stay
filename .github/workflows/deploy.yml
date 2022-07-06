@@ -45,6 +45,8 @@ jobs:
           docker stop nice_stay_app
           docker rm nice_stay_app
           docker run --network my-net --name nice_stay_app -p 3000:3000 --env-file /home/ec2-user/Nice_stay/.env -d kellychen8411/nice_stay
+          docker image prune --filter="dangling=true"
+          y
 
     
 
