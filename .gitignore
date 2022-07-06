@@ -1,8 +1,8 @@
 **/node_modules
 .env
-**/*.jpge
-**/*.png
-**/*.jpg
+public/css/**/*.jpge
+public/css/**/*.png
+public/css/**/*.jpg
 test.js
 date.html
 
