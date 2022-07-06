@@ -41,8 +41,9 @@ jobs:
         port: ${{secrets.PORT}}
         key: ${{secrets.KEY}}
         script:
-          cat ~/DOCKERHUB_pas.txt | docker login -u ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
-          docker pull ${{secrets.DOCKERHUB_USERNAME}}/$REPO
+          # cat ~/DOCKERHUB_pas.txt | docker login -u ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
+          # docker pull ${{secrets.DOCKERHUB_USERNAME}}/$REPO
+          docker-compose down 
 
     
 
