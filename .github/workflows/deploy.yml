@@ -43,7 +43,10 @@ jobs:
         key: ${{secrets.KEY}}
         script:
           echo ${{secrets.DOCKERHUB_TOKEN}} | docker login -u ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
-          # docker run --network my-net --name nice_stay_app -p 3000:3000 --env-file /home/ec2-user/Nice_stay/.env -d kellychen8411/nice_stay
+          docker pull ${{secrets.DOCKERHUB_USERNAME}}/$REPO
+          docker stop nice_stay_app
+          docker rm nice_stay_app
+          docker run --network my-net --name nice_stay_app -p 3000:3000 --env-file /home/ec2-user/Nice_stay/.env -d kellychen8411/nice_stay
 
     
 
