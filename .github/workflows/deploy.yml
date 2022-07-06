@@ -42,7 +42,8 @@ jobs:
         port: ${{secrets.PORT}}
         key: ${{secrets.KEY}}
         script:
-          docker run --network my-net --name nice_stay_app -p 3000:3000 --env-file /home/ec2-user/Nice_stay/.env -d kellychen8411/nice_stay
+          echo ${{secrets.DOCKERHUB_TOKEN}}
+          # docker run --network my-net --name nice_stay_app -p 3000:3000 --env-file /home/ec2-user/Nice_stay/.env -d kellychen8411/nice_stay
 
     
 
