@@ -40,7 +40,6 @@ jobs:
         username: ${{secrets.USERNAME}}
         port: ${{secrets.PORT}}
         key: ${{secrets.KEY}}
-        passphrase: ${{secrets.PASSPHRASE}}
         script:
           docker login -u ${{secrets.DOCKERHUB_USERNAME}} -p ${{secrets.DOCKERHUB_TOKEN}}
           docker pull ${{secrets.DOCKERHUB_USERNAME}}/$REPO
