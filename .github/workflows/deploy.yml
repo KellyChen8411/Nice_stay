@@ -42,10 +42,7 @@ jobs:
         port: ${{secrets.PORT}}
         key: ${{secrets.KEY}}
         script:
-          # cat ~/DOCKERHUB_pas.txt | docker login -u ${{secrets.DOCKERHUB_USERNAME}} --password-stdin
-          # docker pull ${{secrets.DOCKERHUB_USERNAME}}/$REPO
-          cd /home/ec2-user/Nice_stay
-          docker run --network my-net --name stylish -p 3000:3000 --env-file .env -d kellychen8411/nice_stay
+          docker run --network my-net --name nice_stay_app -p 3000:3000 --env-file /home/ec2-user/Nice_stay/.env -d kellychen8411/nice_stay
 
     
 
