@@ -71,12 +71,26 @@ async function buttonAction(e) {
       if (resStatus === 200) {
         let userDecision = confirm("確定要刪除此房源?");
         if (userDecision == true) {
+          //等待畫面
+          $.blockUI({
+            message: "房源刪除中，請稍後",
+            css: {
+              border: "none",
+              padding: "20px",
+              opacity: 0.7,
+              "-webkit-border-radius": "40px",
+              backgroundColor: "#b3225c",
+              color: "#fff",
+            },
+          });
+
           const fetchRes = await fetch(
             `/api/1.0/houses/deleteHouse?id=${house_id}`,
             { method: "DELETE" }
           );
           const fetchStatus = fetchRes.status;
           const finalResult = await fetchRes.json();
+          $.unblockUI();
           if (fetchStatus === 200) {
             alert("刪除成功");
             location.reload(); //重新整理頁面

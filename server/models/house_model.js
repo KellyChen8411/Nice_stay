@@ -35,12 +35,11 @@ houseQuery.createHouse = async (house_data, image_url, amenity_item) => {
       "INSERT INTO image (house_id, image_url) VALUES ?",
       [image_data]
     );
-    // console.log(imageResult);
+
     const [amenityResult] = await conn.query(
       "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?",
       [amenity_data]
     );
-    // console.log(amenityResult);
 
     await conn.query("COMMIT");
     return houde_id;
@@ -78,8 +77,7 @@ houseQuery.checkAmentity = async (amenity_id) => {
   let sql =
     "SELECT house_id, json_arrayagg(amenity_id) as amenity_array FROM house_amenity WHERE amenity_id IN (?) GROUP BY house_id; ";
   const [result] = await pool.query(sql, [amenity_id]);
-  console.log("amenity search");
-  console.log(result);
+
   const house_id = [];
   result.forEach((item) => {
     if (item.amenity_array.length === amenity_id.length) {
@@ -227,8 +225,7 @@ houseQuery.houseSearch = async (
   sql += " LIMIT ?, ?";
   sql_binding.push(itemStartNum);
   sql_binding.push(itemNum);
-  // console.log(sql);
-  // console.log(sql_binding);
+
   const [result] = await pool.query(sql, sql_binding);
 
   let searchData = { data: result, houseCount };

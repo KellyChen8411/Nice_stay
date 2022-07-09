@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
+const multer = require("multer");
 const app = express();
 const server = require('http').createServer(app);
 const io = require('socket.io')(server);
@@ -109,7 +110,12 @@ io.on('connection', (socket) => {
 
 app.use((error, req, res, next) => {
   console.log("Enter express error handling Middleware");
-  console.log(error);
+  // console.log(error);
+  if (error instanceof multer.MulterError) {
+    console.log(error.code);
+    console.log(error.message);
+    return res.status(403).json({ error: error.message });
+  }
   if (error.type === "userExist") {
     return res.status(404).json({ error: error.message });
   } else if (error.type === "tokenExpire") {
@@ -128,4 +134,5 @@ app.use((error, req, res, next) => {
 
 server.listen(3000, async () => {
   console.log("Application is now running");
+  console.log("Github action version20");
 });

@@ -41,10 +41,10 @@ util.checkLoginMiddleware = (req, res, next) => {
   try {
     let AuthorizationHeader = req.get("Authorization");
     const token = AuthorizationHeader.split(" ")[1];
-    // console.log(token);
+
     const payload = jwt.verify(token, `${process.env.JWTSECRET}`);
     req.user = payload;
-    // console.log(payload);
+
     return next();
   } catch (err) {
     const error = Error("token過期,請重新登入");
@@ -98,7 +98,6 @@ util.sendBookingEmail = async (renter_name, renter_email, bookingInfo) => {
 };
 
 util.uplaodImageToS3 = async (files, imageFieldName) => {
-  // console.log(files[imageFieldName]);
   let fileExtend = files[imageFieldName][0].originalname.split(".")[1];
   let uploadPath;
 

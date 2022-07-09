@@ -95,6 +95,19 @@ let submitForm = $("#submitForm");
 submitForm.submit(createHouse);
 
 async function createHouse(e) {
+  //等待畫面
+  $.blockUI({
+    message: "房源建立中，請稍後",
+    css: {
+      border: "none",
+      padding: "20px",
+      opacity: 0.7,
+      "-webkit-border-radius": "40px",
+      backgroundColor: "#b3225c",
+      color: "#fff",
+    },
+  });
+
   e.preventDefault();
   let data = new FormData(submitForm[0]);
   //check facility
@@ -139,7 +152,7 @@ async function createHouse(e) {
         });
         let fetchStatus = featchResponse.status;
         let finalResult = await featchResponse.json();
-
+        $.unblockUI();
         if (fetchStatus === 200) {
           alert(`建立成功，您的房源編號是${finalResult.house_id}`);
           if (user_role === 2) {
@@ -209,6 +222,19 @@ async function sendEditData(e) {
       data.get("cleanfee_percentage").slice(0, -1)
     );
 
+    //等待畫面
+    $.blockUI({
+      message: "房源編輯中，請稍後",
+      css: {
+        border: "none",
+        padding: "20px",
+        opacity: 0.7,
+        "-webkit-border-radius": "40px",
+        backgroundColor: "#b3225c",
+        color: "#fff",
+      },
+    });
+
     let URL = `/api/1.0/houses/updateHouse?id=${house_id}`;
     let featchResponse = await fetch(URL, {
       method: "PATCH",
@@ -216,6 +242,7 @@ async function sendEditData(e) {
     });
     let fetchStatus = featchResponse.status;
     let fetchData = await featchResponse.json();
+    $.unblockUI();
     if (fetchStatus === 200) {
       alert("編輯成功");
       window.location.href = "/admin/manageHouse.html";

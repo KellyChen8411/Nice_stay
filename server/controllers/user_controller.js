@@ -18,7 +18,7 @@ const userSignUp = async (req, res) => {
   if (checkUser.length == 0) {
     let salt = bcrypt.genSaltSync(10);
     let hashPassword = bcrypt.hashSync(signup_password, salt);
-    console.log(hashPassword);
+
     const insertResult = await userQuery.createNativeUser([
       [signup_email, signup_name, hashPassword, 1, 1],
     ]);
@@ -39,7 +39,6 @@ const userSignUp = async (req, res) => {
   const token = jwt.sign(userInfo, process.env.JWTSECRET, {
     expiresIn: "180d",
   });
-  // console.log(token);
 
   res.json({ token });
 };
@@ -72,14 +71,12 @@ const userSignIn = async (req, res) => {
       email: userDataFromDB.email,
       role: userDataFromDB.user_role,
     };
-    console.log(userInfo);
   }
 
   //generate token
   const token = jwt.sign(userInfo, process.env.JWTSECRET, {
     expiresIn: "180d",
   });
-  console.log(token);
 
   res.json({ token });
 };

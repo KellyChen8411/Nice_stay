@@ -11,8 +11,6 @@ const createHouse = async (req, res) => {
   //validate user input
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    // console.log('Validation Error');
-    // console.log(errors.array());
     return res.status(400).json({ error: errors.array() });
   }
 
@@ -37,7 +35,6 @@ const createHouse = async (req, res) => {
     image_data,
     amenityList
   );
-  // console.log(createResult);
 
   res.json({ house_id: createResult });
 };
@@ -58,7 +55,7 @@ const selectAllHouse = async (req, res) => {
     house.image_url = imageURL_prefix + house.image_url;
   });
   APIData.data = houses;
-  // console.log(APIData)
+
   res.json(APIData);
 };
 
@@ -74,8 +71,6 @@ const houseSearch = async (req, res) => {
   queryCondition = Object.entries(queryCondition);
   const paging = parseInt(req.query.paging);
   const itemNum = 7;
-  // console.log(queryCondition);
-  // console.log(orderCondition);
 
   const selectData = await houseQuery.houseSearch(
     queryCondition,
@@ -191,7 +186,6 @@ const houseDatail = async (req, res) => {
   if (landLordRate.length === 0) {
     landLordRate = [];
   }
-  console.log(landLordRate);
 
   res.json({
     house: houseData,
@@ -203,9 +197,7 @@ const houseDatail = async (req, res) => {
 
 const houseNearby = async (req, res) => {
   let { lat, lon, type } = req.query;
-  console.log(lat);
-  console.log(lon);
-  console.log(type);
+
   let URL;
   if (type === "traffic") {
     URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat}%2C${lon}&radius=1000&type=bus_station&key=${process.env.GOOGLEAPI_KEY}`;
@@ -232,8 +224,6 @@ const houseNearby = async (req, res) => {
       name: element.name,
     });
   });
-
-  console.log(nearbyLocationsData);
 
   res.json(nearbyLocationSet);
 };
@@ -264,7 +254,7 @@ const selectTrip = async (req, res) => {
       .format("YYYY-MM-DD");
     trip.image_url = process.env.CLOUDFRONT_DOMAIN + trip.image_url;
   });
-  console.log(userTrip);
+
   res.json(userTrip);
 
   // res.json({test: 'test'});
@@ -275,8 +265,7 @@ const checkRefund = async (req, res) => {
   const requestCancelTime = parseInt(req.query.requestCancelTime);
   let dueTime = await houseQuery.getRefundDue(booking_id);
   dueTime = parseInt(dueTime);
-  console.log(requestCancelTime);
-  console.log(dueTime);
+
   if (dueTime >= requestCancelTime) {
     await houseQuery.updateBooking(booking_id);
     return res.json({ cancel: true });
@@ -308,8 +297,7 @@ const landlordHouse = async (req, res) => {
 const houseHistroyData = async (req, res) => {
   const landlord_id = req.user.id;
   const house_id = req.query.id;
-  console.log(`landlord: ${landlord_id}`);
-  console.log(`house: ${house_id}`);
+
   const house = await houseQuery.houseHistroyData(landlord_id, house_id);
   if (house.length === 0) {
     const err = new Error("權限不足");
@@ -323,7 +311,6 @@ const houseHistroyData = async (req, res) => {
     (sideimage_url) => process.env.CLOUDFRONT_DOMAIN + sideimage_url
   );
 
-  console.log(house);
   res.json(house);
 };
 
@@ -353,8 +340,7 @@ const updateHouse = async (req, res) => {
           req.files,
           imageUploadType[ImgIndex]
         );
-        console.log("Upload image new name");
-        console.log(uploadFileName);
+
         if (ImgIndex === "0") {
           updateHouseData.image_url = uploadFileName;
         } else {
@@ -374,7 +360,6 @@ const updateHouse = async (req, res) => {
       house_id,
     ]);
     if ("image_url" in updateHouseData) {
-      console.log("original main image has been delete and new is updated");
       await util.deleteImageFromS3(deleteImg["0"].slice(38));
     }
 
@@ -432,6 +417,16 @@ const deleteHouse = async (req, res) => {
     //delete data from house table
     await conn.query("DELETE FROM house WHERE id=?", house_id);
 
+    //delete image in S3
+    const [result] = await pool.query(
+      "SELECT a.id, a.image_url AS mainimage_list, b.sideimage_list FROM house a left join (SELECT house_id, JSON_ARRAYAGG(image_url) AS sideimage_list FROM image group by house_id) b ON a.id=b.house_id WHERE a.id=?",
+      house_id
+    );
+    const imageList = [result[0].mainimage_list, ...result[0].sideimage_list];
+    for (let i = 0; i < imageList.length; i++) {
+      await util.deleteImageFromS3(imageList[i]);
+    }
+
     await conn.query("COMMIT");
     return res.json({ status: "succeed" });
   } catch (error) {
@@ -448,7 +443,7 @@ const likeHouse = async (req, res) => {
   const house_id = req.query.id;
   await houseQuery.likeHouse(user_id, house_id);
   const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
-  console.log(favoriteList);
+
   res.json(favoriteList);
 };
 
@@ -456,8 +451,7 @@ const dislikeHouse = async (req, res) => {
   const user_id = req.user.id;
   const house_id = req.query.id;
   const favorite_id = await houseQuery.findFavoriteID(user_id, house_id);
-  console.log("favorite_id");
-  console.log(favorite_id);
+
   await houseQuery.dislikeHouse(favorite_id);
   const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
   res.json(favoriteList);
