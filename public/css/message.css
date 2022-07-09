@@ -164,12 +164,15 @@ span{
 }
 
 .user{
+	padding: 0 10px;
+	width: 100%;
     display: flex;
     align-items: center;
     height: 50px;
     font-weight: 300;
     border-bottom: 1px solid #ede1e1;
-    
+    cursor: pointer;
+
 }
 
 .user>p{
@@ -185,4 +188,20 @@ span{
 	.chat-sidebar {
 		display: none;
 	}
+}
+
+.user_active{
+	background-color: #ebedf0;
+	box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.notification{
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	background-color: #d61563;
+}
+
+.hide{
+	display: none;
 }

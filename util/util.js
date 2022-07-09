@@ -20,6 +20,7 @@ util.checkLogin = (req, res, next) => {
   const payload = jwt.verify(token, `${process.env.JWTSECRET}`);
   let user_id = payload.id;
   let role = payload.role;
+  let name = payload.name;
 
   let updateToken = JSON.parse(req.query.updateToken);
 
@@ -30,9 +31,9 @@ util.checkLogin = (req, res, next) => {
     const new_token = jwt.sign(payload, process.env.JWTSECRET, {
       expiresIn: "180d",
     });
-    return res.json({ new_token, user_id, role });
+    return res.json({ new_token, user_id, role, name });
   } else {
-    res.json({ user_id, role });
+    res.json({ user_id, role, name });
   }
 };
 

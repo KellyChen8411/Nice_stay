@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Nice Stay</title>
-    <link rel="stylesheet" href="../css/basic_nav_footer.css" />
+    <link rel="stylesheet" href="../css/basic_nav_footer_loadlord.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
@@ -14,79 +14,20 @@
     <link rel="stylesheet" href="../css/message.css" />
     <script src="../js/jquery-3.6.0.min.js"></script>
     <script src="../js/showPersonalList.js"></script>
-    <script src="../components/nav_renter.js"></script>
+    <script src="../components/nav_loadlord.js"></script>
   </head>
   <body>
     <div class="chat-container">
-    <nav-renter-component></nav-renter-component>
+    <nav-component></nav-component>
     <div class="dummyDiv"></div>
     <hr />
       <main class="chat-main">
-        <div class="chat-sidebar">
-          <h3 class="message_title"><i class="fas fa-comments"></i> 訊息</h3>
-          <h3 class="user"><i class="fas fa-users"></i><p>Users</p></h3>
-          <h3 class="user"><i class="fas fa-users"></i> <p>Users</p></h3>
-          <h3 class="user"><i class="fas fa-users"></i> <p>Users</p></h3>
-          <ul id="users"></ul>
+        <div id ="user_outter" class="chat-sidebar">
+          <h3 class="message_title"><i class="fas fa-comments"></i><span id="owner">訊息</span></h3>
         </div>
-        <div class="chat-messages">
-            <div class="message">
-                <p class="meta">Kelly<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-
+        <div id="message_outter" class="chat-messages">
+          <div id="message_con">
+          </div>
         </div>
       </main>
       <div class="chat-form-container">
@@ -110,6 +51,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/main.js"></script>
+    <script src="../js/moment.min.js"></script>
+    <script src="../js/message.js"></script>
   </body>
 </html>

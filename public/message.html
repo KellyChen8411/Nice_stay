@@ -22,71 +22,18 @@
     <div class="dummyDiv"></div>
     <hr />
       <main class="chat-main">
-        <div class="chat-sidebar">
-          <h3 class="message_title"><i class="fas fa-comments"></i> 訊息</h3>
-          <h3 class="user"><i class="fas fa-users"></i><p>Users</p></h3>
-          <h3 class="user"><i class="fas fa-users"></i> <p>Users</p></h3>
-          <h3 class="user"><i class="fas fa-users"></i> <p>Users</p></h3>
-          <ul id="users"></ul>
+        <div id ="user_outter" class="chat-sidebar">
+          <h3 class="message_title"><i class="fas fa-comments"></i><span id="owner">訊息</span></h3>
+          <!-- <div class="user_con">
+            <div class="user_active user" data-receiverID="${user.receiver_id}">
+              <h3 class="user"><i class="fas fa-users"></i><p>USER</p></h3>
+              <div class="notification" style="display: none;"></div>
+            </div>
+          </div> -->
         </div>
-        <div class="chat-messages">
-            <div class="message">
-                <p class="meta">Kelly<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-            <div class="message">
-                <p class="meta">Duke<span>2022-07-03 12:50</span></p>
-                <p class="text">Hello</p>
-            </div>
-
+        <div id="message_outter" class="chat-messages">
+          <div id="message_con">
+          </div>
         </div>
       </main>
       <div class="chat-form-container">
@@ -99,7 +46,7 @@
             required
             autocomplete="off"
           ></textarea>
-          <button class="btn"><i class="fas fa-paper-plane"></i> Send</button>
+          <button class="btn" type="button"><i class="fas fa-paper-plane"></i> Send</button>
         </form>
       </div>
     </div>
@@ -110,6 +57,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="js/main.js"></script>
+    <script src="./js/moment.min.js"></script>
+    <script src="./js/message.js"></script>
   </body>
 </html>
