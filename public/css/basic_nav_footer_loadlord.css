@@ -3,6 +3,10 @@
   margin: 0;
 }
 
+a{
+  color: black !important;
+}
+
 p,
 h4,
 h2 {
