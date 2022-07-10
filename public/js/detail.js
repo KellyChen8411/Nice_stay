@@ -14,6 +14,7 @@ let house_id = params.get("id");
 let startDate = params.get("startDate");
 let endDate = params.get("endDate");
 let people_count = params.get("people_count");
+let houseData;
 
 //fetch data
 
@@ -34,14 +35,11 @@ function covertToISOtime(dateString) {
 async function rederData() {
   let detailData = await fetch(`/api/1.0/houses/detail/${house_id}`);
   detailData = await detailData.json();
-  let houseData = detailData.house;
+  houseData = detailData.house;
   let amenityData = detailData.amenity;
   let reviewData = detailData.review;
   let reviewCount = reviewData.length;
   let landLordRate = detailData.landLordRate;
-
-  console.log(houseData);
-  console.log(houseData.landlord_name);
 
   house_lat = houseData.latitude;
   house_lon = houseData.longitude;
@@ -132,10 +130,13 @@ async function rederData() {
     clone.removeAttr("style");
   });
   //checkoout area
-  if (startDate !== null && endDate !== null) {
+  if (startDate !== '' && endDate !== '') {
     $("#checkin_date").val(startDate);
     $("#checkout_date").val(endDate);
-    const durationDays = diffDays(new Date(startDate), new Date(endDate));
+    const day1 = moment(startDate, "YYYY-MM-DD");
+    const day2 = moment(endDate, "YYYY-MM-DD");
+    const durationDays = moment.duration(day2.diff(day1)).asDays();
+    // const durationDays = diffDays(new Date(startDate), new Date(endDate));
     roomfee = houseData.price * durationDays;
     cleanFee = (roomfee * houseData.cleanfee_percentage) / 100;
     taxFee = (roomfee * houseData.tax_percentage) / 100;
@@ -156,7 +157,6 @@ async function rederData() {
     reviewData.forEach((review) => {
       let clone = $("#comment_item").clone().appendTo($("#comment_con"));
       clone.find("h4").text(review.renter_name);
-      console.log(review.created_at);
       let comment_date = parseInt(review.created_at);
       comment_date = moment(comment_date)
         .tz("Asia/Taipei")
@@ -238,4 +238,87 @@ $("#checkout_btn").click(gotoCheckout);
 
 function gotoCheckout() {
   window.location.href = `/checkout.html?id=${house_id}&startDate=${startDate}&endDate=${endDate}&roomfee=${roomfee}&cleanFee=${cleanFee}&taxFee=${taxFee}&amountFee=${amountFee}&people_count=${people_count}&refund_type=${is_refund}&refund_duedate=${refund_duedate}&refund_duedate_timestamp=${refund_duedate_timestamp}`;
+}
+
+
+//datepicker for checkout form
+async function datepicker_booked(){
+  let dateRange = []; 
+  let bookedDateRes = await fetch(`/api/1.0/houses/bookedDate?id=${house_id}`);
+  let bookedDate = await bookedDateRes.json();
+  if(bookedDateRes.status === 200){
+    if(bookedDate.length === 0){
+      dateRange = [];
+    }else{
+      bookedDate = bookedDate[0];
+      const { checkindate_list, checkoutdate_list } = bookedDate;
+      const newcheckoutdate_list = checkoutdate_list.map(date => {
+        return moment(date).subtract(1, 'days').format("YYYY-MM-DD")
+      })
+
+
+      for(let i=0; i<checkindate_list.length; i++){
+          for (let d = moment(checkindate_list[i]).toDate();d <= moment(newcheckoutdate_list[i]).toDate();d.setDate(d.getDate() + 1)) {
+                dateRange.push($.datepicker.formatDate('yy-mm-dd', d));
+          }
+      }
+    }
+    
+    (from = $("#checkin_date")
+    .datepicker({
+      defaultDate: "+1w",
+      dateFormat: "yy-mm-dd",
+      changeMonth: true,
+      numberOfMonths: 1,
+      minDate: 0,
+      beforeShowDay: function (date) {
+          var dateString = jQuery.datepicker.formatDate('yy-mm-dd', date);
+          return [dateRange.indexOf(dateString) == -1];
+      }
+    })
+    .on("change", function () {
+      var currentDate = from.datepicker("getDate");
+      var nextDate = new Date(currentDate.valueOf() + 1000 * 3600 * 24);
+      to.datepicker("option", "minDate", nextDate);
+    })
+    .on("click", function () {
+      $("#checkout_date").val("");
+    })),
+    (to = $("#checkout_date").datepicker({
+      defaultDate: "+1w",
+      dateFormat: "yy-mm-dd",
+      changeMonth: true,
+      numberOfMonths: 1,
+      minDate: "+1d",
+      beforeShowDay: function (date) {
+        var dateString = jQuery.datepicker.formatDate('yy-mm-dd', date);
+        return [dateRange.indexOf(dateString) == -1];
+      }
+    }));
+
+  }
+}
+
+datepicker_booked();
+
+//update price when user pick date
+$("#checkout_date").change(updatePrice);
+
+function updatePrice(){
+  startDate = $("#checkin_date").val();
+  endDate = $("#checkout_date").val();
+  const day1 = moment(startDate, "YYYY-MM-DD");
+  const day2 = moment(endDate, "YYYY-MM-DD");
+  const durationDays = moment.duration(day2.diff(day1)).asDays();
+  // const durationDays = diffDays(new Date(startDate), new Date(endDate));
+  roomfee = houseData.price * durationDays;
+  cleanFee = (roomfee * houseData.cleanfee_percentage) / 100;
+  taxFee = (roomfee * houseData.tax_percentage) / 100;
+  amountFee = roomfee + cleanFee + taxFee;
+  $("#fee_perNight").text(`$${houseData.price} TWD／晚`);
+  $("#room_fee_title").text(`訂房費 (${durationDays}晚)`);
+  $("#room_fee").text(`${roomfee} TWD`);
+  $("#clean_fee").text(`${cleanFee} TWD`);
+  $("#tax_fee").text(`${taxFee} TWD`);
+  $("#amount_fee").text(`${amountFee} TWD`);
 }

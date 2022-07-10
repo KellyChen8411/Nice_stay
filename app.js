@@ -135,7 +135,7 @@ app.use((error, req, res, next) => {
   } else if (error.type === "S3error") {
     return res.status(500).json({ error: error.message });
   } else {
-    // console.log(error);
+    console.log(error);
     res.status(500).json({ error: "internal server error" });
   }
 });

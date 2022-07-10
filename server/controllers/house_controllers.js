@@ -472,6 +472,12 @@ const getUserFavoriteDetail = async (req, res) => {
   res.json(houseDetail);
 };
 
+const houseBookedDate = async (req, res) => {
+  const house_id = req.query.id;
+  let bookedDate_list = await houseQuery.houseBookedDate(house_id);
+  res.json(bookedDate_list);
+}
+
 module.exports = {
   createHouse,
   selectAllHouse,
@@ -490,4 +496,5 @@ module.exports = {
   dislikeHouse,
   getUserFavorite,
   getUserFavoriteDetail,
+  houseBookedDate
 };

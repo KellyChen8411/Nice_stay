@@ -27,6 +27,7 @@ const {
   dislikeHouse,
   getUserFavorite,
   getUserFavoriteDetail,
+  houseBookedDate
 } = require("../controllers/house_controllers");
 
 router.route("/houses/create").post(
@@ -131,5 +132,9 @@ router
 router
   .route("/houses/favoriteDetail")
   .get(util.checkLoginMiddleware, util.wrapAsync(getUserFavoriteDetail));
+
+router
+  .route("/houses/bookedDate")
+  .get(util.wrapAsync(houseBookedDate));
 
 module.exports = router;

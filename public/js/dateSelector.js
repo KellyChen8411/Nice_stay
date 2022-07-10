@@ -5,7 +5,7 @@ $(function () {
       dateFormat: "yy-mm-dd",
       changeMonth: true,
       numberOfMonths: 1,
-      minDate: 0,
+      minDate: 0
     })
     .on("change", function () {
       var currentDate = from.datepicker("getDate");
@@ -20,7 +20,7 @@ $(function () {
       dateFormat: "yy-mm-dd",
       changeMonth: true,
       numberOfMonths: 1,
-      minDate: "+1d",
+      minDate: "+1d"
     }));
 
   $("#area").selectmenu();
