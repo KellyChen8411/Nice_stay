@@ -149,6 +149,11 @@ function pushMessage(user_name, content, created_at){
 socket.on('privateMessage', (messageInfo) => {
   let { sender_name, sender_id, content, created_at, insertMsgID } = messageInfo;
   if(sender_id === activeuser_id){
+    console.log('收到訊息');
+    console.log('sender_id');
+    console.log(sender_id);
+    console.log('activeuser_id');
+    console.log(activeuser_id);
     //將訊息推至對話框
     pushMessage(sender_name, content, created_at);
     //將此訊息更新為已讀

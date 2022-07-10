@@ -1,3 +1,15 @@
+let renter_name;
+let messageInfo = new Map();
+let activeBooking;
+
+////////////DOM element
+// Get the modal
+let modal = document.getElementById("myModal");
+let modalMsg = document.getElementById("myModal_msg");
+// Get the <span> element that closes the modal
+let span = document.getElementsByClassName("close")[0];
+let closeModal = document.getElementsByClassName("close_msg")[0];
+
 let token = localStorage.getItem("token");
 let headers = {
   "Content-Type": "application/json",
@@ -11,11 +23,11 @@ async function fetchTripData() {
     { headers }
   );
   const finalResult = await resultFetch.json();
-
   if (resultFetch.status === 200) {
     if (finalResult.role === 2) {
       $("#landlordContainer").text("切換至出租模式");
     }
+    renter_name = finalResult.name;
 
     //fetch trip data
     const tripsRes = await fetch(`/api/1.0/houses/trip`, { headers });
@@ -37,8 +49,22 @@ async function fetchTripData() {
           past_trip.push(index);
         } else if (moment(trip.checkin_date).isAfter(today)) {
           future_trip.push(index);
+          //蒐集需要發送訊息的資訊,以booking num當key
+          messageInfo.set(trip.booking_id, {
+            owner_id:trip.renter_id, 
+            owner_role:1,
+            talker_id:trip.landlord_id, 
+            talker_role:2, 
+            owner_name:renter_name, 
+            landlord_name: trip.landloard_name,
+            title: trip.title,
+            checkin_date: trip.checkin_date,
+            checkout_date: trip.checkout_date
+          });
         } else {
           now_trip.push(index);
+          //蒐集需要發送訊息的資訊,以booking num當key
+          messageInfo.set(trip.booking_id, {owner_id:trip.renter_id, owner_role:1,talker_id:trip.landlord_id, talker_role:2, owner_name:renter_name, landlord_name: trip.landloard_name});
         }
       } else {
         cancel_trip.push(index);
@@ -75,7 +101,6 @@ async function fetchTripData() {
         $("<h2>已結束的旅程</h2>").appendTo(trip_inner);
         past_trip.forEach((tripIndex) => {
           let trip = trips[tripIndex];
-          console.log(trip);
           renderTrip(trip, 2, buttonName);
         });
       }
@@ -86,7 +111,6 @@ async function fetchTripData() {
       $("<h2>已取消的旅程</h2>").appendTo(trip_inner);
       cancel_trip.forEach((tripIndex) => {
         let trip = trips[tripIndex];
-        console.log(trip);
         renderTrip(trip, 3, buttonName);
       });
     }
@@ -139,6 +163,7 @@ async function buttonAction(e) {
 
     if (buttonType === "取消預定") {
       let userDecision = confirm("確定取消此預定？");
+      
       if (userDecision) {
         let requestCancelTime = moment().valueOf();
         let fetchRes = await fetch(
@@ -149,7 +174,18 @@ async function buttonAction(e) {
         if (fetchStatus === 200) {
           if (finalData.cancel === true) {
             alert("取消成功");
-            window.location.href = "/trip.html";
+            //發訊息通知房東
+            activeBooking = messageInfo.get(parseInt(booking_id));
+            let { owner_id, owner_role, talker_id, talker_role, owner_name, title, checkin_date, checkout_date } = activeBooking;
+            let content = `我已取消${title} ${checkin_date}至${checkout_date}的預定`
+            let created_at = Date.now();
+            const socket = io();
+            socket.emit('privateMessageCancle', { content, owner_id, owner_role, talker_id, talker_role, owner_name, created_at }, (response)=>{
+              if(response === 'ok'){
+                window.location.href = "/trip.html";
+              }
+            });
+            
           } else {
             alert("無法取消");
           }
@@ -172,6 +208,11 @@ async function buttonAction(e) {
       // $('#review_outter').attr("style", `top: ${scrollHeight}px; left:${widthPosition}px`)
     } else if (buttonType === "重新預定") {
       window.location.href = `/detail.html?id=${house_id}`;
+    } else if (buttonType === "連絡房東") {
+      activeBooking = messageInfo.get(parseInt(booking_id));
+      //open the modal
+      $('#message_title').text(`傳訊息給${activeBooking.landlord_name}`);
+      modalMsg.style.display = "block";
     }
   }
 }
@@ -231,7 +272,6 @@ async function sendReview(e) {
       created_at: Date.now(),
     };
 
-    console.log(review_info);
     let headers = {
       "Content-Type": "application/json",
       Accept: "application/json",
@@ -256,28 +296,47 @@ async function sendReview(e) {
   }
 }
 
+//送出訊息
+let messsage_btn = $('#messsage_btn');
+messsage_btn.click(sendMessage);
+
+function sendMessage(){
+  const content = $('#message').val();
+  if(content  === ''){
+    alert('請輸入訊息');
+  }else{
+    //發送訊息
+    let { owner_id, owner_role, talker_id, talker_role, owner_name } = activeBooking;
+    let created_at = Date.now();
+    const socket = io();
+    socket.emit('privateMessage', { content, owner_id, owner_role, talker_id, talker_role, owner_name, created_at });
+    modalMsg.style.display = "none";
+    $('#message').val('');
+  }
+}
+
 //////////////////////for review window////////////////////////
 
-// Get the modal
-var modal = document.getElementById("myModal");
-
-// Get the button that opens the modal
-// var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on <span> (x), close the modal
+//// When the user clicks on <span> (x), close the modal
+//review modal
 span.onclick = function () {
   modal.style.display = "none";
   clearReviewWindow();
 };
+//message modal
+closeModal.onclick = function() {
+  modalMsg.style.display = "none";
+  $('#message').val('');
+}
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
     clearReviewWindow();
+  }else if(event.target == modalMsg){
+    modalMsg.style.display = "none";
+    $('#message').val('');
   }
 };
 

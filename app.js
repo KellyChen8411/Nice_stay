@@ -58,7 +58,6 @@ io.on('connection', (socket) => {
       let talker_id = receiver[0].receiver_id;
       sql = "SELECT a.name, b.sender_id, b.content, b.created_at FROM user a right join (SELECT * FROM message WHERE (sender_id=? and receiver_id=? and sender_role=?) OR (sender_id=? and receiver_id=? and receiver_role=?)) b ON a.id=b.sender_id order by created_at";
       const [message] = await pool.query(sql, [owner_id, talker_id, owner_role, talker_id, owner_id, owner_role]);
-      // console.log(message);
       callback({ receiver, message });
     }
     
@@ -66,7 +65,6 @@ io.on('connection', (socket) => {
 
   //get message with talker
   socket.on("getMessage", async (userInfo, callback) => {
-    // console.log(userInfo);
     let {owner_id, talker_id, owner_role} = userInfo;
     sql = "SELECT a.name, b.sender_id, b.content, b.created_at FROM user a right join (SELECT * FROM message WHERE (sender_id=? and receiver_id=? and sender_role=?) OR (sender_id=? and receiver_id=? and receiver_role=?)) b ON a.id=b.sender_id order by created_at";
       const [message] = await pool.query(sql, [owner_id, talker_id, owner_role, talker_id, owner_id, owner_role]);
@@ -81,7 +79,21 @@ io.on('connection', (socket) => {
     let [insertMsg] = await pool.query(sql, [owner_id, talker_id, content, owner_role, talker_role, created_at]);
     let insertMsgID = insertMsg.insertId
     //發訊息給對方
+    console.log(`send message to user in room: ${talker_id}_${talker_role}`)
     socket.to(`${talker_id}_${talker_role}`).emit("privateMessage", {sender_name: owner_name, sender_id: owner_id, content, created_at, insertMsgID});
+  })
+
+  //sendPrivateMessage
+  socket.on("privateMessageCancle", async (messageInfo, callback) => {
+    const { content, owner_id, owner_role, talker_id, talker_role, owner_name, created_at } = messageInfo;
+    //將訊息存進資料庫
+    sql = "INSERT INTO message (sender_id, receiver_id, content, sender_role, receiver_role, status, created_at) VALUES (?,?,?,?,?,0,?)";
+    let [insertMsg] = await pool.query(sql, [owner_id, talker_id, content, owner_role, talker_role, created_at]);
+    let insertMsgID = insertMsg.insertId
+    //發訊息給對方
+    console.log(`send message to user in room: ${talker_id}_${talker_role}`)
+    socket.to(`${talker_id}_${talker_role}`).emit("privateMessage", {sender_name: owner_name, sender_id: owner_id, content, created_at, insertMsgID});
+    callback('ok')
   })
 
   //現場更新訊息為已讀
@@ -96,8 +108,6 @@ io.on('connection', (socket) => {
     sql = "SELECT json_arrayagg(id) as unreadmsg_id FROM nice_stay.message WHERE receiver_id=? AND sender_id=? AND receiver_role=? AND status=0";
     let [message_id] = await pool.query(sql, [owner_id, talker_id, owner_role]);
     let { unreadmsg_id } = message_id[0];
-    // console.log('update message');
-    // console.log(unreadmsg_id);
     sql = "UPDATE message SET status=1 WHERE id IN (?)";
     await pool.query(sql, [unreadmsg_id]);
   })
@@ -112,8 +122,6 @@ app.use((error, req, res, next) => {
   console.log("Enter express error handling Middleware");
   // console.log(error);
   if (error instanceof multer.MulterError) {
-    console.log(error.code);
-    console.log(error.message);
     return res.status(403).json({ error: error.message });
   }
   if (error.type === "userExist") {
@@ -127,12 +135,11 @@ app.use((error, req, res, next) => {
   } else if (error.type === "S3error") {
     return res.status(500).json({ error: error.message });
   } else {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ error: "internal server error" });
   }
 });
 
 server.listen(3000, async () => {
   console.log("Application is now running");
-  console.log("Github action version20");
 });

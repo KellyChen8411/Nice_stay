@@ -39,6 +39,7 @@ const checkout = async (req, res) => {
 
   const bookingResult = await checkoutQuery.createBooking(booking);
   const orderNum = bookingResult.insertId;
+  // const orderNum = 1;
   const renterInfo = { name: req.user.name, email: req.user.email };
   res.json({ bookingInfo: booking, orderNum, renterInfo });
 };

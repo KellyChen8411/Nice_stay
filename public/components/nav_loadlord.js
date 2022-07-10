@@ -17,7 +17,7 @@ class Nav extends HTMLElement {
               <div><a href="/admin/manageBooking.html">管理預定</a></div>
               <div><a href="/admin/manageHouse.html">管理房源</a></div>
               <div><a href="/admin/createHouse.html">建立房源</a></div>
-              <div><a>訊息</a></div>
+              <div><a href="/admin/message.html">訊息</a></div>
               <div id="loginBtn"><a href="/login.html">登入</a></div>
               <div id="logoutBtn" class="DSHide"><a>登出</a></div>
           </div>

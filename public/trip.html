@@ -16,7 +16,7 @@
     <hr />
 
     <div id="myModal" class="modal">
-      <!-- Modal content -->
+      <!-- Comment Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
         <form
@@ -74,11 +74,37 @@
       </div>
     </div>
 
+     <!-- Message Modal content -->
+     <div id="myModal_msg" class="modal_msg">
+      <!-- Modal content -->
+      <div class="modal-content_msg">
+        <span class="close_msg">&times;</span>
+        <div>
+          <div class="message_con">
+            <p id="message_title"></p>
+            <div id="title_field" class="field title_field textarea_con">
+              <textarea
+              class="message"
+                name="message"
+                row="10"
+                col="50"
+                id="message"
+              ></textarea>
+            </div>
+            <div class="button_con">
+              <button id="messsage_btn" class="messsage_btn">發送訊息</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <footer-component></footer-component>
 
     <script src="./js/moment.min.js"></script>
     <script src="./js/moment-timezone-with-date.js"></script>
     <script src="./js/star.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
     <script src="./js/trip.js"></script>
     <script src="./js/toLandlordPage.js"></script>
   </body>

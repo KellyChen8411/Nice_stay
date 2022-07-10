@@ -1,3 +1,4 @@
+const socket = io({ autoConnect: false });
 $("html,body").scrollTop(0);
 
 const params = new URLSearchParams(window.location.search);
@@ -43,6 +44,10 @@ async function checkOut() {
     Accept: "application/json",
     Authorization: `Bearer ${token}`,
   };
+  //get user input
+  const message = $('#message').val();
+  console.log(message);
+
   let bookoingInfo = {
     house_id,
     checkin_date,
@@ -63,6 +68,7 @@ async function checkOut() {
   });
   let fetchStatus = resultFetch.status;
   let finalResult = await resultFetch.json();
+  console.log(finalResult);
   if (fetchStatus === 200) {
     let sendEmailInfo = finalResult;
     sendEmailInfo = JSON.stringify(sendEmailInfo);
@@ -72,14 +78,29 @@ async function checkOut() {
       "Content-Type": "application/json",
       Accept: "application/json",
     };
+
+    //寄送email
     // let resultFetch = await fetch("/api/1.0/checkout/email", {
     //   method: "POST",
     //   headers,
     //   body: sendEmailInfo,
     // });
+
+    //傳訊息給房東
+    //connect to socket
+    socket.connect();
+    let renter_id = finalResult.bookingInfo.renter_id;
+    let renter_name = finalResult.renterInfo.name;
+    let landlord_id = finalResult.bookingInfo.landlord_id;
+    let created_at = Date.now();
+    // console.log(renter_name);
+    socket.emit('privateMessage', { content: message, owner_id: renter_id, owner_role: 1, talker_id: landlord_id, talker_role: 2, owner_name: renter_name, created_at });
+
+
     alert(
       `您的預訂編號為${finalResult.orderNum}, 已將預訂詳情寄至您的email\n感謝預定`
     );
+    // window.location.href = "/trip.html";
   } else {
     alert(finalResult.error);
     window.location.href = `/login.html?checkout=${true}`;

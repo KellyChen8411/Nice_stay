@@ -84,6 +84,19 @@
           </div>
         </div>
         <hr />
+        <div class="massage_outter">
+          <h2>發送訊息給房東</h2>
+          <h4>跟房東介紹自己或詢問住宿事宜</h4>
+          <div id="title_field" class="field title_field">
+            <textarea
+              name="message"
+              row="10"
+              col="50"
+              id="message"
+            ></textarea>
+          </div>
+        </div>
+        <hr />
         <div class="cancel_outter">
           <h2>退訂政策</h2>
           <h4 id="cancel_plan"></h4>
@@ -130,6 +143,7 @@
       </div>
     </footer>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script src="./js/checkout.js"></script>
   </body>
 </html>
