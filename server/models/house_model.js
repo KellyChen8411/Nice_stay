@@ -375,7 +375,7 @@ houseQuery.selectUserFavoriteHouseDetail = async (user_id) => {
 
 houseQuery.houseBookedDate = async (house_id) => {
   let sql =
-    "SELECT house_id, json_arrayagg(checkin_date) as checkindate_list, json_arrayagg(checkout_date) as checkoutdate_list FROM booking WHERE house_id=? group by house_id";
+    "SELECT house_id, json_arrayagg(checkin_date) as checkindate_list, json_arrayagg(checkout_date) as checkoutdate_list FROM booking WHERE house_id=? and is_refund=0 group by house_id";
   const [result] = await pool.query(sql, house_id);
   return result;
 };

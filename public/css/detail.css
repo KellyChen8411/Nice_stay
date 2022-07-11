@@ -168,6 +168,7 @@
 
 .comment_con {
   display: flex;
+  margin-top: 20px;
 }
 
 .comment_con > div {
