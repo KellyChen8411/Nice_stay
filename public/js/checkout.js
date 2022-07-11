@@ -96,12 +96,12 @@ async function checkOut() {
         Accept: "application/json",
       };
 
-      //寄送email
-      let resultFetch = await fetch("/api/1.0/checkout/email", {
-        method: "POST",
-        headers,
-        body: sendEmailInfo,
-      });
+      // //寄送email
+      // let resultFetch = await fetch("/api/1.0/checkout/email", {
+      //   method: "POST",
+      //   headers,
+      //   body: sendEmailInfo,
+      // });
 
       //傳訊息給房東
       //connect to socket
