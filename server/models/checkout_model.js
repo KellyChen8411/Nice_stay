@@ -14,4 +14,15 @@ checkoutQuery.createBooking = async (values) => {
   return result;
 };
 
+checkoutQuery.updateBookingPaid = async (orderNum) => {
+  let sql = "UPDATE booking SET paid=1 WHERE id=?";
+  await pool.query(sql, orderNum);
+};
+
+checkoutQuery.createPayment = async (values) => {
+  let sql =
+    "INSERT INTO payment (booking_id, rec_trade_id, created_at) VALUES (?,?,?)";
+  await pool.query(sql, values);
+};
+
 module.exports = checkoutQuery;

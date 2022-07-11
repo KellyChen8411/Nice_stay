@@ -4,15 +4,21 @@ let messageInfo = new Map();
 let activeBooking;
 let token = localStorage.getItem("token");
 
-//DOM element
-let modalMsg = document.getElementById("myModal_msg");
-let closeModal = document.getElementsByClassName("close_msg")[0];
-
 let headers = {
   "Content-Type": "application/json",
   Accept: "application/json",
   Authorization: `Bearer ${token}`,
 };
+
+//DOM element
+let modalMsg = document.getElementById("myModal_msg");
+let closeModal = document.getElementsByClassName("close_msg")[0];
+
+/////////////log out function
+function Logout() {
+  localStorage.removeItem("token");
+  window.location.href = "/";
+}
 
 async function renderBooking() {
   const tripsRes = await fetch("/api/1.0/houses/booking", { headers });
@@ -40,7 +46,14 @@ async function renderBooking() {
       trips.forEach((trip, index) => {
         if (trip.is_refund === 0) {
           //蒐集需要發送訊息的資訊,以booking num當key
-          messageInfo.set(trip.booking_id, {owner_id:trip.landlord_id, owner_role:2,talker_id:trip.renter_id, talker_role:1, owner_name:trip.landloard_name, renter_name: trip.renter_name});
+          messageInfo.set(trip.booking_id, {
+            owner_id: trip.landlord_id,
+            owner_role: 2,
+            talker_id: trip.renter_id,
+            talker_role: 1,
+            owner_name: trip.landloard_name,
+            renter_name: trip.renter_name,
+          });
           if (
             moment(trip.checkin_date).isBefore(today) &&
             moment(trip.checkout_date).isSameOrBefore(today)
@@ -95,11 +108,6 @@ async function renderBooking() {
   }
 }
 
-function Logout() {
-  localStorage.removeItem("token");
-  window.location.href = "/";
-}
-
 renderBooking();
 
 function renderTrip(trip, type, buttonName) {
@@ -152,44 +160,53 @@ async function buttonAction(e) {
       } else {
         alert("請求失敗");
       }
-    }else if(buttonType === "連絡房客"){
+    } else if (buttonType === "連絡房客") {
       activeBooking = messageInfo.get(parseInt(booking_id));
       //open the modal
-      $('#message_title').text(`傳訊息給${activeBooking.renter_name}`);
+      $("#message_title").text(`傳訊息給${activeBooking.renter_name}`);
       modalMsg.style.display = "block";
     }
   }
 }
 
 //送出訊息
-let messsage_btn = $('#messsage_btn');
+let messsage_btn = $("#messsage_btn");
 messsage_btn.click(sendMessage);
 
-function sendMessage(){
-  const content = $('#message').val();
-  if(content  === ''){
-    alert('請輸入訊息');
-  }else{
+function sendMessage() {
+  const content = $("#message").val();
+  if (content === "") {
+    alert("請輸入訊息");
+  } else {
     //發送訊息
-    let { owner_id, owner_role, talker_id, talker_role, owner_name } = activeBooking;
+    let { owner_id, owner_role, talker_id, talker_role, owner_name } =
+      activeBooking;
     let created_at = Date.now();
     const socket = io();
-    socket.emit('privateMessage', { content, owner_id, owner_role, talker_id, talker_role, owner_name, created_at });
+    socket.emit("privateMessage", {
+      content,
+      owner_id,
+      owner_role,
+      talker_id,
+      talker_role,
+      owner_name,
+      created_at,
+    });
     modalMsg.style.display = "none";
-    $('#message').val('');
+    $("#message").val("");
   }
 }
 
 // When the user clicks on <span> (x), close the modal
-closeModal.onclick = function() {
+closeModal.onclick = function () {
   modalMsg.style.display = "none";
-  $('#message').val('');
-}
+  $("#message").val("");
+};
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
+window.onclick = function (event) {
   if (event.target == modalMsg) {
     modalMsg.style.display = "none";
-    $('#message').val('');
+    $("#message").val("");
   }
-}
+};

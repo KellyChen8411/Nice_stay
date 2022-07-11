@@ -6,18 +6,28 @@ let headers = {
   Authorization: `Bearer ${token}`,
 };
 
+/////////////log out function
+function Logout() {
+  localStorage.removeItem("token");
+  window.location.href = "/";
+}
+
 async function renderHouse() {
   const housesRes = await fetch("/api/1.0/houses/landlordHouse", { headers });
   const fetchStatus = housesRes.status;
   const houses = await housesRes.json();
   if (fetchStatus === 200) {
-    console.log(houses);
+    //切換登入登出鍵
+    $("#logoutBtn").toggleClass("DSHide", false); //remove class
+    $("#loginBtn").toggleClass("DSHide", true); //add class
+    $("#logoutBtn").click(Logout);
+
     houses.forEach((house) => {
       renderData(house);
     });
   } else {
     alert(houses.error);
-    // window.location.href = "/";
+    window.location.href = "/";
   }
 }
 

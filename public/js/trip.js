@@ -51,20 +51,27 @@ async function fetchTripData() {
           future_trip.push(index);
           //蒐集需要發送訊息的資訊,以booking num當key
           messageInfo.set(trip.booking_id, {
-            owner_id:trip.renter_id, 
-            owner_role:1,
-            talker_id:trip.landlord_id, 
-            talker_role:2, 
-            owner_name:renter_name, 
+            owner_id: trip.renter_id,
+            owner_role: 1,
+            talker_id: trip.landlord_id,
+            talker_role: 2,
+            owner_name: renter_name,
             landlord_name: trip.landloard_name,
             title: trip.title,
             checkin_date: trip.checkin_date,
-            checkout_date: trip.checkout_date
+            checkout_date: trip.checkout_date,
           });
         } else {
           now_trip.push(index);
           //蒐集需要發送訊息的資訊,以booking num當key
-          messageInfo.set(trip.booking_id, {owner_id:trip.renter_id, owner_role:1,talker_id:trip.landlord_id, talker_role:2, owner_name:renter_name, landlord_name: trip.landloard_name});
+          messageInfo.set(trip.booking_id, {
+            owner_id: trip.renter_id,
+            owner_role: 1,
+            talker_id: trip.landlord_id,
+            talker_role: 2,
+            owner_name: renter_name,
+            landlord_name: trip.landloard_name,
+          });
         }
       } else {
         cancel_trip.push(index);
@@ -163,7 +170,7 @@ async function buttonAction(e) {
 
     if (buttonType === "取消預定") {
       let userDecision = confirm("確定取消此預定？");
-      
+
       if (userDecision) {
         let requestCancelTime = moment().valueOf();
         let fetchRes = await fetch(
@@ -176,16 +183,36 @@ async function buttonAction(e) {
             alert("取消成功");
             //發訊息通知房東
             activeBooking = messageInfo.get(parseInt(booking_id));
-            let { owner_id, owner_role, talker_id, talker_role, owner_name, title, checkin_date, checkout_date } = activeBooking;
-            let content = `我已取消${title} ${checkin_date}至${checkout_date}的預定`
+            let {
+              owner_id,
+              owner_role,
+              talker_id,
+              talker_role,
+              owner_name,
+              title,
+              checkin_date,
+              checkout_date,
+            } = activeBooking;
+            let content = `我已取消${title} ${checkin_date}至${checkout_date}的預定`;
             let created_at = Date.now();
             const socket = io();
-            socket.emit('privateMessageCancle', { content, owner_id, owner_role, talker_id, talker_role, owner_name, created_at }, (response)=>{
-              if(response === 'ok'){
-                window.location.href = "/trip.html";
+            socket.emit(
+              "privateMessageCancle",
+              {
+                content,
+                owner_id,
+                owner_role,
+                talker_id,
+                talker_role,
+                owner_name,
+                created_at,
+              },
+              (response) => {
+                if (response === "ok") {
+                  window.location.href = "/trip.html";
+                }
               }
-            });
-            
+            );
           } else {
             alert("無法取消");
           }
@@ -211,7 +238,7 @@ async function buttonAction(e) {
     } else if (buttonType === "連絡房東") {
       activeBooking = messageInfo.get(parseInt(booking_id));
       //open the modal
-      $('#message_title').text(`傳訊息給${activeBooking.landlord_name}`);
+      $("#message_title").text(`傳訊息給${activeBooking.landlord_name}`);
       modalMsg.style.display = "block";
     }
   }
@@ -297,21 +324,30 @@ async function sendReview(e) {
 }
 
 //送出訊息
-let messsage_btn = $('#messsage_btn');
+let messsage_btn = $("#messsage_btn");
 messsage_btn.click(sendMessage);
 
-function sendMessage(){
-  const content = $('#message').val();
-  if(content  === ''){
-    alert('請輸入訊息');
-  }else{
+function sendMessage() {
+  const content = $("#message").val();
+  if (content === "") {
+    alert("請輸入訊息");
+  } else {
     //發送訊息
-    let { owner_id, owner_role, talker_id, talker_role, owner_name } = activeBooking;
+    let { owner_id, owner_role, talker_id, talker_role, owner_name } =
+      activeBooking;
     let created_at = Date.now();
     const socket = io();
-    socket.emit('privateMessage', { content, owner_id, owner_role, talker_id, talker_role, owner_name, created_at });
+    socket.emit("privateMessage", {
+      content,
+      owner_id,
+      owner_role,
+      talker_id,
+      talker_role,
+      owner_name,
+      created_at,
+    });
     modalMsg.style.display = "none";
-    $('#message').val('');
+    $("#message").val("");
   }
 }
 
@@ -324,19 +360,19 @@ span.onclick = function () {
   clearReviewWindow();
 };
 //message modal
-closeModal.onclick = function() {
+closeModal.onclick = function () {
   modalMsg.style.display = "none";
-  $('#message').val('');
-}
+  $("#message").val("");
+};
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
     clearReviewWindow();
-  }else if(event.target == modalMsg){
+  } else if (event.target == modalMsg) {
     modalMsg.style.display = "none";
-    $('#message').val('');
+    $("#message").val("");
   }
 };
 

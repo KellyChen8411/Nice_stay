@@ -66,7 +66,7 @@
   margin-bottom: 10px !important;
 }
 
-.massage_outter > h4{
+.massage_outter > h4 {
   color: gray;
 }
 
@@ -93,8 +93,18 @@ textarea {
   height: 200px;
   font-size: 16px !important;
   resize: none;
-  border: 1px solid rgba(34,36,38,.15);
+  border: 1px solid rgba(34, 36, 38, 0.15);
   outline: 0;
   border-radius: 0.28571429rem;
 }
 
+/* for tappay */
+.tpfield {
+  height: 40px;
+  width: 100%;
+  margin: 5px 0 10px 0;
+  padding: 5px;
+  border: 1px solid rgba(34, 36, 38, 0.15);
+  border-radius: 0.28571429rem;
+  outline: 0;
+}

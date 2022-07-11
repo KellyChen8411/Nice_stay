@@ -8,7 +8,7 @@ class Nav extends HTMLElement {
 
       <nav>
           <div class="logoContainer">
-              <a href="/"><img src="../images/Logo.png" /></a>
+            <a href="/"><img src="../images/Nlogo2.jpg" class="Nlogo" /></a>
           </div>
           <div id="hamburgerContainer" class="hamburgerContainer">
               <img src="../images/hamburger_icon.png" />

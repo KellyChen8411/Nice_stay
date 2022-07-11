@@ -14,7 +14,14 @@
       integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
       crossorigin="anonymous"
     ></script>
-    <!-- <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script> -->
+    <script src="https://js.tappaysdk.com/tpdirect/v5.1.0"></script>
+    <script>
+      TPDirect.setupSDK(
+        12348,
+        "app_pa1pQcKoY22IlnSXq5m5WP5jFKzoRG58VEXpT7wU62ud7mMbDOGzCYIlzzLF",
+        "sandbox"
+      );
+    </script>
   </head>
   <body>
     <nav>
@@ -75,25 +82,19 @@
           </div>
         </div>
         <hr />
-        <div class="email_outter">
+        <!-- <div class="email_outter">
           <h2>寄送email</h2>
-          <!-- <small>收件人:</small> -->
           <h4>收件人</h4>
           <div class="ui large input email_con">
             <input type="text" id="email" placeholder="email..." />
           </div>
         </div>
-        <hr />
+        <hr /> -->
         <div class="massage_outter">
           <h2>發送訊息給房東</h2>
           <h4>跟房東介紹自己或詢問住宿事宜</h4>
           <div id="title_field" class="field title_field">
-            <textarea
-              name="message"
-              row="10"
-              col="50"
-              id="message"
-            ></textarea>
+            <textarea name="message" row="10" col="50" id="message"></textarea>
           </div>
         </div>
         <hr />
@@ -105,7 +106,7 @@
         <div class="creditcard_outter">
           <h2>付款</h2>
           <form class="ui form checkoutForm">
-            <div class="field">
+            <!-- <div class="field">
               <label>卡號</label>
               <input type="text" name="card_num" placeholder="請輸入卡號" />
             </div>
@@ -120,7 +121,13 @@
             <div class="field">
               <label>安全碼</label>
               <input type="text" name="card_code" placeholder="請輸入安全碼" />
-            </div>
+            </div> -->
+            <h4>卡號</h4>
+            <div class="tpfield" id="card-number"></div>
+            <h4>到期日</h4>
+            <div class="tpfield" id="card-expiration-date"></div>
+            <h4>安全碼</h4>
+            <div class="tpfield" id="card-ccv"></div>
             <button id="checkout_btn" class="checkout_btn" type="button">
               確認預定
             </button>
@@ -143,6 +150,7 @@
       </div>
     </footer>
 
+    <script src="./js/tappay_ui.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/checkout.js"></script>
   </body>

@@ -130,7 +130,7 @@ async function rederData() {
     clone.removeAttr("style");
   });
   //checkoout area
-  if (startDate !== '' && endDate !== '') {
+  if (startDate !== "" && endDate !== "") {
     $("#checkin_date").val(startDate);
     $("#checkout_date").val(endDate);
     const day1 = moment(startDate, "YYYY-MM-DD");
@@ -240,62 +240,63 @@ function gotoCheckout() {
   window.location.href = `/checkout.html?id=${house_id}&startDate=${startDate}&endDate=${endDate}&roomfee=${roomfee}&cleanFee=${cleanFee}&taxFee=${taxFee}&amountFee=${amountFee}&people_count=${people_count}&refund_type=${is_refund}&refund_duedate=${refund_duedate}&refund_duedate_timestamp=${refund_duedate_timestamp}`;
 }
 
-
 //datepicker for checkout form
-async function datepicker_booked(){
-  let dateRange = []; 
+async function datepicker_booked() {
+  let dateRange = [];
   let bookedDateRes = await fetch(`/api/1.0/houses/bookedDate?id=${house_id}`);
   let bookedDate = await bookedDateRes.json();
-  if(bookedDateRes.status === 200){
-    if(bookedDate.length === 0){
+  if (bookedDateRes.status === 200) {
+    if (bookedDate.length === 0) {
       dateRange = [];
-    }else{
+    } else {
       bookedDate = bookedDate[0];
       const { checkindate_list, checkoutdate_list } = bookedDate;
-      const newcheckoutdate_list = checkoutdate_list.map(date => {
-        return moment(date).subtract(1, 'days').format("YYYY-MM-DD")
-      })
+      const newcheckoutdate_list = checkoutdate_list.map((date) => {
+        return moment(date).subtract(1, "days").format("YYYY-MM-DD");
+      });
 
-
-      for(let i=0; i<checkindate_list.length; i++){
-          for (let d = moment(checkindate_list[i]).toDate();d <= moment(newcheckoutdate_list[i]).toDate();d.setDate(d.getDate() + 1)) {
-                dateRange.push($.datepicker.formatDate('yy-mm-dd', d));
-          }
+      for (let i = 0; i < checkindate_list.length; i++) {
+        for (
+          let d = moment(checkindate_list[i]).toDate();
+          d <= moment(newcheckoutdate_list[i]).toDate();
+          d.setDate(d.getDate() + 1)
+        ) {
+          dateRange.push($.datepicker.formatDate("yy-mm-dd", d));
+        }
       }
     }
-    
-    (from = $("#checkin_date")
-    .datepicker({
-      defaultDate: "+1w",
-      dateFormat: "yy-mm-dd",
-      changeMonth: true,
-      numberOfMonths: 1,
-      minDate: 0,
-      beforeShowDay: function (date) {
-          var dateString = jQuery.datepicker.formatDate('yy-mm-dd', date);
-          return [dateRange.indexOf(dateString) == -1];
-      }
-    })
-    .on("change", function () {
-      var currentDate = from.datepicker("getDate");
-      var nextDate = new Date(currentDate.valueOf() + 1000 * 3600 * 24);
-      to.datepicker("option", "minDate", nextDate);
-    })
-    .on("click", function () {
-      $("#checkout_date").val("");
-    })),
-    (to = $("#checkout_date").datepicker({
-      defaultDate: "+1w",
-      dateFormat: "yy-mm-dd",
-      changeMonth: true,
-      numberOfMonths: 1,
-      minDate: "+1d",
-      beforeShowDay: function (date) {
-        var dateString = jQuery.datepicker.formatDate('yy-mm-dd', date);
-        return [dateRange.indexOf(dateString) == -1];
-      }
-    }));
 
+    (from = $("#checkin_date")
+      .datepicker({
+        defaultDate: "+1w",
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        numberOfMonths: 1,
+        minDate: 0,
+        beforeShowDay: function (date) {
+          var dateString = jQuery.datepicker.formatDate("yy-mm-dd", date);
+          return [dateRange.indexOf(dateString) == -1];
+        },
+      })
+      .on("change", function () {
+        var currentDate = from.datepicker("getDate");
+        var nextDate = new Date(currentDate.valueOf() + 1000 * 3600 * 24);
+        to.datepicker("option", "minDate", nextDate);
+      })
+      .on("click", function () {
+        $("#checkout_date").val("");
+      })),
+      (to = $("#checkout_date").datepicker({
+        defaultDate: "+1w",
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        numberOfMonths: 1,
+        minDate: "+1d",
+        beforeShowDay: function (date) {
+          var dateString = jQuery.datepicker.formatDate("yy-mm-dd", date);
+          return [dateRange.indexOf(dateString) == -1];
+        },
+      }));
   }
 }
 
@@ -304,7 +305,7 @@ datepicker_booked();
 //update price when user pick date
 $("#checkout_date").change(updatePrice);
 
-function updatePrice(){
+function updatePrice() {
   startDate = $("#checkin_date").val();
   endDate = $("#checkout_date").val();
   const day1 = moment(startDate, "YYYY-MM-DD");

@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <title>Nice Stay</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Nice Stay</title>
+    <link rel="icon" type="image/x-icon" href="./images/Nlogo2.jpg" />
     <link rel="stylesheet" href="./css/basic_nav_footer.css" />
     <link
       rel="stylesheet"
@@ -19,12 +20,12 @@
   <body>
     <div class="chat-container">
       <nav-renter-component></nav-renter-component>
-      <div class="dummyDiv"></div>
-      <hr />
-      <main class="chat-main">
 
-        <div id ="user_outter" class="chat-sidebar">
-          <h3 class="message_title"><i class="fas fa-comments"></i><span id="owner">訊息</span></h3>
+      <main class="chat-main">
+        <div id="user_outter" class="chat-sidebar">
+          <h3 class="message_title">
+            <i class="fas fa-comments"></i><span id="owner">訊息</span>
+          </h3>
           <!-- <div class="user_con">
             <div class="user_active user" data-receiverID="${user.receiver_id}">
               <h3 class="user"><i class="fas fa-users"></i><p>USER</p></h3>
@@ -33,9 +34,7 @@
           </div> -->
         </div>
         <div id="message_outter" class="chat-messages">
-          <div id="message_con">
-
-          </div>
+          <div id="message_con"></div>
         </div>
       </main>
       <div class="chat-form-container">
@@ -48,7 +47,9 @@
             required
             autocomplete="off"
           ></textarea>
-          <button class="btn" type="button"><i class="fas fa-paper-plane"></i> Send</button>
+          <button class="btn" type="button">
+            <i class="fas fa-paper-plane"></i> Send
+          </button>
         </form>
       </div>
     </div>
@@ -61,5 +62,6 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="./js/moment.min.js"></script>
     <script src="./js/message.js"></script>
+    <script src="./js/toLandlordPage.js"></script>
   </body>
 </html>

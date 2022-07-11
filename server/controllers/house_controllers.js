@@ -386,7 +386,7 @@ const updateHouse = async (req, res) => {
     return res.json({ status: "succeed" });
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+    throw error;
     return -1;
   } finally {
     await conn.release();
@@ -476,7 +476,7 @@ const houseBookedDate = async (req, res) => {
   const house_id = req.query.id;
   let bookedDate_list = await houseQuery.houseBookedDate(house_id);
   res.json(bookedDate_list);
-}
+};
 
 module.exports = {
   createHouse,
@@ -496,5 +496,5 @@ module.exports = {
   dislikeHouse,
   getUserFavorite,
   getUserFavoriteDetail,
-  houseBookedDate
+  houseBookedDate,
 };
