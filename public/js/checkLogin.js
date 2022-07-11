@@ -1,4 +1,5 @@
 let userFavoriteList; //存user收藏房源的全域變數
+let renter_id; //存renter_id的全域變數
 
 let token = localStorage.getItem("token");
 let headers = {
@@ -29,8 +30,12 @@ async function checkForLogin() {
       //update token
       localStorage.setItem("token", finalResult.new_token);
     }
+    console.log('user_info');
+    console.log(finalResult);
+    renter_id = finalResult.user_id;
   }
 }
+
 
 checkForLogin();
 

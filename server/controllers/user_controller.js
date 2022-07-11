@@ -100,9 +100,20 @@ const updateUserRole = async (req, res) => {
   res.json({ new_token });
 };
 
+const checkUserBlacklist = async (req, res) => {
+  const { landlord_id, renter_id } = req.query;
+  const blacklistResult = await userQuery.checkUserBlacklist(landlord_id, renter_id);
+  if(blacklistResult.length === 0){
+    return res.json({inlist: false});
+  }else{
+    res.json({inlist: true});
+  }
+}
+
 module.exports = {
   userSignUp,
   userSignIn,
   addBlackList,
   updateUserRole,
+  checkUserBlacklist
 };

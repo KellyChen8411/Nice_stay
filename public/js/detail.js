@@ -15,6 +15,7 @@ let startDate = params.get("startDate");
 let endDate = params.get("endDate");
 let people_count = params.get("people_count");
 let houseData;
+let landlord_id;
 
 //fetch data
 
@@ -40,6 +41,7 @@ async function rederData() {
   let reviewData = detailData.review;
   let reviewCount = reviewData.length;
   let landLordRate = detailData.landLordRate;
+  landlord_id = houseData.landlord_id;
 
   house_lat = houseData.latitude;
   house_lon = houseData.longitude;
@@ -138,8 +140,8 @@ async function rederData() {
     const durationDays = moment.duration(day2.diff(day1)).asDays();
     // const durationDays = diffDays(new Date(startDate), new Date(endDate));
     roomfee = houseData.price * durationDays;
-    cleanFee = (roomfee * houseData.cleanfee_percentage) / 100;
-    taxFee = (roomfee * houseData.tax_percentage) / 100;
+    cleanFee = Math.floor((roomfee * houseData.cleanfee_percentage) / 100);
+    taxFee = Math.floor((roomfee * houseData.tax_percentage) / 100);
     amountFee = roomfee + cleanFee + taxFee;
     $("#fee_perNight").text(`$${houseData.price} TWD／晚`);
     $("#room_fee_title").text(`訂房費 (${durationDays}晚)`);
@@ -236,8 +238,27 @@ async function getNearbyInfo(e) {
 //go to checkout
 $("#checkout_btn").click(gotoCheckout);
 
-function gotoCheckout() {
-  window.location.href = `/checkout.html?id=${house_id}&startDate=${startDate}&endDate=${endDate}&roomfee=${roomfee}&cleanFee=${cleanFee}&taxFee=${taxFee}&amountFee=${amountFee}&people_count=${people_count}&refund_type=${is_refund}&refund_duedate=${refund_duedate}&refund_duedate_timestamp=${refund_duedate_timestamp}`;
+async function gotoCheckout() {
+  if($(checkout_date).val() === ''){
+    alert("請選擇住宿日期");
+    return
+  }
+
+  if(renter_id !== undefined){
+    //確認user是否在blacklist中
+    const blacklistRes = await fetch(`/api/1.0/users/checkUserBlacklist?landlord_id=${landlord_id}&renter_id=${renter_id}`);
+    const blacklistcheck = await blacklistRes.json();
+    if(blacklistcheck.inlist === false){
+      window.location.href = `/checkout.html?id=${house_id}&startDate=${startDate}&endDate=${endDate}&roomfee=${roomfee}&cleanFee=${cleanFee}&taxFee=${taxFee}&amountFee=${amountFee}&people_count=${people_count}&refund_type=${is_refund}&refund_duedate=${refund_duedate}&refund_duedate_timestamp=${refund_duedate_timestamp}`;
+    }else{
+      alert("已被房東加入黑名單，無法預定");
+      window.location.href = "/";
+    }
+    
+  }else{
+    alert("請先登入");
+  }
+  
 }
 
 //datepicker for checkout form
@@ -311,10 +332,9 @@ function updatePrice() {
   const day1 = moment(startDate, "YYYY-MM-DD");
   const day2 = moment(endDate, "YYYY-MM-DD");
   const durationDays = moment.duration(day2.diff(day1)).asDays();
-  // const durationDays = diffDays(new Date(startDate), new Date(endDate));
   roomfee = houseData.price * durationDays;
-  cleanFee = (roomfee * houseData.cleanfee_percentage) / 100;
-  taxFee = (roomfee * houseData.tax_percentage) / 100;
+  cleanFee = Math.floor((roomfee * houseData.cleanfee_percentage) / 100);
+  taxFee = Math.floor((roomfee * houseData.tax_percentage) / 100);
   amountFee = roomfee + cleanFee + taxFee;
   $("#fee_perNight").text(`$${houseData.price} TWD／晚`);
   $("#room_fee_title").text(`訂房費 (${durationDays}晚)`);

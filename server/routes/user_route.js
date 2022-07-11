@@ -9,6 +9,7 @@ const {
   userSignIn,
   addBlackList,
   updateUserRole,
+  checkUserBlacklist
 } = require("../controllers/user_controller");
 
 router.route("/users/signup").post(
@@ -55,5 +56,7 @@ router.route("/users/blacklist").post(util.wrapAsync(addBlackList));
 router
   .route("/users/updateUserRole")
   .get(util.checkLoginMiddleware, util.wrapAsync(updateUserRole));
+
+router.route("/users/checkUserBlacklist").get(util.wrapAsync(checkUserBlacklist));
 
 module.exports = router;

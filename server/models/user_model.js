@@ -25,4 +25,10 @@ userQuery.updateUserRole = async (user_id) => {
   await pool.query(sql, user_id);
 };
 
+userQuery.checkUserBlacklist = async (landlord_id, renter_id) => {
+  let sql = "SELECT * FROM blacklist WHERE landlord_id=? AND renter_id=?";
+  const [result] = await pool.query(sql, [landlord_id, renter_id]);
+  return result;
+}
+
 module.exports = userQuery;

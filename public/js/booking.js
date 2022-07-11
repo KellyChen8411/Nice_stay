@@ -145,20 +145,23 @@ async function buttonAction(e) {
     let renter_id = e.target.dataset.renterid;
 
     if (buttonType === "加入黑名單") {
-      let headers = {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      };
-      let resultFetch = await fetch("/api/1.0/users/blacklist", {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ landlord_id, renter_id }),
-      });
-      let fetchStatus = resultFetch.status;
-      if (fetchStatus === 200) {
-        alert("請求成功");
-      } else {
-        alert("請求失敗");
+      let userDecision = confirm('確定將此user加入黑名單？');
+      if(userDecision){
+        let headers = {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        };
+        let resultFetch = await fetch("/api/1.0/users/blacklist", {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ landlord_id, renter_id }),
+        });
+        let fetchStatus = resultFetch.status;
+        if (fetchStatus === 200) {
+          alert("請求成功");
+        } else {
+          alert("請求失敗");
+        }
       }
     } else if (buttonType === "連絡房客") {
       activeBooking = messageInfo.get(parseInt(booking_id));
