@@ -36,6 +36,11 @@ nav > div {
   align-items: center;
 }
 
+.Nlogo{
+  width: 55px;
+  height: 55px;
+}
+
 .landlordContainer {
   margin-left: auto;
   height: 47px;

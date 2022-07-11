@@ -34,6 +34,11 @@ nav > div {
   align-items: center;
 }
 
+.Nlogo{
+  width: 33px;
+  height: 33px;
+}
+
 .mainSearch {
   display: flex;
   align-items: center;
