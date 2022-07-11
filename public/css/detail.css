@@ -167,18 +167,24 @@
 }
 
 .comment_con {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   margin-top: 20px;
 }
 
 .comment_con > div {
   flex: 1;
   height: 115px;
+  margin-top: 10px;
 }
 
 .comment_con > div > p {
   width: 450px;
   font-size: 16px;
+}
+
+.comment_time{
+  color: gray;
 }
 
 .nearby_con > button {

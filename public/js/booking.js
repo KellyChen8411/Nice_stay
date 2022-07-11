@@ -131,6 +131,7 @@ function renderTrip(trip, type, buttonName) {
   clone.find("button").attr("data-bookingid", trip.booking_id);
   clone.find("button").attr("data-houseid", trip.house_id);
   clone.find("button").attr("data-renterid", trip.renter_id);
+  clone.find("a").attr("href", `/detail.html?id=${trip.house_id}&startDate=&endDate=&people_count=`);
   clone.removeAttr("style");
 }
 
