@@ -25,11 +25,27 @@ $(function () {
 
   $("#area").selectmenu();
 
+  //people and pet count area 
+  $("#peopleSelectArea").click(changeConfigCount);
+  function changeConfigCount(e) {
+    if (e.target.innerHTML === "+") {
+      let inputElement = $(`#count_${e.target.dataset.type}`);
+      let newValue = parseInt(inputElement.val()) + 1;
+      inputElement.val(newValue);
+    } else if (e.target.innerHTML === "-") {
+      let inputElement = $(`#count_${e.target.dataset.type}`);
+      if (inputElement.val() > 0) {
+        let newValue = parseInt(inputElement.val()) - 1;
+        inputElement.val(newValue);
+      }
+    }
+  }
+  //when people area is seleced
   let peopleTag = $("#people");
   let peopleAreaTag = $("#peopleSelectArea");
   let leftPosition = Math.round(peopleTag.position().left);
   peopleAreaTag.css("left", leftPosition);
-  peopleTag.focus(function () {
+  peopleTag.click(function (e) {
     peopleAreaTag.removeClass("PAHide");
     peopleAreaTag.addClass("PAShow");
   });
@@ -37,31 +53,22 @@ $(function () {
   peopleBtn.click(function () {
     peopleAreaTag.removeClass("PAShow");
     peopleAreaTag.addClass("PAHide");
-    let humanCount = human.spinner("value");
-    let petCount = pet.spinner("value");
+    let humanCount = parseInt($('#count_0').val());
+    let petCount =  parseInt($('#count_1').val());
+   
     if (!(humanCount === 0 && petCount === 0)) {
       let peoleSelectResult = `${humanCount},${petCount}`;
       peopleTag.val(peoleSelectResult);
     }
   });
 
-  let human = $("#human")
-    .spinner({
-      min: 0,
-    })
-    .val(0);
-  let pet = $("#pet")
-    .spinner({
-      min: 0,
-    })
-    .val(0);
 
   let hamburgerIcon = $("#hamburgerContainer");
   hamburgerIcon.click(showPersonalList);
   let personalArea = $("#personalArea");
   personalArea.css("right", "20px");
 
-  function showPersonalList() {
+  function showPersonalList(e) {
     if (personalArea.hasClass("PAHide")) {
       personalArea.removeClass("PAHide");
       personalArea.addClass("PAShow");
@@ -74,14 +81,14 @@ $(function () {
   $("#houseArea").click(addToFavorite);
 
   async function addToFavorite(e) {
-    console.log(e.target.nodeName);
+  
     if (e.target.nodeName === "I") {
       if (localStorage.getItem("token") === null) {
         alert("欲收藏房源請先登入");
       } else {
         let house_id = e.target.parentElement.dataset.id;
         if (e.target.classList.contains("grey")) {
-          console.log(`like house ${house_id}`);
+          
           //收藏
           const fetchRes = await fetch(
             `/api/1.0/houses/likeHouse?id=${house_id}`,
@@ -90,12 +97,12 @@ $(function () {
           const finalResult = await fetchRes.json();
           if (fetchRes.status === 200) {
             userFavoriteList = finalResult;
-            console.log(userFavoriteList);
+            
           }
           e.target.classList.toggle("grey");
           e.target.classList.toggle("red");
         } else if (e.target.classList.contains("red")) {
-          console.log(`dislike house ${house_id}`);
+          
           //取消收藏
           const fetchRes = await fetch(
             `/api/1.0/houses/dislikeHouse?id=${house_id}`,
@@ -104,14 +111,13 @@ $(function () {
           const finalResult = await fetchRes.json();
           if (fetchRes.status === 200) {
             userFavoriteList = finalResult;
-            console.log(userFavoriteList);
+            
           }
           e.target.classList.toggle("grey");
           e.target.classList.toggle("red");
         }
       }
-      // console.log(e.target.classList.contains("grey"));
-      // console.log(e.target.parentElement.dataset.id);
+
     }
     if (e.target.nodeName === "IMG") {
       let house_id = e.target.dataset.id;
@@ -137,12 +143,44 @@ $(function () {
   });
 
   //細節篩選單顯示
-  $("#detailSearch").click(function () {
-    $("#detailSearchList").removeClass("DSHide");
+  $("#detailSearch").click(function (e) {
+    if($("#detailSearchList").hasClass("DSHide")){
+      $("#detailSearchList").removeClass("DSHide");
+    }else{
+      $("#detailSearchList").addClass("DSHide");
+    }
+    
   });
 
   //細節篩選單關閉
   $("#close_icon").click(function () {
     $("#detailSearchList").addClass("DSHide");
   });
+
+  // 點擊其他東西時關閉下拉式選單  $("peopleSelectArea")
+  window.onclick = function(event) {
+   
+    if(!($("#people")[0].contains(event.target)) && !($("#peopleSelectArea")[0].contains(event.target))){
+      if ($("#peopleSelectArea").hasClass("PAShow")) {
+        $("#peopleSelectArea").removeClass("PAShow");
+        $("#peopleSelectArea").addClass("PAHide");
+      }
+    }
+    
+    if(!($("#hamburgerContainer")[0].contains(event.target)) && !($("#personalArea")[0].contains(event.target))){
+      if($("#personalArea").hasClass("PAShow")){
+        $("#personalArea").removeClass("PAShow");
+        $("#personalArea").addClass("PAHide");
+      }
+    }
+
+    if(!($("#detailSearch")[0].contains(event.target)) && !($("#detailSearchList")[0].contains(event.target))){
+      if(!$("#detailSearchList").hasClass("DSHide")){
+        $("#detailSearchList").addClass("DSHide");
+      }
+    }
+
+  }
+ 
+  
 });

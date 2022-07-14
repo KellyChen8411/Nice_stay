@@ -34,10 +34,6 @@ textarea {
   resize: none !important;
 }
 
-/* .city_region{
-  display: flex !important;
-} */
-
 .config_con,
 .price_con {
   border: 1px solid #dedbd5;

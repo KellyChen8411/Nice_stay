@@ -3,6 +3,11 @@
   margin: 0;
 }
 
+body{
+  position: relative;
+  height: 980px !important;
+}
+
 a {
   color: black !important;
   cursor: pointer !important;
@@ -15,13 +20,14 @@ p {
 /* navbar */
 nav {
   display: flex !important;
-  /* align-items: center; */
+  align-items: center;
   padding: 20px;
   position: fixed;
   top: 0;
   z-index: 1;
   background-color: white;
   width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 }
 
 nav > div {
@@ -45,13 +51,9 @@ nav > div {
   /* height: 51px; */
   padding: 5px 30px;
   margin: auto;
-  border: 1px solid black;
+  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
   border-radius: 50px;
 }
-
-/* .mainSearch>form{
-    display: flex;
-} */
 
 .mainSearch input {
   display: inline-block;
@@ -65,11 +67,12 @@ nav > div {
 .mainSearch p {
   padding: 0 10px;
   font-size: 2rem;
+  color: #696568;
 }
 
 .detailSearch {
   padding: 5px 5px;
-  border: 1px solid black;
+  box-shadow: rgb(67 71 85 / 27%) 0px 0px 0.25em;
   border-radius: 10px;
   cursor: pointer;
 }
@@ -79,18 +82,40 @@ nav > div {
   display: inline-block;
   height: 37px;
   line-height: 37px;
+  color: #696568 !important;
 }
 
 .searchIcon {
-  display: flex;
+  width: 30px;
+  height: 30px;
+  /* display: flex;
   align-items: center;
+  justify-content: center; */
+  position: relative;
   cursor: pointer;
+  border-radius: 50px;
+  background-color: #EA8D8D;
 }
 
+.searchIcon>i{
+  position: absolute;
+  top: 6px;
+  left: 2px;
+}
+
+
 .landlordContainer {
-  height: 47px;
-  line-height: 47px;
+  width: 120px;
+  height: 33px;
+  text-align: center;
+  line-height: 33px;
+  font-weight: 700;
   cursor: pointer;
+  border-radius: 32px;
+}
+
+.landlordContainer:hover{
+  background-color: #f7f6f2;
 }
 
 .hamburgerContainer {
@@ -105,6 +130,10 @@ nav > div {
   line-height: 36px;
 }
 
+.peopleSelectArea{
+  padding: 0 20px;
+}
+
 .PAHide {
   display: none;
   position: absolute;
@@ -112,24 +141,36 @@ nav > div {
 }
 
 .PAShow {
-  background-color: #d5d9d4;
+  background-color: #fff;
   border-radius: 20px;
   position: absolute;
-  top: 95px;
+  top: 80px;
+  box-shadow: rgb(67 71 85 / 27%) 0px 0px 0.25em, rgb(90 125 188 / 5%) 0px 0.25em 1em;
 }
 
-.PA > div {
-  margin: 40px 10px;
-}
+/* .PA > div {
+  margin: 5px 10px;
+} */
 
 .peopleBtnContainer {
+  margin-bottom: 20px;
   display: flex;
   justify-content: end;
 }
 
 .peopleBtn {
+  padding: 0 24px;
+  border: 0;
+  background-color: #b3225c;
+  color: #fff;
   border-radius: 5px;
-  padding: 10px 24px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 36px;
+}
+
+.peopleBtn:hover{
+  background-color: #d61563;
 }
 
 .personalArea {
@@ -149,17 +190,23 @@ nav > div {
 }
 
 .detailSearchList {
+  padding: 0 20px;
   position: absolute;
-  top: 95px;
+  top: 120px;
   transform: translate(50%, 0);
   width: 50vw;
   height: 70vh;
-  border: 1px solid black;
-  border-radius: 20px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  border-radius: 5px;
   background-color: white;
   z-index: 2;
   overflow-y: scroll;
 }
+
+#detailSearchList::-webkit-scrollbar-track{
+  border-radius: 5px;
+}
+
 
 .DSHide {
   display: none;
@@ -200,6 +247,7 @@ nav > div {
 
 .housetype_list {
   display: grid;
+  padding-bottom: 20px;
   grid-template-columns: 1fr 1fr 1fr;
 }
 
@@ -217,6 +265,10 @@ nav > div {
   display: flex;
   align-items: center;
   font-size: medium;
+}
+
+.priceorder_list{
+  padding-bottom: 20px;
 }
 
 .detailSearchList h2 {
@@ -241,10 +293,10 @@ nav > div {
 }
 
 .detailsearchBtn_con > button {
-  margin: 4px 4px 4px 12px;
+  margin: 20px 0 20px 10px;
   padding: 0 24px;
   border: 0;
-  background: #1a73e8;
+  background: #b3225c;
   color: #fff;
   border-radius: 5px;
   cursor: pointer;
@@ -252,9 +304,29 @@ nav > div {
   height: 36px;
 }
 
-.dummyDiv {
-  height: 90px;
+.detailsearchBtn_con > button:hover{
+  background-color: #d61563;
 }
+
+
+
+input[type=checkbox], input[type=radio] {
+  accent-color: #b3225c;
+}
+
+/* body::after {
+  content: "";
+  background: url("../images/NiceStayBP2.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
+} */
 
 /* footer */
 footer {
@@ -275,3 +347,67 @@ footer > p {
 footer a {
   cursor: pointer;
 }
+
+.config_item{
+  width: 200px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+}
+
+.config_item {
+  margin: 20px 0 !important;
+}
+
+.config_select {
+  display: flex;
+}
+
+.subtract_btn,
+.add_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 15px;
+  height: 15px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.subtract_btn {
+  font-size: 20px;
+}
+
+.config_input {
+  margin: 0 5px !important;
+  width: 25px !important;
+  height: 18px;
+  border: 0 !important;
+  outline: none !important;
+  text-align: center;
+}
+
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  /* position: fixed; Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+
+/* datepicker */
+/* .ui-widget-header{
+  background-color: #b3225c !important;
+} */
+

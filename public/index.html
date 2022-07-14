@@ -38,6 +38,7 @@
           name="startDate"
           placeholder="開始日期"
           autocomplete="off"
+          readonly
         />
         <p>|</p>
         <input
@@ -45,6 +46,7 @@
           name="endDate"
           placeholder="結束日期"
           autocomplete="off"
+          readonly
         />
         <p>|</p>
         <input
@@ -52,27 +54,67 @@
           name="people"
           placeholder="人數"
           autocomplete="off"
+          readonly
         />
         <div id="searchIcon" class="searchIcon">
-          <img src="./images/search.png" style="width: 30px" />
+          <i class="inverted search icon" style="width: 25px; height: 18px;"></i>
+          <!-- <img src="./images/search.png" style="width: 30px" /> -->
         </div>
       </div>
       <div id="detailSearch" class="detailSearch"><a>細部篩選</a></div>
       <div id="landlordContainer" class="landlordContainer">
-        <a>成為房東</a>
+        <!-- <div class="landlordcon_inner"> -->
+          成為房東
+        <!-- </div> -->
       </div>
       <div id="hamburgerContainer" class="hamburgerContainer">
         <img src="./images/hamburger_icon.png" />
       </div>
-      <div id="peopleSelectArea" class="PA PAHide">
-        <div>
-          <label for="human">人數</label>
-          <input id="human" />
+      <div id="peopleSelectArea" class="PA PAHide peopleSelectArea">
+        <div class="config_item">
+          <p>人數</p>
+          <div class="config_select">
+            <div class="subtract_btn" data-type="0">-</div>
+            <input
+              id="count_0"
+              name="people_count"
+              class="config_input"
+              value="0"
+              readonly
+            />
+            <div class="add_btn" data-type="0">+</div>
+          </div>
+        </div>
+        <div class="config_item">
+          <p>寵物</p>
+          <div class="config_select">
+            <div class="subtract_btn" data-type="1">-</div>
+            <input
+              id="count_1"
+              name="pet_count"
+              class="config_input"
+              value="0"
+              readonly
+            />
+            <div class="add_btn" data-type="1">+</div>
+          </div>
+        </div>
+        <!-- <div>
+          <label>人數</label>
+          <div class="ui input">
+            <input id="humancount" type="number" value="0" min="0" step="1" pattern="[0-9]" style="margin-left: 10px;">
+          </div>
         </div>
         <div>
+          <label>寵物</label>
+          <div class="ui input">
+            <input id="petcount" type="number" value="0" min="0" style="margin-left: 10px;">
+          </div>
+        </div>         -->
+        <!-- <div>
           <label for="pet">寵物</label>
           <input id="pet" />
-        </div>
+        </div> -->
         <div class="peopleBtnContainer">
           <button id="peopleBtn" class="peopleBtn">Done</button>
         </div>
@@ -84,6 +126,7 @@
         <div id="loginBtn"><a href="/login.html">登入</a></div>
         <div id="logoutBtn" class="DSHide"><a>登出</a></div>
       </div>
+
       <div id="detailSearchList" class="detailSearchList DSHide">
         <div class="detailSearchList_inner">
           <div class="closeIcon_container">
@@ -102,21 +145,21 @@
                 <div class="price_container_outer">
                   <div class="price_container">
                     <small for="start_price">最低價格</small>
-                    <input id="start_price" name="start_price" value="300" />
+                    <input id="start_price" name="start_price" value="300" readonly />
                   </div>
                   <div>
                     <p>-</p>
                   </div>
                   <div class="price_container">
                     <small>最高價格</small>
-                    <input id="end_price" name="end_price" value="100000" />
+                    <input id="end_price" name="end_price" value="100000" readonly />
                   </div>
                 </div>
               </section>
               <hr />
               <section>
                 <h2>價格排序</h2>
-                <div>
+                <div class="priceorder_list">
                   <div class="ui form">
                     <div class="grouped fields">
                       <div class="field">
@@ -154,22 +197,6 @@
                 </div>
               </section>
               <hr />
-              <!-- <section class="condition_3">
-                                <h2>臥室和床舖</h2>
-                                <div>
-                                    <p>臥室</p>
-                                    <input type="number" name="room" min="1" max="8">
-                                </div>
-                                <div>
-                                    <p>床位</p>
-                                    <input type="number" name="bed" min="1" max="8">
-                                </div>
-                                <div>
-                                    <p>衛浴</p>
-                                    <input type="number" name="bathroom" min="1" max="8">
-                                </div>
-                            </section>
-                            <hr> -->
               <section class="condition_4">
                 <h2>設備與服務</h2>
                 <div id="infer_list" class="infer_list">
@@ -180,15 +207,16 @@
                 </div>
               </section>
               <div class="detailsearchBtn_con">
-                <button id="detailsearchBtn" type="submit">查詢</button>
+                <button id="resetBtn" type="button">重置</button>
+                <button id="detailsearchBtn" type="button">查詢</button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </nav>
-    <div class="dummyDiv" style="height: 95px"></div>
-    <hr />
+    <!-- <div class="dummyDiv" style="height: 95px"></div> -->
+ 
 
     <div id="houseArea" class="houseArea">
       <div id="houseItem" class="houseItem" style="display: none">

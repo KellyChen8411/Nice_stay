@@ -41,10 +41,6 @@ async function fetchHouseData() {
     pageSelectorCon.append(pageItem);
   }
 
-  // $('.house_image').each(function(index){
-  //     console.log( index + ": " + $( this ).attr("src") );
-  //     console.log($( this ).find('+a')[0]);
-  // })
 }
 
 //change page
@@ -52,7 +48,7 @@ $("#changePage_con").click(changePage);
 
 async function changePage(e) {
   if (e.target.nodeName === "A") {
-    // console.log(previousSelectPage);
+    
     $(`#changePage_con>a:nth-child(${previousSelectPage})`).removeClass(
       "active"
     );
@@ -146,20 +142,15 @@ function renderHouseData(datas) {
   });
 }
 
-// let ele = document.getElementById("houseArea");
-// ele.addEventListener("scroll", function () {
-//   console.log(ele.scrollTop);
-// });
+
 
 function renderCityData(datas) {
   datas.map((data, index) => {
-    // if(index == 0){
+ 
     let new_option = $(`<option>${data.name}</option>`);
     new_option.attr("value", data.id);
     citys_list.append(new_option);
-    // }else{
-    // citys_list.append($(`<option>${data.name}</option>`));
-    // }
+
   });
 }
 
