@@ -9,9 +9,8 @@ p {
 
 /* mainArea */
 .houseArea {
+  height: auto !important;
   margin: 110px auto 0;
-  /* margin-right: 80px;
-  margin-left: 80px; */
   padding-top: 50px;
   padding-bottom: 50px;
   width: 1130px;
@@ -69,12 +68,5 @@ p {
     width: 100%;
     position: absolute;
     bottom: 48px;
-  
-  /* padding-bottom: 50px; */
 }
 
-/* @media only screen and (max-width: 1400px) {
-  .houseArea {
-    grid-template-columns: repeat(3, 1fr);
-  }
-} */

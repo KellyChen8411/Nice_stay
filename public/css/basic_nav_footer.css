@@ -18,12 +18,13 @@ h2 {
 nav {
   display: flex !important;
   align-items: center;
-  padding: 20px;
+  padding: 20px 40px;
   position: fixed;
   top: 0;
   z-index: 1;
   background-color: white;
   width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 }
 
 nav > div {
@@ -43,9 +44,18 @@ nav > div {
 
 .landlordContainer {
   margin-left: auto;
-  height: 47px;
-  line-height: 47px;
+  width: 120px;
+  height: 33px;
+  text-align: center;
+  line-height: 33px;
+  font-weight: 700;
   cursor: pointer;
+  border-radius: 32px;
+  font-size: 14px;
+}
+
+.landlordContainer:hover{
+  background-color: #f7f6f2;
 }
 
 .hamburgerContainer {
@@ -63,28 +73,29 @@ nav > div {
 .PAHide {
   display: none;
   position: absolute;
-  top: 95px;
+  top: 80px;
 }
 
 .PAShow {
-  background-color: #d5d9d4;
+  background-color: #fff;
   border-radius: 20px;
   position: absolute;
-  top: 95px;
+  top: 80px;
+  box-shadow: rgb(67 71 85 / 27%) 0px 0px 0.25em, rgb(90 125 188 / 5%) 0px 0.25em 1em;
 }
 
 .personalArea {
   width: 200px;
 }
 
-.personalArea > div {
+.personalArea div {
   margin: 5px 0;
   padding: 5px 10px;
+  cursor: pointer;
 }
 
-.personalArea > div:hover {
-  background-color: #585959;
-  color: white;
+.personalArea div:hover {
+  background-color: #f7f6f2;
   border-radius: 20px;
 }
 

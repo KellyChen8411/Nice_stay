@@ -16,6 +16,7 @@ let endDate = params.get("endDate");
 let people_count = params.get("people_count");
 let houseData;
 let landlord_id;
+let hasFeature = 0; //用來確認是否有feature的變數
 
 //fetch data
 
@@ -32,6 +33,62 @@ function covertToISOtime(dateString) {
   let time_ISO = dateString + "T23:59:00+0800";
   return time_ISO;
 }
+function computeDueTime(startDate){
+  //計算離入住前剩餘幾天
+  const today_date_moment = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
+  const checkinDate_moment = moment(startDate);
+  const duration = checkinDate_moment.diff(today_date_moment, "days");
+  if (duration >= houseData.refund_duration) {
+    is_refund = 1;
+    //計算取消期限的日期
+    let dueDate = moment(startDate)
+      .subtract(houseData.refund_duration, "days")
+      .format("YYYY-MM-DD");
+    let dueDate_ISO = covertToISOtime(dueDate);
+    refund_duedate = moment(dueDate_ISO).format("YYYY-MM-DD HH:mm:ss");
+    refund_duedate_timestamp = moment(dueDate_ISO).valueOf();
+    return refund_duedate
+
+    // //render data
+    // let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
+    // clone.find("img").attr("src", "./images/calendar.png");
+    // clone
+    //   .find("h4")
+    //   .text(
+    //     `入住${houseData.refund_duration}天(${refund_duedate})前可免費取消`
+    //   );
+    // clone.removeAttr("style");
+  }else{
+    return null
+  }
+}
+function renderDueTime(refund_duedate){
+
+  //render data
+  let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
+  clone.attr('data-type', 'price');
+  clone.find("img").attr("src", "./images/calendar.png");
+  clone
+    .find("h4")
+    .text(
+      `入住${houseData.refund_duration}天(${refund_duedate})前可免費取消`
+    );
+  clone.removeAttr("style");
+}
+function computeRoomPrice(startDate, endDate){
+  const day1 = moment(startDate, "YYYY-MM-DD");
+  const day2 = moment(endDate, "YYYY-MM-DD");
+  const durationDays = moment.duration(day2.diff(day1)).asDays();
+  roomfee = houseData.price * durationDays;
+  cleanFee = Math.floor((roomfee * houseData.cleanfee_percentage) / 100);
+  taxFee = Math.floor((roomfee * houseData.tax_percentage) / 100);
+  amountFee = roomfee + cleanFee + taxFee;
+  $("#room_fee_title").text(`訂房費 (${durationDays}晚)`);
+  $("#room_fee").text(`${roomfee} TWD`);
+  $("#clean_fee").text(`${cleanFee} TWD`);
+  $("#tax_fee").text(`${taxFee} TWD`);
+  $("#amount_fee").text(`${amountFee} TWD`);
+}
 
 async function rederData() {
   let detailData = await fetch(`/api/1.0/houses/detail/${house_id}`);
@@ -42,6 +99,7 @@ async function rederData() {
   let reviewCount = reviewData.length;
   let landLordRate = detailData.landLordRate;
   landlord_id = houseData.landlord_id;
+
 
   house_lat = houseData.latitude;
   house_lon = houseData.longitude;
@@ -70,58 +128,53 @@ async function rederData() {
     clone.find("img").attr("src", "./images/landlord.png");
     clone.find("h4").text(`${houseData.landlord_name}是超讚房東`);
     clone.removeAttr("style");
+    hasFeature += 1;
   }
-  if (houseData.refund_type === 1) {
-    //計算離入住前剩餘幾天
-    // const today_date = new Date(Date.now() + (8*60*60*1000)).toISOString().split('T')[0];
-    // const duration = diffDays(new Date(today_date), new Date(startDate));
-    const today_date_moment = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
-    const checkinDate_moment = moment(startDate);
-    const duration = checkinDate_moment.diff(today_date_moment, "days");
-    if (duration >= houseData.refund_duration) {
-      is_refund = 1;
-      //計算取消期限的日期
-      // let dueDate = computeDueDate(startDate, houseData.refund_duration);
-      // console.log(moment(startDate).format());
-      let dueDate = moment(startDate)
-        .subtract(houseData.refund_duration, "days")
-        .format("YYYY-MM-DD");
-      // console.log(startDate);
-      // console.log(houseData.refund_duration);
-      // console.log(dueDate);
-      // console.log(dueDate.format('YYYY-MM-DD'));
-      let dueDate_ISO = covertToISOtime(dueDate);
-      console.log(dueDate_ISO);
-      refund_duedate = moment(dueDate_ISO).format("YYYY-MM-DD HH:mm:ss");
-      refund_duedate_timestamp = moment(dueDate_ISO).valueOf();
-      // console.log(startDate);
-      // console.log(dueDate);
-      // console.log(covertToISOtime(dueDate));
-      // console.log(moment(covertToISOtime(dueDate)).format());
-      // console.log(moment(covertToISOtime(dueDate)).format('YYYY-MM-DD HH:mm:ss'));
-      // console.log(moment(covertToISOtime(dueDate)).valueOf());
-      // console.log(moment(moment(covertToISOtime(dueDate)).format()).valueOf());
-      // console.log(refund_duedate_timestamp);
-
-      //render data
-      let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
-      clone.find("img").attr("src", "./images/calendar.png");
-      clone
-        .find("h4")
-        .text(
-          `入住${houseData.refund_duration}天(${refund_duedate})前可免費取消`
-        );
-      clone.removeAttr("style");
+  if (houseData.refund_type === 1 && startDate !== '' && startDate !== null) {
+    const deuTimeComputed = computeDueTime(startDate);
+    if(deuTimeComputed !== null){
+      hasFeature += 1;
+      renderDueTime(deuTimeComputed);
     }
+    // //計算離入住前剩餘幾天
+    // const today_date_moment = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
+    // const checkinDate_moment = moment(startDate);
+    // const duration = checkinDate_moment.diff(today_date_moment, "days");
+    // if (duration >= houseData.refund_duration) {
+    //   is_refund = 1;
+    //   hasFeature = true;
+    //   //計算取消期限的日期
+    //   let dueDate = moment(startDate)
+    //     .subtract(houseData.refund_duration, "days")
+    //     .format("YYYY-MM-DD");
+    //   let dueDate_ISO = covertToISOtime(dueDate);
+    //   refund_duedate = moment(dueDate_ISO).format("YYYY-MM-DD HH:mm:ss");
+    //   refund_duedate_timestamp = moment(dueDate_ISO).valueOf();
+
+    //   //render data
+    //   let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
+    //   clone.find("img").attr("src", "./images/calendar.png");
+    //   clone
+    //     .find("h4")
+    //     .text(
+    //       `入住${houseData.refund_duration}天(${refund_duedate})前可免費取消`
+    //     );
+    //   clone.removeAttr("style");
+    // }
   }
-  if (houseData.refund_type === 2) {
-    is_refund = 2;
-    refund_duedate = houseData.refund_duration;
-    let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
-    clone.find("img").attr("src", "./images/calendar.png");
-    clone.find("h4").text(`${houseData.refund_duration}小時內可免費取消`);
-    clone.removeAttr("style");
+  // if (houseData.refund_type === 2) {
+  //   is_refund = 2;
+  //   refund_duedate = houseData.refund_duration;
+  //   let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
+  //   clone.find("img").attr("src", "./images/calendar.png");
+  //   clone.find("h4").text(`${houseData.refund_duration}小時內可免費取消`);
+  //   clone.removeAttr("style");
+  // }
+
+  if(hasFeature === 0){
+    $('#feature_outter').attr('style', 'display: none;');
   }
+
   //introduce area
   $("#introduce_con>p").text(houseData.description);
   //facility area
@@ -132,23 +185,24 @@ async function rederData() {
     clone.removeAttr("style");
   });
   //checkoout area
-  if (startDate !== "" && endDate !== "") {
+  $("#fee_perNight").text(`$${houseData.price} TWD／晚`);
+  if (startDate !== "" && endDate !== "" && startDate !== null && endDate !== null) {
     $("#checkin_date").val(startDate);
     $("#checkout_date").val(endDate);
-    const day1 = moment(startDate, "YYYY-MM-DD");
-    const day2 = moment(endDate, "YYYY-MM-DD");
-    const durationDays = moment.duration(day2.diff(day1)).asDays();
-    // const durationDays = diffDays(new Date(startDate), new Date(endDate));
-    roomfee = houseData.price * durationDays;
-    cleanFee = Math.floor((roomfee * houseData.cleanfee_percentage) / 100);
-    taxFee = Math.floor((roomfee * houseData.tax_percentage) / 100);
-    amountFee = roomfee + cleanFee + taxFee;
-    $("#fee_perNight").text(`$${houseData.price} TWD／晚`);
-    $("#room_fee_title").text(`訂房費 (${durationDays}晚)`);
-    $("#room_fee").text(`${roomfee} TWD`);
-    $("#clean_fee").text(`${cleanFee} TWD`);
-    $("#tax_fee").text(`${taxFee} TWD`);
-    $("#amount_fee").text(`${amountFee} TWD`);
+    computeRoomPrice(startDate, endDate);
+    // const day1 = moment(startDate, "YYYY-MM-DD");
+    // const day2 = moment(endDate, "YYYY-MM-DD");
+    // const durationDays = moment.duration(day2.diff(day1)).asDays();
+    // roomfee = houseData.price * durationDays;
+    // cleanFee = Math.floor((roomfee * houseData.cleanfee_percentage) / 100);
+    // taxFee = Math.floor((roomfee * houseData.tax_percentage) / 100);
+    // amountFee = roomfee + cleanFee + taxFee;
+    // // $("#fee_perNight").text(`$${houseData.price} TWD／晚`);
+    // $("#room_fee_title").text(`訂房費 (${durationDays}晚)`);
+    // $("#room_fee").text(`${roomfee} TWD`);
+    // $("#clean_fee").text(`${cleanFee} TWD`);
+    // $("#tax_fee").text(`${taxFee} TWD`);
+    // $("#amount_fee").text(`${amountFee} TWD`);
   }
   //comment area
 
@@ -173,12 +227,32 @@ async function rederData() {
   }
 
   //landlord area
+  let landlord_rating;
+  ////// show rating for landlord
   $("#landlord_outter>h2").text(`房東:${houseData.landlord_name}`);
   if (landLordRate.length !== 0) {
-    $("#landlord_outter>sapn").text(landLordRate[0].ave_landload_rate);
+    $("#landlord_outter>p").text(`評分: ${landLordRate[0].ave_landload_rate}`);
+    landlord_rating = landLordRate[0].ave_landload_rate;
   } else {
-    $("#landlord_outter>sapn").text("暫無評分");
+    $("#landlord_outter>p").text("暫無評分");
+    landlord_rating = 0;
   }
+
+  ////// set rating star
+  raterJs( {
+    element:document.querySelector("#landlordRater"),
+    // the number of stars
+    max: 5,
+    // star size
+    starSize: 24,
+    // is readonly?
+    readOnly: true,
+    rating: landlord_rating,
+    rateCallback:function rateCallback(rating, done) {
+      this.setRating(rating); 
+      done(); 
+    }
+  });
 
   //map area
   window.initMap = initMap(house_lat, house_lon);
@@ -239,12 +313,19 @@ async function getNearbyInfo(e) {
 $("#checkout_btn").click(gotoCheckout);
 
 async function gotoCheckout() {
-  if($(checkout_date).val() === ''){
-    alert("請選擇住宿日期");
-    return
-  }
-
-  if(renter_id !== undefined){
+  
+  //確認user是否有登入
+  if(renter_id){
+    //確認是否有選擇住宿日期
+    if($(checkout_date).val() === ''){
+      alert("請選擇住宿日期");
+      return
+    }
+    //確認user是不是房東
+    if(renter_id === landlord_id){
+      alert("您為此間房源的房東，無法預定");
+      return
+    }
     //確認user是否在blacklist中
     const blacklistRes = await fetch(`/api/1.0/users/checkUserBlacklist?landlord_id=${landlord_id}&renter_id=${renter_id}`);
     const blacklistcheck = await blacklistRes.json();
@@ -266,6 +347,7 @@ async function datepicker_booked() {
   let dateRange = [];
   let bookedDateRes = await fetch(`/api/1.0/houses/bookedDate?id=${house_id}`);
   let bookedDate = await bookedDateRes.json();
+ 
   if (bookedDateRes.status === 200) {
     if (bookedDate.length === 0) {
       dateRange = [];
@@ -327,19 +409,57 @@ datepicker_booked();
 $("#checkout_date").change(updatePrice);
 
 function updatePrice() {
+
   startDate = $("#checkin_date").val();
   endDate = $("#checkout_date").val();
-  const day1 = moment(startDate, "YYYY-MM-DD");
-  const day2 = moment(endDate, "YYYY-MM-DD");
-  const durationDays = moment.duration(day2.diff(day1)).asDays();
-  roomfee = houseData.price * durationDays;
-  cleanFee = Math.floor((roomfee * houseData.cleanfee_percentage) / 100);
-  taxFee = Math.floor((roomfee * houseData.tax_percentage) / 100);
-  amountFee = roomfee + cleanFee + taxFee;
-  $("#fee_perNight").text(`$${houseData.price} TWD／晚`);
-  $("#room_fee_title").text(`訂房費 (${durationDays}晚)`);
-  $("#room_fee").text(`${roomfee} TWD`);
-  $("#clean_fee").text(`${cleanFee} TWD`);
-  $("#tax_fee").text(`${taxFee} TWD`);
-  $("#amount_fee").text(`${amountFee} TWD`);
+  computeRoomPrice(startDate, endDate);
+  // const day1 = moment(startDate, "YYYY-MM-DD");
+  // const day2 = moment(endDate, "YYYY-MM-DD");
+  // const durationDays = moment.duration(day2.diff(day1)).asDays();
+  // roomfee = houseData.price * durationDays;
+  // cleanFee = Math.floor((roomfee * houseData.cleanfee_percentage) / 100);
+  // taxFee = Math.floor((roomfee * houseData.tax_percentage) / 100);
+  // amountFee = roomfee + cleanFee + taxFee;
+  // $("#room_fee_title").text(`訂房費 (${durationDays}晚)`);
+  // $("#room_fee").text(`${roomfee} TWD`);
+  // $("#clean_fee").text(`${cleanFee} TWD`);
+  // $("#tax_fee").text(`${taxFee} TWD`);
+  // $("#amount_fee").text(`${amountFee} TWD`);
+
+  //計算dueTime
+  if (houseData.refund_type === 1){
+    const deuTimeComputed = computeDueTime(startDate);
+
+    //更新後有取消政策
+    if(deuTimeComputed !== null){
+      if($('div[data-type=price]')[0] !== undefined){
+        //condition1 原本已有取消政策
+        $('div[data-type=price]>h4').text(`入住${houseData.refund_duration}天(${deuTimeComputed})前可免費取消`)
+      }else{
+        //condition2 原本沒取消政策
+        if(hasFeature === 0){
+          //先把feature title顯示出來
+          $('#feature_outter').removeAttr('style')
+          hasFeature += 1;
+        }
+        renderDueTime(deuTimeComputed)
+      }
+    }else{
+      //更新後沒取消政策
+      if($('div[data-type=price]')[0] !== undefined){
+        //但原本有
+        $('div[data-type=price]')[0].outerHTML=''; //清空refund feature
+        
+        is_refund = 0;   //清空與取消政策有關變數
+        refund_duedate = undefined;
+        refund_duedate_timestamp = undefined; 
+        if(hasFeature === 1){
+          //原本只有refund這個feature
+          $('#feature_outter').attr('style', 'display: none;');  //feature title隱藏
+        }
+        hasFeature -= 1;
+      }
+    }
+  }
+  
 }

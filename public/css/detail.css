@@ -1,4 +1,5 @@
 .outter_div {
+  margin-top: 90px;
   margin-left: auto;
   margin-right: auto;
   padding: 25px 0;
@@ -12,7 +13,7 @@
 
 /* image */
 .image_con {
-  margin: 25px 0 50px 0;
+  padding: 25px 0 50px 0;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -74,7 +75,7 @@
 }
 
 .detail_con > div {
-  margin: 40px 0;
+  padding: 40px 0;
 }
 
 .feature_con,
@@ -93,8 +94,9 @@
 }
 
 .introduce_con > p {
-  word-spacing: 9999px;
+  margin-top: 10px !important;
   font-size: 20px;
+  white-space: pre-line;
 }
 
 .facility_inner {
@@ -158,7 +160,9 @@
 
 /* comment */
 .comment_outter {
-  margin: 40px 0;
+  padding: 40px 0;
+  border-top: 1px inset #cfd4d1;
+  border-bottom: 1px inset #cfd4d1;
 }
 
 .comment_summary {
@@ -174,7 +178,7 @@
 
 .comment_con > div {
   flex: 1;
-  height: 115px;
+  height: 130px;
   margin-top: 10px;
 }
 
@@ -203,21 +207,19 @@
   margin-bottom: 40px;
   width: 100%;
   height: 500px;
-  background-color: burlywood;
 }
 
-.landlord_outter {
-  margin: 40px 0;
+.location_outter>h2{
+  padding-top: 40px;
 }
 
-.landlord_outter > button {
-  margin: 10px 0;
-  display: block;
-  padding: 13px 23px;
-  border: 1px solid black;
-  background-color: white;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  height: 50px;
+.landlord_outter>p, .landlord_outter>div{
+  margin-top: 10px !important;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+
+.landlord_outter, .feature_outter, .introduce_con, .image_con {
+  border-bottom: 1px inset #cfd4d1;
 }

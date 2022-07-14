@@ -157,7 +157,7 @@ $(function () {
     $("#detailSearchList").addClass("DSHide");
   });
 
-  // 點擊其他東西時關閉下拉式選單  $("peopleSelectArea")
+  // 點擊其他東西時關閉下拉式選單
   window.onclick = function(event) {
    
     if(!($("#people")[0].contains(event.target)) && !($("#peopleSelectArea")[0].contains(event.target))){

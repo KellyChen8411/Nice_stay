@@ -12,9 +12,9 @@ class Nav extends HTMLElement {
             <img src="../images/hamburger_icon.png" />
         </div>
         <div id="personalArea" class="personalArea PAHide">
-            <div><a href="/message.html">訊息</a></div>
-            <div><a href="/trip.html">旅程</a></div>
-            <div><a href="/favorite.html">心願單</a></div>
+            <a href="/message.html"><div>訊息</div></a>
+            <a href="/trip.html"><div>旅程</div></a>
+            <a href="/favorite.html"><div>心願單</div></a>
             <div id="logoutBtn" onclick="Logout()"><a>登出</a></div>
         </div>
     </nav>

@@ -88,9 +88,6 @@ nav > div {
 .searchIcon {
   width: 30px;
   height: 30px;
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
   position: relative;
   cursor: pointer;
   border-radius: 50px;
@@ -177,15 +174,14 @@ nav > div {
   width: 200px;
 }
 
-.personalArea > div {
+.personalArea div {
   margin: 5px 0;
   padding: 5px 10px;
   cursor: pointer;
 }
 
-.personalArea > div:hover {
-  background-color: #585959;
-  color: white;
+.personalArea div:hover {
+  background-color: #f7f6f2;
   border-radius: 20px;
 }
 

@@ -288,7 +288,7 @@ async function sendReview(e) {
   let house_rate = houseRating.getRating();
   if (landlord_rate === null || house_rate === null) {
     alert("請填寫完整!");
-  } else if ($("textarea").val().length > 200) {
+  } else if ($("textarea").val().length > 100) {
     alert("評論超過字數限制");
   } else {
     //left review
