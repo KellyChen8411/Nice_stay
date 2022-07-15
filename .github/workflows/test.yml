@@ -26,5 +26,5 @@ jobs:
         run: npm install
       
       - name: "Run Test"
-        run: NODE_ENV=test API_VERSION=1.0 DB_HOST=${{secrets.DB_HOST}} DB_USER_TEST=${{secrets.DB_USER_TEST}} DB_PASSWORD_TEST=${{secrets.DB_PASSWORD_TEST}} DB_DATABASE_TEST=${{secrets.DB_DATABASE_TEST}} mocha --exit
+        run: NODE_ENV=test API_VERSION=1.0 DB_HOST=${{secrets.DB_HOST}} DB_USER_TEST=${{secrets.DB_USER_TEST}} DB_PASSWORD_TEST=${{secrets.DB_PASSWORD_TEST}} DB_DATABASE_TEST=${{secrets.DB_DATABASE_TEST}} CLOUDFRONT_DOMAIN=${{secrets.CLOUDFRONT_DOMAIN}} mocha --exit
       
