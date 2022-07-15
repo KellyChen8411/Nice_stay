@@ -478,6 +478,22 @@ const houseBookedDate = async (req, res) => {
   res.json(bookedDate_list);
 };
 
+const checkBooking = async (req, res) => {
+  let  { startDate, endDate, id } = req.query;
+  id = parseInt(id); 
+
+  const bookedResult = await houseQuery.checkBooking([
+    startDate,
+    endDate,
+    startDate,
+    endDate,
+    startDate,
+    endDate,
+  ]);
+
+  res.json({ status: bookedResult.includes(id)});  
+}
+
 module.exports = {
   createHouse,
   selectAllHouse,
@@ -497,4 +513,5 @@ module.exports = {
   getUserFavorite,
   getUserFavoriteDetail,
   houseBookedDate,
+  checkBooking
 };

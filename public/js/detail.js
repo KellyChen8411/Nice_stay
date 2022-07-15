@@ -317,13 +317,21 @@ async function gotoCheckout() {
   //確認user是否有登入
   if(renter_id){
     //確認是否有選擇住宿日期
-    if($(checkout_date).val() === ''){
+    if($(checkout_date).val() === '' || $(checkin_date).val() === ''){
       alert("請選擇住宿日期");
       return
     }
     //確認user是不是房東
     if(renter_id === landlord_id){
       alert("您為此間房源的房東，無法預定");
+      return
+    }
+    //確認此房源在選擇日期內是否已被預訂
+    const bookedInfoRes = await fetch(`/api/1.0/houses/checkBooking?startDate=${startDate}&endDate=${endDate}&id=${house_id}`);
+    const bookedInfoData = await bookedInfoRes.json();
+    
+    if(bookedInfoData.status){
+      alert("此房源在您所選擇的日期內已被預訂，請重新選擇日期");
       return
     }
     //確認user是否在blacklist中
@@ -412,6 +420,11 @@ function updatePrice() {
 
   startDate = $("#checkin_date").val();
   endDate = $("#checkout_date").val();
+
+  if(startDate === '' || endDate === ''){
+    return
+  }
+
   computeRoomPrice(startDate, endDate);
   // const day1 = moment(startDate, "YYYY-MM-DD");
   // const day2 = moment(endDate, "YYYY-MM-DD");

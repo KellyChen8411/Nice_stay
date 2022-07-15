@@ -28,6 +28,7 @@ const {
   getUserFavorite,
   getUserFavoriteDetail,
   houseBookedDate,
+  checkBooking
 } = require("../controllers/house_controllers");
 
 router.route("/houses/create").post(
@@ -134,5 +135,7 @@ router
   .get(util.checkLoginMiddleware, util.wrapAsync(getUserFavoriteDetail));
 
 router.route("/houses/bookedDate").get(util.wrapAsync(houseBookedDate));
+
+router.route("/houses/checkBooking").get(util.wrapAsync(checkBooking));
 
 module.exports = router;
