@@ -6,9 +6,13 @@ describe('houseIndexPage', () => {
 
     it('get house in index page', async () => {
         let houseData = await requester.get("/api/1.0/houses/all?paging=0");
-        // console.log('test');
+        console.log('test');
+        console.log(houseData);
         houseData = houseData.body.data;
-        // console.log(houseData);
+
+        console.log('environment')
+        console.log(process.env.DB_HOST)
+        console.log(process.env.NODE_ENV);
         
         const expected = [
             {
