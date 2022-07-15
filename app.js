@@ -213,3 +213,6 @@ app.use((error, req, res, next) => {
 server.listen(3000, async () => {
   console.log("Application is now running");
 });
+
+
+module.exports = app;

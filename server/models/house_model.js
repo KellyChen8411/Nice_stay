@@ -67,7 +67,7 @@ houseQuery.allHouseCount = async () => {
 
 houseQuery.checkBooking = async (dates) => {
   let sql =
-    "SELECT house_id FROM nice_stay.booking WHERE (checkin_date >= ? AND checkin_date < ?) OR (checkout_date > ? AND checkout_date <= ?) OR (checkin_date < ? AND  checkout_date > ?)";
+    "SELECT house_id FROM booking WHERE (checkin_date >= ? AND checkin_date < ?) OR (checkout_date > ? AND checkout_date <= ?) OR (checkin_date < ? AND  checkout_date > ?)";
   const [result] = await pool.query(sql, dates);
   const bookedHouseID = result.map((item) => item.house_id);
   return bookedHouseID;
@@ -249,8 +249,8 @@ houseQuery.houseAmentity = async (house_id) => {
 houseQuery.houseReview = async (values) => {
   let sql =
     "SELECT a.comment, a.created_at, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT review.comment, review.house_rate, review.landlord_rate, review.created_at, booking.house_id, booking.renter_id, booking.landlord_id FROM review as review left join booking AS booking ON review.booking_id= booking.id WHERE booking.house_id=?) as a left join (SELECT g.house_id, AVG(g.house_rate) as ave_house FROM (SELECT review.comment, review.house_rate, review.landlord_rate, review.created_at, booking.house_id, booking.renter_id, booking.landlord_id FROM review as review left join booking AS booking ON review.booking_id= booking.id WHERE booking.house_id =?) g) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
-  // "SELECT a.comment, a.created_at, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT * FROM nice_stay.review WHERE house_id=?) as a left join (SELECT house_id, AVG(house_rate) as ave_house FROM nice_stay.review WHERE house_id =?) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
-  // "SELECT a.comment, a.created_at, round(b.ave_landload_rate, 1) as landlord_ave, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT * FROM nice_stay.review WHERE house_id=?) as a left join (SELECT landlord_id, AVG(landlord_rate) as ave_landload_rate FROM nice_stay.review WHERE landlord_id=? group by landlord_id) as b on a.landlord_id = b.landlord_id left join (SELECT house_id, AVG(house_rate) as ave_house FROM nice_stay.review WHERE house_id =?) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
+  // "SELECT a.comment, a.created_at, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT * FROM review WHERE house_id=?) as a left join (SELECT house_id, AVG(house_rate) as ave_house FROM review WHERE house_id =?) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
+  // "SELECT a.comment, a.created_at, round(b.ave_landload_rate, 1) as landlord_ave, round(c.ave_house, 1) as house_ave, d.name as landlord_name, e.name as renter_name  FROM (SELECT * FROM review WHERE house_id=?) as a left join (SELECT landlord_id, AVG(landlord_rate) as ave_landload_rate FROM review WHERE landlord_id=? group by landlord_id) as b on a.landlord_id = b.landlord_id left join (SELECT house_id, AVG(house_rate) as ave_house FROM review WHERE house_id =?) c on a.house_id=c.house_id left join user d on a.landlord_id = d.id left join user e on a.renter_id = e.id";
   const [result] = await pool.query(sql, values);
   return result;
 };
@@ -258,7 +258,7 @@ houseQuery.houseReview = async (values) => {
 houseQuery.landLordRate = async (landlord_id) => {
   let sql =
     "SELECT a.landlord_id, round(AVG(a.landlord_rate),1) as ave_landload_rate FROM (SELECT review.comment, review.house_rate, review.landlord_rate, review.created_at, booking.house_id, booking.renter_id, booking.landlord_id FROM review as review left join booking AS booking ON review.booking_id= booking.id) a WHERE a.landlord_id=? group by a.landlord_id";
-  // "SELECT round(AVG(landlord_rate),1) as ave_landload_rate FROM nice_stay.review WHERE landlord_id=? group by landlord_id"
+  // "SELECT round(AVG(landlord_rate),1) as ave_landload_rate FROM review WHERE landlord_id=? group by landlord_id"
   const [result] = await pool.query(sql, landlord_id);
   return result;
 };
@@ -361,7 +361,7 @@ houseQuery.dislikeHouse = async (favorite_id) => {
 
 houseQuery.selectUserFavoriteHouse = async (user_id) => {
   let sql =
-    "SELECT json_arrayagg(house_id) AS id_list FROM nice_stay.favorite WHERE renter_id=?";
+    "SELECT json_arrayagg(house_id) AS id_list FROM favorite WHERE renter_id=?";
   const [result] = await pool.query(sql, user_id);
   return result[0].id_list;
 };
