@@ -3,6 +3,7 @@ h2 {
 }
 
 .trip_outter {
+  margin-top: 90px;
   margin-left: auto;
   margin-right: auto;
   padding: 25px 0 75px 0;
@@ -10,6 +11,7 @@ h2 {
 }
 
 .trip_inner {
+  margin: 0 auto;
   width: 730px;
 }
 
@@ -18,7 +20,7 @@ h2 {
   display: flex;
   width: 700px;
   height: 200px;
-  border: 1px solid black;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 10px;
 }
 
@@ -36,11 +38,21 @@ h2 {
   align-items: center;
 }
 
-.trip_image {
+.image_area{
   display: flex;
-  width: 100%;
-  height: 200px;
+  align-items: center;
+  justify-content: end;
+}
+
+.trip_image {
+  display: block;
+  margin-left: auto;
+  width: 95%;
+  height: 180px;
   border-radius: 10px;
+  object-position: center center;
+  object-fit: cover;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 }
 
 .content {
@@ -68,6 +80,10 @@ button {
   padding-bottom: 20px;
   display: flex;
   align-items: flex-end;
+}
+
+button:hover {
+  background-color: #d61563;
 }
 
 .cancle_date {
@@ -178,3 +194,58 @@ button {
   display: flex;
   justify-content: center;
 }
+
+
+/* for no result */
+
+.noresult_outer{
+  margin-top: 40px;
+  padding: 10px;
+  width: 100%;
+  height: 300px;
+  /* background-color: #d61563; */
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border-radius: 20px;
+}
+
+.noresult_inner{
+
+  width: 100%;
+  height: 100%;
+  display: flex;
+  border-radius: 20px;
+  box-shadow: rgb(0 0 0 / 5%) 0px 0px 0px 1px;
+}
+
+.noresult_content{
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px;
+  flex: 2;
+  height: 280px;
+  border-radius: 20px;
+}
+
+.noresult_image{
+  flex: 3;
+  height: 280px;
+  background: url("../images/travel.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.7;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.noresult_hi{
+  width: 48px;
+  height: 48px;
+  background: url("../images/hi.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.noresult_content>p{
+  margin-bottom: 5px !important;
+}
+

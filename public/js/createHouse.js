@@ -185,6 +185,7 @@ async function createHouse(e) {
           alert(`${finalResult.error}`);
         }
       } else {
+        $.unblockUI();
         alert("地址不夠精確，請重新輸入!");
       }
     }

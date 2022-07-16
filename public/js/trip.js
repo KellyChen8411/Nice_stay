@@ -86,7 +86,8 @@ async function fetchTripData() {
       future_trip.length === 0 &&
       past_trip.length === 0
     ) {
-      $("<h2>暫無預定</h2>").appendTo(trip_inner);
+      $("#noresult_outer").removeAttr("style");
+      $("#trip_outter").attr("style", "padding-top: 70px;");
     } else {
       if (now_trip.length !== 0) {
         $("<h2>正在進行中的旅程</h2>").appendTo(trip_inner);

@@ -89,8 +89,7 @@ async function checkOut() {
     if (fetchStatus === 200) {
       let sendEmailInfo = finalResult;
       sendEmailInfo = JSON.stringify(sendEmailInfo);
-      // console.log('email')
-      // console.log(sendEmailInfo);
+      
       let headers = {
         "Content-Type": "application/json",
         Accept: "application/json",
@@ -125,7 +124,7 @@ async function checkOut() {
         (response) => {
           if (response === "ok") {
             alert(
-              `您的預訂編號為${finalResult.orderNum}, 已將預訂詳情寄至您的email\n感謝預定`
+              `感謝預定\n您的預訂編號為${finalResult.orderNum}\n已將預訂詳情寄至您的email\n`
             );
             window.location.href = "/trip.html";
           }

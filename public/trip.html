@@ -26,8 +26,8 @@
           method="post"
           action="/"
         >
-          <h3 id="review_house">溫馨小窩</h3>
-          <h3 id="review_landlord">房東: 東東</h3>
+          <h3 id="review_house"></h3>
+          <h3 id="review_landlord"></h3>
           <div class="sartRate">
             <span>房東評分</span>&nbsp&nbsp
             <div id="rater_landlord"></div>
@@ -54,7 +54,8 @@
       </div>
     </div>
 
-    <div class="trip_outter">
+    <div id="trip_outter" class="trip_outter">
+
       <div id="trip_inner" class="trip_inner">
         <div id="trip_con" class="trip_con" style="display: none">
           <div class="image_area">
@@ -75,6 +76,23 @@
           </div>
         </div>
       </div>
+
+      <div id="noresult_outer" class="noresult_outer" style="display: none;">
+        <div class="noresult_inner">
+          <div class="noresult_content">
+            <div class="noresult_hi"></div>
+            <h3>還沒預訂任何旅程！</h3>
+            <p>該拿出行李箱，開始規劃下一趟冒險之旅了</p>
+            <a href="/">
+              <div class="noresultbutton_con">
+                <button class="createhouse_btn" type="button">開始搜尋</button>
+              </div>
+            </a>
+          </div>
+          <div class="noresult_image"></div>   
+        </div>
+      </div>
+
     </div>
 
     <!-- Message Modal content -->

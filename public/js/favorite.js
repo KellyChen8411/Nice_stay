@@ -24,8 +24,8 @@ $(async function () {
       if (houses.length !== 0) {
         renderHouseData(houses);
       } else {
-        $("#lackOfFavorite").text("無收藏的房源");
-        $("#lackOfFavorite").removeAttr("style");
+        $("#noresult_outer").removeAttr("style");
+        $("#houseArea").attr("style", "margin: 0")
       }
     }
   } else {

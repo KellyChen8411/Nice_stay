@@ -431,7 +431,7 @@ const deleteHouse = async (req, res) => {
     return res.json({ status: "succeed" });
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
+    throw error;
     return -1;
   } finally {
     await conn.release();

@@ -11,6 +11,7 @@ h2 {
 }
 
 .trip_inner {
+  margin: 0 auto;
   width: 730px;
 }
 
@@ -19,7 +20,7 @@ h2 {
   display: flex;
   width: 700px;
   height: 200px;
-  border: 1px solid black;
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
   border-radius: 10px;
 }
 
@@ -37,19 +38,32 @@ h2 {
   align-items: center;
 }
 
-.trip_image {
+.image_area{
   display: flex;
-  width: 100%;
-  height: 200px;
+  align-items: center;
+  justify-content: end;
+}
+
+.trip_image {
+  display: block;
+  margin-left: auto;
+  width: 95%;
+  height: 180px;
   border-radius: 10px;
+  object-position: center center;
+  object-fit: cover;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 }
 
 .content {
   margin-left: 50px;
-  /* height: 100px; */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.content>*{
+  margin-bottom: 10px !important;
 }
 
 button {
@@ -161,7 +175,7 @@ button {
 }
 
 .edithouse_btn,
-.deletehouse_btn {
+.deletehouse_btn{
   width: 70%;
   padding: 0 24px;
   border: 0;
@@ -260,4 +274,69 @@ button:hover {
   margin-top: 20px;
   display: flex;
   justify-content: center;
+}
+
+
+/* for no result */
+
+.noresult_outer{
+  padding: 10px;
+  width: 100%;
+  height: 300px;
+  /* background-color: #d61563; */
+  box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+  border-radius: 20px;
+}
+
+.noresult_inner{
+
+  width: 100%;
+  height: 100%;
+  display: flex;
+  border-radius: 20px;
+  box-shadow: rgb(0 0 0 / 5%) 0px 0px 0px 1px;
+}
+
+.noresult_content{
+  display: flex;
+  flex-direction: column;
+  padding: 20px 40px;
+  flex: 2;
+  height: 280px;
+  border-radius: 20px;
+}
+
+.noresult_image{
+  flex: 3;
+  height: 280px;
+  background: url("../images/travel.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.7;
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.noresult_hi{
+  width: 48px;
+  height: 48px;
+  background: url("../images/hi.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.createhouse_btn {
+  width: 157px;
+  padding: 0 24px;
+  border: 0;
+  background: #b3225c;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  height: 36px;
+}
+
+.noresult_content>a{
+  margin-top: auto;
 }

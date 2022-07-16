@@ -32,7 +32,8 @@ async function renderBooking() {
 
     //存landlord id
     if (trips.length === 0) {
-      $("<h2>暫無預定</h2>").appendTo(trip_inner);
+      $("#trip_outter").attr("style", "padding-top: 70px;");
+      $("#noresult_outer").removeAttr("style");
     } else {
       landlord_id = trips[0].landlord_id;
       landloard_name = trips[0].landloard_name;

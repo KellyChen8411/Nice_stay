@@ -16,11 +16,10 @@
   </head>
   <body>
     <nav-component></nav-component>
-    <div class="dummyDiv"></div>
-    <hr />
 
-    <div class="trip_outter">
+    <div id="trip_outter" class="trip_outter">
       <div id="trip_inner" class="trip_inner">
+        <h2 id="managehouse_title"></h2>
         <div id="trip_con" class="trip_con" style="display: none">
           <div class="image_area">
             <img
@@ -42,6 +41,23 @@
           </div>
         </div>
       </div>
+
+      <div id="noresult_outer" class="noresult_outer" style="display: none;">
+        <div class="noresult_inner">
+          <div class="noresult_content">
+            <div class="noresult_hi"></div>
+            <h3>您還未建立任何房源</h3>
+            <p>快點擊下方按鍵，為自己增加被動式收入吧!</p>
+            <a href="/admin/createHouse.html">
+              <div class="noresultbutton_con">
+                <button class="createhouse_btn" type="button">建立房源</button>
+              </div>
+            </a>
+          </div>
+          <div class="noresult_image"></div>   
+        </div>
+      </div>
+
     </div>
 
     <footer-component></footer-component>

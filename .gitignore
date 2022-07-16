@@ -1,7 +1,7 @@
 **/node_modules
 .env
 public/css/**/*.jpge
-public/css/**/*.png
+# public/css/**/*.png
 public/css/**/*.jpg
 test.js
 date.html

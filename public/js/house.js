@@ -16,15 +16,23 @@ async function renderHouse() {
   const housesRes = await fetch("/api/1.0/houses/landlordHouse", { headers });
   const fetchStatus = housesRes.status;
   const houses = await housesRes.json();
+  console.log('house result');
+  console.log(houses);
   if (fetchStatus === 200) {
     //切換登入登出鍵
     $("#logoutBtn").toggleClass("DSHide", false); //remove class
     $("#loginBtn").toggleClass("DSHide", true); //add class
     $("#logoutBtn").click(Logout);
-
-    houses.forEach((house) => {
-      renderData(house);
-    });
+    if(houses.length !== 0){
+      $("#managehouse_title").text("您擁有的房源");
+      houses.forEach((house) => {
+        renderData(house);
+      });
+    }else{
+      $("#trip_outter").attr("style", "padding-top: 70px;");
+      $("#noresult_outer").removeAttr("style");
+    }
+    
   } else {
     alert(houses.error);
     window.location.href = "/";
@@ -100,12 +108,15 @@ async function buttonAction(e) {
           );
           const fetchStatus = fetchRes.status;
           const finalResult = await fetchRes.json();
+          
+          console.log(fetchStatus);
+          console.log(finalResult);
           $.unblockUI();
           if (fetchStatus === 200) {
             alert("刪除成功");
             location.reload(); //重新整理頁面
           } else {
-            alert(`刪除失敗, 原因:`);
+            alert(`刪除失敗,請連絡相關人員`);
           }
         }
       } else {
