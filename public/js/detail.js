@@ -294,6 +294,10 @@ async function getNearbyInfo(e) {
       }
       markers = [];
     }
+
+    //create info window
+    let infoWindow = new google.maps.InfoWindow();
+
     for (var i = 0; i < nearbyLocations.length; i++) {
       var position = new google.maps.LatLng(
         nearbyLocations[i].lat,
@@ -305,6 +309,29 @@ async function getNearbyInfo(e) {
         map: map,
       });
       markers.push(marker);
+
+      let content = `<h2>${nearbyLocations[i].name}</h2>`;
+
+      //Attach click event to the marker.
+      (function (marker, content) {
+          google.maps.event.addListener(marker, "click", function (e) {
+              infoWindow.setContent(content);
+              infoWindow.open(map, marker);
+          });
+      })(marker, content);
+   
+
+      // // let infowindow = new google.maps.InfoWindow();
+
+      // marker.addListener("click", () => {
+      //   infoWindow.setContent(content);
+      //   infoWindow.open({
+      //     anchor: marker,
+      //     map,
+      //     shouldFocus: false,
+      //   });
+      // });
+
     }
   }
 }
