@@ -46,6 +46,9 @@ function computeDueTime(startDate){
       .format("YYYY-MM-DD");
     let dueDate_ISO = covertToISOtime(dueDate);
     refund_duedate = moment(dueDate_ISO).format("YYYY-MM-DD HH:mm:ss");
+    console.log(moment(dueDate_ISO).format("YYYY-MM-DD HH:mm:ss"))
+    console.log(moment(dueDate_ISO).format("YYYY-MM-DD HH:MM:SS"))
+    console.log(moment(dueDate_ISO).format("YYYY-MM-DD HH:mm:ss"))
     refund_duedate_timestamp = moment(dueDate_ISO).valueOf();
     return refund_duedate
 

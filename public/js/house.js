@@ -16,8 +16,7 @@ async function renderHouse() {
   const housesRes = await fetch("/api/1.0/houses/landlordHouse", { headers });
   const fetchStatus = housesRes.status;
   const houses = await housesRes.json();
-  console.log('house result');
-  console.log(houses);
+  
   if (fetchStatus === 200) {
     //切換登入登出鍵
     $("#logoutBtn").toggleClass("DSHide", false); //remove class
@@ -80,6 +79,7 @@ async function buttonAction(e) {
     if (buttonType === "編輯房源") {
       window.location.href = `/admin/createHouse.html?edit=${true}&id=${house_id}`;
     } else if (buttonType === "刪除房源") {
+      
       const houseRes = await fetch(
         `/api/1.0/houses/houseHistroyData?id=${house_id}`,
         { headers }
@@ -101,25 +101,25 @@ async function buttonAction(e) {
               color: "#fff",
             },
           });
-
+    
           const fetchRes = await fetch(
             `/api/1.0/houses/deleteHouse?id=${house_id}`,
             { method: "DELETE" }
           );
+          
           const fetchStatus = fetchRes.status;
           const finalResult = await fetchRes.json();
           
-          console.log(fetchStatus);
-          console.log(finalResult);
           $.unblockUI();
           if (fetchStatus === 200) {
             alert("刪除成功");
             location.reload(); //重新整理頁面
           } else {
-            alert(`刪除失敗,請連絡相關人員`);
+            alert(`刪除失敗,此房源仍有預定`);
           }
         }
       } else {
+        $.unblockUI();
         alert(house.error);
       }
     }

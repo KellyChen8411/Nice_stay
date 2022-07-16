@@ -97,6 +97,11 @@ const houseSearch = async (req, res) => {
 };
 
 const houseTest = async (req, res) => {
+  const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD HH:mm:ss");
+  const result = await houseQuery.checkBookingForDelete(50, today);
+  res.json(result);
+  // const result = houseQuery.checkBookingForDelete()
+
   // const house_id = await houseQuery.getHouseID();
   // const amenity_id = [1,2,3,4,5,6,7,8,9,10];
   // function getRandomSubarray(arr, size) {
@@ -396,6 +401,15 @@ const updateHouse = async (req, res) => {
 const deleteHouse = async (req, res) => {
   const house_id = req.query.id;
   const conn = await pool.getConnection();
+
+  const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
+  const remainBooking = await houseQuery.checkBookingForDelete(house_id, today);
+  
+  //若此房源還有預定，則無法刪除
+  if(remainBooking.length !== 0){
+    return res.status(500).json({ status: "still has booking" });
+  }
+
   try {
     await conn.query("START TRANSACTION");
     //delete data from image table
@@ -432,7 +446,6 @@ const deleteHouse = async (req, res) => {
   } catch (error) {
     await conn.query("ROLLBACK");
     throw error;
-    return -1;
   } finally {
     await conn.release();
   }

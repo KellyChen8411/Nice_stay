@@ -380,4 +380,10 @@ houseQuery.houseBookedDate = async (house_id) => {
   return result;
 };
 
+houseQuery.checkBookingForDelete = async (house_id, today)=>{
+  let sql = "SELECT id FROM nice_stay.booking WHERE house_id=? AND (checkin_date>=? OR (checkin_date<? AND checkout_date>?))";
+  const [result] = await pool.query(sql, [house_id, today, today, today]);
+  return result;
+}
+
 module.exports = houseQuery;
