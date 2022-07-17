@@ -202,10 +202,10 @@ app.use((error, req, res, next) => {
     return res.status(500).json({ error: error.message });
   } else if (error.type === "paymentFail") {
     console.log("tappay payment fail");
-    console.log(error);
+    // console.log(error);
     return res.status(400).json({ error: error.message });
   } else {
-    console.log(error);
+    // console.log(error);
     res.status(500).json({ error: "internal server error" });
   }
 });
