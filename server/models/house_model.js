@@ -67,7 +67,7 @@ houseQuery.allHouseCount = async () => {
 
 houseQuery.checkBooking = async (dates) => {
   let sql =
-    "SELECT house_id FROM booking WHERE (checkin_date >= ? AND checkin_date < ?) OR (checkout_date > ? AND checkout_date <= ?) OR (checkin_date < ? AND  checkout_date > ?)";
+    "SELECT house_id FROM booking WHERE ((checkin_date >= ? AND checkin_date < ?) OR (checkout_date > ? AND checkout_date <= ?) OR (checkin_date < ? AND  checkout_date > ?)) AND is_refund=0";
   const [result] = await pool.query(sql, dates);
   const bookedHouseID = result.map((item) => item.house_id);
   return bookedHouseID;
