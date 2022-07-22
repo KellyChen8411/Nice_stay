@@ -24,7 +24,8 @@ nav {
   z-index: 1;
   background-color: white;
   width: 100%;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 }
 
 nav > div {
@@ -54,7 +55,7 @@ nav > div {
   font-size: 14px;
 }
 
-.landlordContainer:hover{
+.landlordContainer:hover {
   background-color: #f7f6f2;
 }
 
@@ -81,7 +82,8 @@ nav > div {
   border-radius: 20px;
   position: absolute;
   top: 80px;
-  box-shadow: rgb(67 71 85 / 27%) 0px 0px 0.25em, rgb(90 125 188 / 5%) 0px 0.25em 1em;
+  box-shadow: rgb(67 71 85 / 27%) 0px 0px 0.25em,
+    rgb(90 125 188 / 5%) 0px 0.25em 1em;
 }
 
 .personalArea {

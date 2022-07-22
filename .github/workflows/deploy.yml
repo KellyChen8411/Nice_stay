@@ -2,7 +2,7 @@ name: Deploy nice stay app
 
 on:
   workflow_run:
-    workflows: [ Test nice stay app ]
+    workflows: [Test nice stay app]
     types:
       - completed
 # on:

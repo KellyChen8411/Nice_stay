@@ -42,8 +42,8 @@ async function submitMainSearch() {
   if (status === 200) {
     selectType = "mainSearch";
     houseDatas = await houseDatas.json();
-    
-    if(houseDatas.data.length !== 0){
+
+    if (houseDatas.data.length !== 0) {
       houseArea_container.empty();
       houseItemClone.appendTo(houseArea_container);
       renderHouseData(houseDatas.data);
@@ -77,13 +77,12 @@ async function submitMainSearch() {
         }
         pageSelectorCon.append(pageItem);
       }
-    }else{
+    } else {
       alert("搜尋無結果，請變更搜索條件");
     }
-  }else{
+  } else {
     alert("系統錯誤，請連絡相關人員");
   }
-  
 }
 
 //detail search
@@ -91,7 +90,6 @@ const detailSearchForm = document.getElementById("detailSearchForm");
 // detailSearchForm.addEventListener("submit", detailSearch);
 
 $("#detailsearchBtn").click(detailSearch);
-
 
 async function detailSearch(e) {
   // $("#detailSearchList").addClass("DSHide");
@@ -131,9 +129,8 @@ async function detailSearch(e) {
   if (status === 200) {
     selectType = "detailSearch";
     houseDatas = await houseDatas.json();
-   
-    
-    if(houseDatas.data.length !== 0){
+
+    if (houseDatas.data.length !== 0) {
       $("#detailSearchList").addClass("DSHide"); //關閉細節搜索視窗
       houseArea_container.empty();
       houseItemClone.appendTo(houseArea_container);
@@ -168,19 +165,18 @@ async function detailSearch(e) {
         }
         pageSelectorCon.append(pageItem);
       }
-    }else{
-      alert("搜尋無結果，請變更搜索條件");    
+    } else {
+      alert("搜尋無結果，請變更搜索條件");
     }
-  }else{
+  } else {
     alert("系統錯誤，請連絡相關人員");
     $("#detailSearchList").addClass("DSHide");
   }
 }
 
-
 //重置細部搜索表單
 
-$("#resetBtn").click(function(){
+$("#resetBtn").click(function () {
   detailSearchForm.reset();
   $("#price_range").slider({
     range: true,
@@ -192,4 +188,4 @@ $("#resetBtn").click(function(){
       $("#end_price").val(ui.values[1]);
     },
   });
-})
+});

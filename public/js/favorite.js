@@ -25,7 +25,7 @@ $(async function () {
         renderHouseData(houses);
       } else {
         $("#noresult_outer").removeAttr("style");
-        $("#houseArea").attr("style", "margin: 0")
+        $("#houseArea").attr("style", "margin: 0");
       }
     }
   } else {

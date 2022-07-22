@@ -33,7 +33,7 @@ function covertToISOtime(dateString) {
   let time_ISO = dateString + "T23:59:00+0800";
   return time_ISO;
 }
-function computeDueTime(startDate){
+function computeDueTime(startDate) {
   //計算離入住前剩餘幾天
   const today_date_moment = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
   const checkinDate_moment = moment(startDate);
@@ -46,9 +46,9 @@ function computeDueTime(startDate){
       .format("YYYY-MM-DD");
     let dueDate_ISO = covertToISOtime(dueDate);
     refund_duedate = moment(dueDate_ISO).format("YYYY-MM-DD HH:mm:ss");
-    
+
     refund_duedate_timestamp = moment(dueDate_ISO).valueOf();
-    return refund_duedate
+    return refund_duedate;
 
     // //render data
     // let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
@@ -59,24 +59,21 @@ function computeDueTime(startDate){
     //     `入住${houseData.refund_duration}天(${refund_duedate})前可免費取消`
     //   );
     // clone.removeAttr("style");
-  }else{
-    return null
+  } else {
+    return null;
   }
 }
-function renderDueTime(refund_duedate){
-
+function renderDueTime(refund_duedate) {
   //render data
   let clone = $("#feature_con").clone().appendTo($("#feature_outter"));
-  clone.attr('data-type', 'price');
+  clone.attr("data-type", "price");
   clone.find("img").attr("src", "./images/calendar.png");
   clone
     .find("h4")
-    .text(
-      `入住${houseData.refund_duration}天(${refund_duedate})前可免費取消`
-    );
+    .text(`入住${houseData.refund_duration}天(${refund_duedate})前可免費取消`);
   clone.removeAttr("style");
 }
-function computeRoomPrice(startDate, endDate){
+function computeRoomPrice(startDate, endDate) {
   const day1 = moment(startDate, "YYYY-MM-DD");
   const day2 = moment(endDate, "YYYY-MM-DD");
   const durationDays = moment.duration(day2.diff(day1)).asDays();
@@ -100,7 +97,6 @@ async function rederData() {
   let reviewCount = reviewData.length;
   let landLordRate = detailData.landLordRate;
   landlord_id = houseData.landlord_id;
-
 
   house_lat = houseData.latitude;
   house_lon = houseData.longitude;
@@ -131,9 +127,9 @@ async function rederData() {
     clone.removeAttr("style");
     hasFeature += 1;
   }
-  if (houseData.refund_type === 1 && startDate !== '' && startDate !== null) {
+  if (houseData.refund_type === 1 && startDate !== "" && startDate !== null) {
     const deuTimeComputed = computeDueTime(startDate);
-    if(deuTimeComputed !== null){
+    if (deuTimeComputed !== null) {
       hasFeature += 1;
       renderDueTime(deuTimeComputed);
     }
@@ -172,8 +168,8 @@ async function rederData() {
   //   clone.removeAttr("style");
   // }
 
-  if(hasFeature === 0){
-    $('#feature_outter').attr('style', 'display: none;');
+  if (hasFeature === 0) {
+    $("#feature_outter").attr("style", "display: none;");
   }
 
   //introduce area
@@ -187,7 +183,12 @@ async function rederData() {
   });
   //checkoout area
   $("#fee_perNight").text(`$${houseData.price} TWD／晚`);
-  if (startDate !== "" && endDate !== "" && startDate !== null && endDate !== null) {
+  if (
+    startDate !== "" &&
+    endDate !== "" &&
+    startDate !== null &&
+    endDate !== null
+  ) {
     $("#checkin_date").val(startDate);
     $("#checkout_date").val(endDate);
     computeRoomPrice(startDate, endDate);
@@ -240,8 +241,8 @@ async function rederData() {
   }
 
   ////// set rating star
-  raterJs( {
-    element:document.querySelector("#landlordRater"),
+  raterJs({
+    element: document.querySelector("#landlordRater"),
     // the number of stars
     max: 5,
     // star size
@@ -249,10 +250,10 @@ async function rederData() {
     // is readonly?
     readOnly: true,
     rating: landlord_rating,
-    rateCallback:function rateCallback(rating, done) {
-      this.setRating(rating); 
-      done(); 
-    }
+    rateCallback: function rateCallback(rating, done) {
+      this.setRating(rating);
+      done();
+    },
   });
 
   //map area
@@ -315,12 +316,11 @@ async function getNearbyInfo(e) {
 
       //Attach click event to the marker.
       (function (marker, content) {
-          google.maps.event.addListener(marker, "click", function (e) {
-              infoWindow.setContent(content);
-              infoWindow.open(map, marker);
-          });
+        google.maps.event.addListener(marker, "click", function (e) {
+          infoWindow.setContent(content);
+          infoWindow.open(map, marker);
+        });
       })(marker, content);
-   
 
       // // let infowindow = new google.maps.InfoWindow();
 
@@ -332,7 +332,6 @@ async function getNearbyInfo(e) {
       //     shouldFocus: false,
       //   });
       // });
-
     }
   }
 }
@@ -341,41 +340,42 @@ async function getNearbyInfo(e) {
 $("#checkout_btn").click(gotoCheckout);
 
 async function gotoCheckout() {
-  
   //確認user是否有登入
-  if(renter_id){
+  if (renter_id) {
     //確認是否有選擇住宿日期
-    if($(checkout_date).val() === '' || $(checkin_date).val() === ''){
+    if ($(checkout_date).val() === "" || $(checkin_date).val() === "") {
       alert("請選擇住宿日期");
-      return
+      return;
     }
     //確認user是不是房東
-    if(renter_id === landlord_id){
+    if (renter_id === landlord_id) {
       alert("您為此間房源的房東，無法預定");
-      return
+      return;
     }
     //確認此房源在選擇日期內是否已被預訂
-    const bookedInfoRes = await fetch(`/api/1.0/houses/checkBooking?startDate=${startDate}&endDate=${endDate}&id=${house_id}`);
+    const bookedInfoRes = await fetch(
+      `/api/1.0/houses/checkBooking?startDate=${startDate}&endDate=${endDate}&id=${house_id}`
+    );
     const bookedInfoData = await bookedInfoRes.json();
-    
-    if(bookedInfoData.status){
+
+    if (bookedInfoData.status) {
       alert("此房源在您所選擇的日期內已被預訂，請重新選擇日期");
-      return
+      return;
     }
     //確認user是否在blacklist中
-    const blacklistRes = await fetch(`/api/1.0/users/checkUserBlacklist?landlord_id=${landlord_id}&renter_id=${renter_id}`);
+    const blacklistRes = await fetch(
+      `/api/1.0/users/checkUserBlacklist?landlord_id=${landlord_id}&renter_id=${renter_id}`
+    );
     const blacklistcheck = await blacklistRes.json();
-    if(blacklistcheck.inlist === false){
+    if (blacklistcheck.inlist === false) {
       window.location.href = `/checkout.html?id=${house_id}&startDate=${startDate}&endDate=${endDate}&roomfee=${roomfee}&cleanFee=${cleanFee}&taxFee=${taxFee}&amountFee=${amountFee}&people_count=${people_count}&refund_type=${is_refund}&refund_duedate=${refund_duedate}&refund_duedate_timestamp=${refund_duedate_timestamp}`;
-    }else{
+    } else {
       alert("已被房東加入黑名單，無法預定");
       window.location.href = "/";
     }
-    
-  }else{
+  } else {
     alert("請先登入");
   }
-  
 }
 
 //datepicker for checkout form
@@ -383,7 +383,7 @@ async function datepicker_booked() {
   let dateRange = [];
   let bookedDateRes = await fetch(`/api/1.0/houses/bookedDate?id=${house_id}`);
   let bookedDate = await bookedDateRes.json();
- 
+
   if (bookedDateRes.status === 200) {
     if (bookedDate.length === 0) {
       dateRange = [];
@@ -445,12 +445,11 @@ datepicker_booked();
 $("#checkout_date").change(updatePrice);
 
 function updatePrice() {
-
   startDate = $("#checkin_date").val();
   endDate = $("#checkout_date").val();
 
-  if(startDate === '' || endDate === ''){
-    return
+  if (startDate === "" || endDate === "") {
+    return;
   }
 
   computeRoomPrice(startDate, endDate);
@@ -468,39 +467,40 @@ function updatePrice() {
   // $("#amount_fee").text(`${amountFee} TWD`);
 
   //計算dueTime
-  if (houseData.refund_type === 1){
+  if (houseData.refund_type === 1) {
     const deuTimeComputed = computeDueTime(startDate);
 
     //更新後有取消政策
-    if(deuTimeComputed !== null){
-      if($('div[data-type=price]')[0] !== undefined){
+    if (deuTimeComputed !== null) {
+      if ($("div[data-type=price]")[0] !== undefined) {
         //condition1 原本已有取消政策
-        $('div[data-type=price]>h4').text(`入住${houseData.refund_duration}天(${deuTimeComputed})前可免費取消`)
-      }else{
+        $("div[data-type=price]>h4").text(
+          `入住${houseData.refund_duration}天(${deuTimeComputed})前可免費取消`
+        );
+      } else {
         //condition2 原本沒取消政策
-        if(hasFeature === 0){
+        if (hasFeature === 0) {
           //先把feature title顯示出來
-          $('#feature_outter').removeAttr('style')
+          $("#feature_outter").removeAttr("style");
           hasFeature += 1;
         }
-        renderDueTime(deuTimeComputed)
+        renderDueTime(deuTimeComputed);
       }
-    }else{
+    } else {
       //更新後沒取消政策
-      if($('div[data-type=price]')[0] !== undefined){
+      if ($("div[data-type=price]")[0] !== undefined) {
         //但原本有
-        $('div[data-type=price]')[0].outerHTML=''; //清空refund feature
-        
-        is_refund = 0;   //清空與取消政策有關變數
+        $("div[data-type=price]")[0].outerHTML = ""; //清空refund feature
+
+        is_refund = 0; //清空與取消政策有關變數
         refund_duedate = undefined;
-        refund_duedate_timestamp = undefined; 
-        if(hasFeature === 1){
+        refund_duedate_timestamp = undefined;
+        if (hasFeature === 1) {
           //原本只有refund這個feature
-          $('#feature_outter').attr('style', 'display: none;');  //feature title隱藏
+          $("#feature_outter").attr("style", "display: none;"); //feature title隱藏
         }
         hasFeature -= 1;
       }
     }
   }
-  
 }

@@ -25,7 +25,7 @@ $(function () {
 
   $("#area").selectmenu();
 
-  //people and pet count area 
+  //people and pet count area
   $("#peopleSelectArea").click(changeConfigCount);
   function changeConfigCount(e) {
     if (e.target.innerHTML === "+") {
@@ -53,15 +53,14 @@ $(function () {
   peopleBtn.click(function () {
     peopleAreaTag.removeClass("PAShow");
     peopleAreaTag.addClass("PAHide");
-    let humanCount = parseInt($('#count_0').val());
-    let petCount =  parseInt($('#count_1').val());
-   
+    let humanCount = parseInt($("#count_0").val());
+    let petCount = parseInt($("#count_1").val());
+
     if (!(humanCount === 0 && petCount === 0)) {
       let peoleSelectResult = `${humanCount},${petCount}`;
       peopleTag.val(peoleSelectResult);
     }
   });
-
 
   let hamburgerIcon = $("#hamburgerContainer");
   hamburgerIcon.click(showPersonalList);
@@ -81,14 +80,12 @@ $(function () {
   $("#houseArea").click(addToFavorite);
 
   async function addToFavorite(e) {
-  
     if (e.target.nodeName === "I") {
       if (localStorage.getItem("token") === null) {
         alert("欲收藏房源請先登入");
       } else {
         let house_id = e.target.parentElement.dataset.id;
         if (e.target.classList.contains("grey")) {
-          
           //收藏
           const fetchRes = await fetch(
             `/api/1.0/houses/likeHouse?id=${house_id}`,
@@ -97,12 +94,10 @@ $(function () {
           const finalResult = await fetchRes.json();
           if (fetchRes.status === 200) {
             userFavoriteList = finalResult;
-            
           }
           e.target.classList.toggle("grey");
           e.target.classList.toggle("red");
         } else if (e.target.classList.contains("red")) {
-          
           //取消收藏
           const fetchRes = await fetch(
             `/api/1.0/houses/dislikeHouse?id=${house_id}`,
@@ -111,13 +106,11 @@ $(function () {
           const finalResult = await fetchRes.json();
           if (fetchRes.status === 200) {
             userFavoriteList = finalResult;
-            
           }
           e.target.classList.toggle("grey");
           e.target.classList.toggle("red");
         }
       }
-
     }
     if (e.target.nodeName === "IMG") {
       let house_id = e.target.dataset.id;
@@ -144,12 +137,11 @@ $(function () {
 
   //細節篩選單顯示
   $("#detailSearch").click(function (e) {
-    if($("#detailSearchList").hasClass("DSHide")){
+    if ($("#detailSearchList").hasClass("DSHide")) {
       $("#detailSearchList").removeClass("DSHide");
-    }else{
+    } else {
       $("#detailSearchList").addClass("DSHide");
     }
-    
   });
 
   //細節篩選單關閉
@@ -158,29 +150,34 @@ $(function () {
   });
 
   // 點擊其他東西時關閉下拉式選單
-  window.onclick = function(event) {
-   
-    if(!($("#people")[0].contains(event.target)) && !($("#peopleSelectArea")[0].contains(event.target))){
+  window.onclick = function (event) {
+    if (
+      !$("#people")[0].contains(event.target) &&
+      !$("#peopleSelectArea")[0].contains(event.target)
+    ) {
       if ($("#peopleSelectArea").hasClass("PAShow")) {
         $("#peopleSelectArea").removeClass("PAShow");
         $("#peopleSelectArea").addClass("PAHide");
       }
     }
-    
-    if(!($("#hamburgerContainer")[0].contains(event.target)) && !($("#personalArea")[0].contains(event.target))){
-      if($("#personalArea").hasClass("PAShow")){
+
+    if (
+      !$("#hamburgerContainer")[0].contains(event.target) &&
+      !$("#personalArea")[0].contains(event.target)
+    ) {
+      if ($("#personalArea").hasClass("PAShow")) {
         $("#personalArea").removeClass("PAShow");
         $("#personalArea").addClass("PAHide");
       }
     }
 
-    if(!($("#detailSearch")[0].contains(event.target)) && !($("#detailSearchList")[0].contains(event.target))){
-      if(!$("#detailSearchList").hasClass("DSHide")){
+    if (
+      !$("#detailSearch")[0].contains(event.target) &&
+      !$("#detailSearchList")[0].contains(event.target)
+    ) {
+      if (!$("#detailSearchList").hasClass("DSHide")) {
         $("#detailSearchList").addClass("DSHide");
       }
     }
-
-  }
- 
-  
+  };
 });

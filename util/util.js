@@ -97,7 +97,7 @@ util.sendBookingEmail = async (renter_name, renter_email, bookingInfo) => {
   console.log("Message sent: %s", info.messageId);
 };
 
-util.uplaodImageToS3 = async (files, imageFieldName) => {
+util.uploadImageToS3 = async (files, imageFieldName) => {
   let fileExtend = files[imageFieldName][0].originalname.split(".")[1];
   let uploadPath;
 
@@ -109,18 +109,37 @@ util.uplaodImageToS3 = async (files, imageFieldName) => {
     uploadPath = `Nice_stay/side_image/${Date.now()}_2.${fileExtend}`;
   }
 
-  const params = {
-    Bucket: process.env.AWS_BUCKET_NAME,
-    Key: uploadPath, // File name you want to save as in S3
-    ContentType: files[imageFieldName][0].minetype,
-    Body: files[imageFieldName][0].buffer,
-  };
+  try {
+    const params = {
+      Bucket: process.env.AWS_BUCKET_NAME,
+      Key: uploadPath, // File name you want to save as in S3
+      ContentType: files[imageFieldName][0].minetype,
+      Body: files[imageFieldName][0].buffer,
+    };
 
-  const uploadedImage = await s3.upload(params).promise();
-  const uploadFilename = uploadedImage.key;
+    const uploadedImage = await s3.upload(params).promise();
+    const uploadFilename = uploadedImage.key;
 
-  return uploadFilename;
-  // return "test";
+    return uploadFilename;
+  } catch (error) {
+    error.type = "S3error";
+    throw error;
+  }
+};
+
+util.uploadImageToS3Multi = async (files, imageIndices) => {
+  const imageUploadType = ["mainImg", "sideImg1", "sideImg2"];
+  try {
+    const uploadImagePromises = imageIndices.map(
+      async (imageIndex) =>
+        await util.uploadImageToS3(files, imageUploadType[imageIndex])
+    );
+    const newFileNames = await Promise.all(uploadImagePromises);
+    return newFileNames;
+  } catch (error) {
+    error.type = "S3error";
+    throw error;
+  }
 };
 
 util.deleteImageFromS3 = async (image_path) => {
@@ -131,22 +150,36 @@ util.deleteImageFromS3 = async (image_path) => {
 
   try {
     await s3.headObject(params).promise();
-    console.log("File Found in S3");
     try {
       await s3.deleteObject(params).promise();
-      console.log("file deleted Successfully");
+      console.log("delete image on S3");
     } catch (err) {
-      const error = new Error("刪除照片時發生錯誤");
-      error.type = "S3error";
-      throw error;
-      // console.log("ERROR in file Deleting : " + JSON.stringify(err))
+      console.log("There is error happened when delete image on S3");
+      return;
     }
   } catch (err) {
-    const error = new Error("欲刪除的檔案不存在");
-    error.type = "S3error";
-    throw error;
-    // console.log("File not Found ERROR : " + err.code)
+    console.log("There is error happened when delete image on S3");
+    return;
   }
+};
+
+util.deleteImageFromS3Multi = async (deleteImageList) => {
+  console.log("enter deleteImageFromS3Multi");
+  try {
+    const deleteImagePromises = deleteImageList.map(
+      async (deleteImagePath) => await util.deleteImageFromS3(deleteImagePath)
+    );
+    await Promise.all(deleteImagePromises);
+    return;
+  } catch (error) {
+    console.log("There is error happened when delete image on S3");
+    return;
+  }
+};
+
+util.getImagePathOnS3 = (imageWholePath) => {
+  return imageWholePath.slice(process.env.CLOUDFRONT_DOMAIN.length);
+  // return imageWholePath.replace(/(.+\w\/)(.+)/,"/$2");
 };
 
 module.exports = util;

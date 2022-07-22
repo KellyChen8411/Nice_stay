@@ -58,7 +58,6 @@ $(async function () {
     socket.connect();
     //join room
     socket.emit("user_join", { user_room }, (response) => {
-      
       const receiver_list = response.receiver;
       if (receiver_list.length === 0) {
         alert("暫無訊息");
@@ -195,7 +194,6 @@ socket.on("privateMessage", (messageInfo) => {
   let { sender_name, sender_id, content, created_at, insertMsgID } =
     messageInfo;
   if (sender_id === activeuser_id) {
-    
     //將訊息推至對話框
     pushMessage(sender_name, content, created_at);
     //將此訊息更新為已讀

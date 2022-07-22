@@ -16,22 +16,21 @@ async function renderHouse() {
   const housesRes = await fetch("/api/1.0/houses/landlordHouse", { headers });
   const fetchStatus = housesRes.status;
   const houses = await housesRes.json();
-  
+
   if (fetchStatus === 200) {
     //切換登入登出鍵
     $("#logoutBtn").toggleClass("DSHide", false); //remove class
     $("#loginBtn").toggleClass("DSHide", true); //add class
     $("#logoutBtn").click(Logout);
-    if(houses.length !== 0){
+    if (houses.length !== 0) {
       $("#managehouse_title").text("您擁有的房源");
       houses.forEach((house) => {
         renderData(house);
       });
-    }else{
+    } else {
       $("#trip_outter").attr("style", "padding-top: 70px;");
       $("#noresult_outer").removeAttr("style");
     }
-    
   } else {
     alert(houses.error);
     window.location.href = "/";
@@ -79,7 +78,6 @@ async function buttonAction(e) {
     if (buttonType === "編輯房源") {
       window.location.href = `/admin/createHouse.html?edit=${true}&id=${house_id}`;
     } else if (buttonType === "刪除房源") {
-      
       const houseRes = await fetch(
         `/api/1.0/houses/houseHistroyData?id=${house_id}`,
         { headers }
@@ -101,15 +99,15 @@ async function buttonAction(e) {
               color: "#fff",
             },
           });
-    
+
           const fetchRes = await fetch(
             `/api/1.0/houses/deleteHouse?id=${house_id}`,
             { method: "DELETE" }
           );
-          
+
           const fetchStatus = fetchRes.status;
           const finalResult = await fetchRes.json();
-          
+
           $.unblockUI();
           if (fetchStatus === 200) {
             alert("刪除成功");

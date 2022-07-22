@@ -23,9 +23,9 @@ const createHouse = async (req, res) => {
   }
 
   // upload Image
-  const mainImg_url = await util.uplaodImageToS3(req.files, "mainImg");
-  const sideImg1_url = await util.uplaodImageToS3(req.files, "sideImg1");
-  const sideImg2_url = await util.uplaodImageToS3(req.files, "sideImg2");
+  const mainImg_url = await util.uploadImageToS3(req.files, "mainImg");
+  const sideImg1_url = await util.uploadImageToS3(req.files, "sideImg1");
+  const sideImg2_url = await util.uploadImageToS3(req.files, "sideImg2");
 
   house_data.image_url = mainImg_url;
   const image_data = [sideImg1_url, sideImg2_url];
@@ -94,71 +94,6 @@ const houseSearch = async (req, res) => {
   APIData.data = houses;
 
   res.json(APIData);
-};
-
-const houseTest = async (req, res) => {
-  const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD HH:mm:ss");
-  const result = await houseQuery.checkBookingForDelete(50, today);
-  res.json(result);
-  // const result = houseQuery.checkBookingForDelete()
-
-  // const house_id = await houseQuery.getHouseID();
-  // const amenity_id = [1,2,3,4,5,6,7,8,9,10];
-  // function getRandomSubarray(arr, size) {
-  //     var shuffled = arr.slice(0), i = arr.length, temp, index;
-  //     while (i--) {
-  //         index = Math.floor((i + 1) * Math.random());
-  //         temp = shuffled[index];
-  //         shuffled[index] = shuffled[i];
-  //         shuffled[i] = temp;
-  //     }
-  //     return shuffled.slice(0, size);
-  // }
-  // let insertData = [];
-  // house_id.forEach(house => {
-  //     let arrayNum = Math.floor(Math.random() * (10- 6 + 1)) + 6;
-  //     let tempAmenity = getRandomSubarray(amenity_id, arrayNum);
-  //     tempAmenity.forEach(amenity=>{
-  //         let tempArr = [house[0], amenity];
-  //         insertData.push(tempArr);
-  //     })
-  // })
-  // // console.log(insertData);
-  // await houseQuery.insertAmenity(insertData);
-  // res.send('test');
-  // let newAmenityList = [1,2,3,4,7,8,10];
-  // let new_id_list = [];
-  // for(let i=0; i<newAmenityList.length; i++){
-  //   let temp = [1, newAmenityList[i]];
-  //   new_id_list.push(temp);
-  // }
-  // let house_id = 1;
-  // const conn = await pool.getConnection();
-  // try {
-  //   // await conn.query("START TRANSACTION");
-  //   // await conn.query( "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?", [ new_id_list ] );
-  //   const [result] = await conn.query( "SELECT JSON_ARRAYAGG(id) AS id_list FROM house_amenity WHERE house_id=?", house_id );
-  //   let id_list = result[0].id_list;
-  //   console.log(id_list);
-  //   // let new_id_list = [];
-  //   // for(let i=0; i<id_list.length; i++){
-  //   //   let temp = [];
-  //   //   temp.push(id_list[i]);
-  //   //   new_id_list.push(temp);
-  //   // }
-  //   // console.log(new_id_list);
-  //   // const [result2] = await conn.query( "SELECT * FROM house_amenity WHERE id in (?)", [ id_list ] );
-  //   const [result2] = await conn.query( "DELETE FROM house_amenity WHERE id in (?)",  [ id_list ]   );
-  //   console.log(result2);
-  //   res.json({ test: "test" });
-  //   await conn.query("COMMIT");
-  // } catch (error) {
-  //   await conn.query("ROLLBACK");
-  //   console.log(error);
-  //   return -1;
-  // } finally {
-  //   await conn.release();
-  // }
 };
 
 const houseDatail = async (req, res) => {
@@ -261,8 +196,6 @@ const selectTrip = async (req, res) => {
   });
 
   res.json(userTrip);
-
-  // res.json({test: 'test'});
 };
 
 const checkRefund = async (req, res) => {
@@ -320,82 +253,70 @@ const houseHistroyData = async (req, res) => {
 };
 
 const updateHouse = async (req, res) => {
-  const conn = await pool.getConnection();
-  try {
-    let house_id = req.query.id;
-    let { deleteImg, amenity } = req.body;
-    deleteImg = JSON.parse(deleteImg);
-    let amenityList = JSON.parse(amenity);
-    //delete redundant data in house data
-    delete req.body.deleteImg;
-    delete req.body.city_id;
-    delete req.body.region;
-    delete req.body.address;
-    delete req.body.amenity;
-    req.body.updated_at = Date.now();
-    const updateHouseData = req.body;
+  let house_id = req.query.id;
+  let { deleteImg, amenity } = req.body;
+  deleteImg = JSON.parse(deleteImg);
+  amenity = JSON.parse(amenity);
+  //delete redundant data in house data
+  delete req.body.deleteImg;
+  delete req.body.city_id;
+  delete req.body.region;
+  delete req.body.address;
+  delete req.body.amenity;
+  req.body.updated_at = Date.now();
+  const updateHouseData = req.body;
 
-    //upload all uploaded image and update image(side) table and delete side image in S3
-    let deleteImgIndex = Object.keys(deleteImg);
-    let imageUploadType = ["mainImg", "sideImg1", "sideImg2"];
-    if (deleteImgIndex.length !== 0) {
-      for (let i = 0; i < deleteImgIndex.length; i++) {
-        let ImgIndex = deleteImgIndex[i];
-        let uploadFileName = await util.uplaodImageToS3(
-          req.files,
-          imageUploadType[ImgIndex]
-        );
+  let newImageFileNames;
+  let mainImages = [];
+  let sideImages = [];
+  let updateSideImage = false; //variable to check if side image is updated
+  let oldImageList = [];
 
-        if (ImgIndex === "0") {
-          updateHouseData.image_url = uploadFileName;
-        } else {
-          let oldSideImgUrl = deleteImg[`${ImgIndex}`].slice(38);
-          await conn.query("UPDATE image SET image_url=? WHERE image_url=?", [
-            uploadFileName,
-            oldSideImgUrl,
-          ]);
-          await util.deleteImageFromS3(oldSideImgUrl);
-        }
+  //upload all uploaded image to S3
+  let deleteImgIndices = Object.keys(deleteImg);
+  if (deleteImgIndices.length !== 0) {
+    newImageFileNames = await util.uploadImageToS3Multi(
+      req.files,
+      deleteImgIndices
+    );
+    deleteImgIndices.forEach((deleteImgIndex, arrayIndex) => {
+      let newImageName = newImageFileNames[arrayIndex];
+      let oldImageName = util.getImagePathOnS3(deleteImg[deleteImgIndex]);
+      oldImageList.push(oldImageName);
+      if (deleteImgIndex === "0") {
+        //main image
+        mainImages.push(newImageName);
+        mainImages.push(oldImageName);
+        updateHouseData.image_url = mainImages[0];
+      } else {
+        //side image
+        sideImages.push([newImageName, oldImageName]);
+        updateSideImage = true;
       }
-    }
-
-    //insert data into house table and delete main image in S3
-    await conn.query("UPDATE house SET ? WHERE id=?", [
-      updateHouseData,
-      house_id,
-    ]);
-    if ("image_url" in updateHouseData) {
-      await util.deleteImageFromS3(deleteImg["0"].slice(38));
-    }
-
-    //delete house amenity and reinsert data
-    //delete
-    let [id_list] = await conn.query(
-      "SELECT JSON_ARRAYAGG(id) AS id_list FROM house_amenity WHERE house_id=?",
-      house_id
-    );
-    id_list = id_list[0].id_list;
-    await conn.query("DELETE FROM house_amenity WHERE id in (?)", [id_list]);
-    //reinsert
-    let newAmenityList = [];
-    for (let i = 0; i < amenityList.length; i++) {
-      let temp = [house_id, amenityList[i]];
-      newAmenityList.push(temp);
-    }
-    const [amenityResult] = await conn.query(
-      "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?",
-      [newAmenityList]
-    );
-
-    await conn.query("COMMIT");
-    return res.json({ status: "succeed" });
-  } catch (error) {
-    await conn.query("ROLLBACK");
-    throw error;
-    return -1;
-  } finally {
-    await conn.release();
+    });
   }
+
+  let updateAmenityData = [];
+  for (let i = 0; i < amenity.length; i++) {
+    let temp = [house_id, amenity[i]];
+    updateAmenityData.push(temp);
+  }
+
+  //update table in RDS
+  await houseQuery.updateHouse(
+    house_id,
+    updateHouseData,
+    sideImages,
+    updateSideImage,
+    updateAmenityData
+  );
+
+  //delete old image on S3
+  if (deleteImgIndices.length !== 0) {
+    await util.deleteImageFromS3Multi(oldImageList);
+  }
+
+  return res.json({ status: "succeed" });
 };
 
 const deleteHouse = async (req, res) => {
@@ -404,9 +325,9 @@ const deleteHouse = async (req, res) => {
 
   const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
   const remainBooking = await houseQuery.checkBookingForDelete(house_id, today);
-  
-  //若此房源還有預定，則無法刪除
-  if(remainBooking.length !== 0){
+
+  //cannot delete house, if there is booking existing
+  if (remainBooking.length !== 0) {
     return res.status(500).json({ status: "still has booking" });
   }
 
@@ -437,9 +358,7 @@ const deleteHouse = async (req, res) => {
       house_id
     );
     const imageList = [result[0].mainimage_list, ...result[0].sideimage_list];
-    for (let i = 0; i < imageList.length; i++) {
-      await util.deleteImageFromS3(imageList[i]);
-    }
+    await util.deleteImageFromS3Multi(imageList);
 
     await conn.query("COMMIT");
     return res.json({ status: "succeed" });
@@ -492,8 +411,8 @@ const houseBookedDate = async (req, res) => {
 };
 
 const checkBooking = async (req, res) => {
-  let  { startDate, endDate, id } = req.query;
-  id = parseInt(id); 
+  let { startDate, endDate, id } = req.query;
+  id = parseInt(id);
 
   const bookedResult = await houseQuery.checkBooking([
     startDate,
@@ -504,8 +423,15 @@ const checkBooking = async (req, res) => {
     endDate,
   ]);
 
-  res.json({ status: bookedResult.includes(id)});  
-}
+  res.json({ status: bookedResult.includes(id) });
+};
+
+const houseTest = async (req, res) => {
+  let sql = "SELECT * FROM review";
+  const [houses] = await pool.query(sql);
+
+  res.json(houses);
+};
 
 module.exports = {
   createHouse,
@@ -526,5 +452,5 @@ module.exports = {
   getUserFavorite,
   getUserFavoriteDetail,
   houseBookedDate,
-  checkBooking
+  checkBooking,
 };

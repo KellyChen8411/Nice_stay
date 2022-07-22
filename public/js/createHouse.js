@@ -171,7 +171,7 @@ async function createHouse(e) {
             }
             window.location.href = "/admin/manageHouse.html";
           }
-        } else if (fetchStatus === 404) {
+        } else if (fetchStatus === 401) {
           alert(`${finalResult.error}`);
           window.location.href = "/login.html";
         } else if (fetchStatus === 400) {

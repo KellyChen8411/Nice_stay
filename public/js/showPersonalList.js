@@ -14,17 +14,16 @@ $(function () {
     }
   }
 
-
   // 點擊其他東西時關閉下拉式選單
-  window.onclick = function(event) {
-    
-    if(!($("#hamburgerContainer")[0].contains(event.target)) && !($("#personalArea")[0].contains(event.target))){
-      if($("#personalArea").hasClass("PAShow")){
+  window.onclick = function (event) {
+    if (
+      !$("#hamburgerContainer")[0].contains(event.target) &&
+      !$("#personalArea")[0].contains(event.target)
+    ) {
+      if ($("#personalArea").hasClass("PAShow")) {
         $("#personalArea").removeClass("PAShow");
         $("#personalArea").addClass("PAHide");
       }
     }
-
-  }
-
+  };
 });

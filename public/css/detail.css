@@ -187,7 +187,7 @@
   font-size: 16px;
 }
 
-.comment_time{
+.comment_time {
   color: gray;
 }
 
@@ -209,17 +209,20 @@
   height: 500px;
 }
 
-.location_outter>h2{
+.location_outter > h2 {
   padding-top: 40px;
 }
 
-.landlord_outter>p, .landlord_outter>div{
+.landlord_outter > p,
+.landlord_outter > div {
   margin-top: 10px !important;
   font-size: 18px;
   font-weight: 700;
 }
 
-
-.landlord_outter, .feature_outter, .introduce_con, .image_con {
+.landlord_outter,
+.feature_outter,
+.introduce_con,
+.image_con {
   border-bottom: 1px inset #cfd4d1;
 }

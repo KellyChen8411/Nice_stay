@@ -35,7 +35,6 @@ async function checkForLogin() {
   }
 }
 
-
 checkForLogin();
 
 function Logout() {

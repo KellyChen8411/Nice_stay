@@ -89,7 +89,7 @@ async function checkOut() {
     if (fetchStatus === 200) {
       let sendEmailInfo = finalResult;
       sendEmailInfo = JSON.stringify(sendEmailInfo);
-      
+
       let headers = {
         "Content-Type": "application/json",
         Accept: "application/json",

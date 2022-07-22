@@ -28,7 +28,7 @@ const {
   getUserFavorite,
   getUserFavoriteDetail,
   houseBookedDate,
-  checkBooking
+  checkBooking,
 } = require("../controllers/house_controllers");
 
 router.route("/houses/create").post(

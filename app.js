@@ -191,18 +191,17 @@ app.use((error, req, res, next) => {
     return res.status(403).json({ error: error.message });
   }
   if (error.type === "userExist") {
-    return res.status(404).json({ error: error.message });
+    return res.status(401).json({ error: "使用者已存在" });
   } else if (error.type === "tokenExpire") {
-    return res.status(404).json({ error: "token過期,請重新登入" });
+    return res.status(401).json({ error: "請先登入" });
   } else if (error.type === "userInput") {
     return res.status(400).json({ error: error.message });
   } else if (error.type === "forbidden") {
     return res.status(403).json({ error: error.message });
   } else if (error.type === "S3error") {
-    return res.status(500).json({ error: error.message });
+    return res.status(500).json({ error: "S3 error" });
   } else if (error.type === "paymentFail") {
-    console.log("tappay payment fail");
-    // console.log(error);
+    // console.log("tappay payment fail");
     return res.status(400).json({ error: error.message });
   } else {
     // console.log(error);
@@ -213,6 +212,5 @@ app.use((error, req, res, next) => {
 server.listen(3000, async () => {
   console.log("Application is now running");
 });
-
 
 module.exports = app;

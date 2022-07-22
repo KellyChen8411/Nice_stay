@@ -40,7 +40,6 @@ async function fetchHouseData() {
     }
     pageSelectorCon.append(pageItem);
   }
-
 }
 
 //change page
@@ -48,7 +47,6 @@ $("#changePage_con").click(changePage);
 
 async function changePage(e) {
   if (e.target.nodeName === "A") {
-    
     $(`#changePage_con>a:nth-child(${previousSelectPage})`).removeClass(
       "active"
     );
@@ -142,15 +140,11 @@ function renderHouseData(datas) {
   });
 }
 
-
-
 function renderCityData(datas) {
   datas.map((data, index) => {
- 
     let new_option = $(`<option>${data.name}</option>`);
     new_option.attr("value", data.id);
     citys_list.append(new_option);
-
   });
 }
 

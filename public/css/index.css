@@ -3,7 +3,7 @@
   margin: 0;
 }
 
-body{
+body {
   position: relative;
   height: 980px !important;
 }
@@ -27,7 +27,8 @@ nav {
   z-index: 1;
   background-color: white;
   width: 100%;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 }
 
 nav > div {
@@ -51,7 +52,8 @@ nav > div {
   /* height: 51px; */
   padding: 5px 30px;
   margin: auto;
-  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
+  box-shadow: rgba(67, 71, 85, 0.27) 0px 0px 0.25em,
+    rgba(90, 125, 188, 0.05) 0px 0.25em 1em;
   border-radius: 50px;
 }
 
@@ -91,15 +93,14 @@ nav > div {
   position: relative;
   cursor: pointer;
   border-radius: 50px;
-  background-color: #EA8D8D;
+  background-color: #ea8d8d;
 }
 
-.searchIcon>i{
+.searchIcon > i {
   position: absolute;
   top: 6px;
   left: 2px;
 }
-
 
 .landlordContainer {
   width: 120px;
@@ -111,7 +112,7 @@ nav > div {
   border-radius: 32px;
 }
 
-.landlordContainer:hover{
+.landlordContainer:hover {
   background-color: #f7f6f2;
 }
 
@@ -127,7 +128,7 @@ nav > div {
   line-height: 36px;
 }
 
-.peopleSelectArea{
+.peopleSelectArea {
   padding: 0 20px;
 }
 
@@ -142,7 +143,8 @@ nav > div {
   border-radius: 20px;
   position: absolute;
   top: 80px;
-  box-shadow: rgb(67 71 85 / 27%) 0px 0px 0.25em, rgb(90 125 188 / 5%) 0px 0.25em 1em;
+  box-shadow: rgb(67 71 85 / 27%) 0px 0px 0.25em,
+    rgb(90 125 188 / 5%) 0px 0.25em 1em;
 }
 
 /* .PA > div {
@@ -166,7 +168,7 @@ nav > div {
   height: 36px;
 }
 
-.peopleBtn:hover{
+.peopleBtn:hover {
   background-color: #d61563;
 }
 
@@ -192,17 +194,17 @@ nav > div {
   transform: translate(50%, 0);
   width: 50vw;
   height: 70vh;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   border-radius: 5px;
   background-color: white;
   z-index: 2;
   overflow-y: scroll;
 }
 
-#detailSearchList::-webkit-scrollbar-track{
+#detailSearchList::-webkit-scrollbar-track {
   border-radius: 5px;
 }
-
 
 .DSHide {
   display: none;
@@ -263,7 +265,7 @@ nav > div {
   font-size: medium;
 }
 
-.priceorder_list{
+.priceorder_list {
   padding-bottom: 20px;
 }
 
@@ -300,13 +302,12 @@ nav > div {
   height: 36px;
 }
 
-.detailsearchBtn_con > button:hover{
+.detailsearchBtn_con > button:hover {
   background-color: #d61563;
 }
 
-
-
-input[type=checkbox], input[type=radio] {
+input[type="checkbox"],
+input[type="radio"] {
   accent-color: #b3225c;
 }
 
@@ -344,7 +345,7 @@ footer a {
   cursor: pointer;
 }
 
-.config_item{
+.config_item {
   width: 200px;
   display: flex;
   justify-content: space-between;
@@ -385,7 +386,6 @@ footer a {
   text-align: center;
 }
 
-
 /* The Modal (background) */
 .modal {
   display: none;
@@ -397,13 +397,11 @@ footer a {
   width: 100%; /* Full width */
   height: 100%; /* Full height */
   overflow: auto; /* Enable scroll if needed */
-  background-color: rgb(0,0,0); /* Fallback color */
-  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 }
-
 
 /* datepicker */
 /* .ui-widget-header{
   background-color: #b3225c !important;
 } */
-

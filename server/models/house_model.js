@@ -52,6 +52,57 @@ houseQuery.createHouse = async (house_data, image_url, amenity_item) => {
   }
 };
 
+houseQuery.updateHouse = async (
+  house_id,
+  updateHouseData,
+  sideImageData,
+  updateSideImage,
+  amenityData
+) => {
+  const conn = await pool.getConnection();
+  try {
+    await conn.query("START TRANSACTION");
+
+    //update house table
+    await conn.query("UPDATE house SET ? WHERE id=?", [
+      updateHouseData,
+      house_id,
+    ]);
+
+    //update (side)image table
+    if (updateSideImage) {
+      for (let i = 0; i < sideImageData.length; i++) {
+        await conn.query("UPDATE image SET image_url=? WHERE image_url=?", [
+          sideImageData[i][0],
+          sideImageData[i][1],
+        ]);
+      }
+    }
+
+    //delete amenity table
+    let [id_list] = await conn.query(
+      "SELECT JSON_ARRAYAGG(id) AS id_list FROM house_amenity WHERE house_id=?",
+      house_id
+    );
+    await conn.query("DELETE FROM house_amenity WHERE id in (?)", [
+      id_list[0].id_list,
+    ]);
+    //reinsert into amenity table
+    await conn.query(
+      "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?",
+      [amenityData]
+    );
+
+    await conn.query("COMMIT");
+    return;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    throw error;
+  } finally {
+    await conn.release();
+  }
+};
+
 houseQuery.selectAllHouse = async (paging, itemNum) => {
   let itemStartNum = paging * 6;
   let sql = `SELECT a.id, a.title, a.people_count, a.room_count, a.bed_count, a.created_at , a.bathroom_count, b.name as city_name, a.price, a.image_url FROM house a left join city b on a.city_id = b.id LIMIT ?, ?`;
@@ -220,6 +271,7 @@ houseQuery.houseSearch = async (
   } else if (queryCondition === 2) {
     sql += " ORDER BY price ASC, id";
   }
+
   const [houseSelect] = await pool.query(sql, sql_binding);
   let houseCount = houseSelect.length;
   sql += " LIMIT ?, ?";
@@ -262,17 +314,6 @@ houseQuery.landLordRate = async (landlord_id) => {
   const [result] = await pool.query(sql, landlord_id);
   return result;
 };
-
-// houseQuery.getHouseID = async () => {
-//   let sql = "SELECT id FROM house";
-//   const [result] = await pool.query({ sql, rowsAsArray: true });
-//   return result;
-// };
-
-// houseQuery.insertAmenity = async (values) => {
-//   let sql = "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?";
-//   await pool.query(sql, [values]);
-// };
 
 houseQuery.selectTrip = async (user_id, requestType) => {
   let sql;
@@ -323,11 +364,11 @@ houseQuery.houseHistroyData = async (landlord_id, house_id) => {
   return result;
 };
 
-houseQuery.updateHouse = async (updateHouseDate, house_id) => {
-  let sql = "UPDATE house SET ? WHERE id=?";
-  const [result] = await pool.query(sql, [updateHouseDate, house_id]);
-  return result;
-};
+// houseQuery.updateHouse = async (updateHouseDate, house_id) => {
+//   let sql = "UPDATE house SET ? WHERE id=?";
+//   const [result] = await pool.query(sql, [updateHouseDate, house_id]);
+//   return result;
+// };
 
 houseQuery.updateSideImage = async (new_url, old_url) => {
   let sql = "UPDATE image SET image_url=? WHERE image_url=?";
@@ -380,10 +421,11 @@ houseQuery.houseBookedDate = async (house_id) => {
   return result;
 };
 
-houseQuery.checkBookingForDelete = async (house_id, today)=>{
-  let sql = "SELECT id FROM nice_stay.booking WHERE house_id=? AND (checkin_date>=? OR (checkin_date<? AND checkout_date>?))";
+houseQuery.checkBookingForDelete = async (house_id, today) => {
+  let sql =
+    "SELECT id FROM booking WHERE house_id=? AND (checkin_date>=? OR (checkin_date<? AND checkout_date>?))";
   const [result] = await pool.query(sql, [house_id, today, today, today]);
   return result;
-}
+};
 
 module.exports = houseQuery;

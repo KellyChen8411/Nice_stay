@@ -1,6 +1,6 @@
 require("dotenv").config();
 const mysql = require("mysql2/promise");
-const env = process.env.NODE_ENV || 'production';
+const env = process.env.NODE_ENV || "production";
 
 const pool = mysql.createPool({
   connectionLimit: 10,
@@ -20,13 +20,12 @@ const poolTest = mysql.createPool({
   // timezone: 'utc'
 });
 
-if(env === 'test'){
+if (env === "test") {
   module.exports = {
     pool: poolTest,
   };
-}else{
+} else {
   module.exports = {
-    pool
+    pool,
   };
 }
-

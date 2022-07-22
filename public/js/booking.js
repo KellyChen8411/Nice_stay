@@ -132,7 +132,12 @@ function renderTrip(trip, type, buttonName) {
   clone.find("button").attr("data-bookingid", trip.booking_id);
   clone.find("button").attr("data-houseid", trip.house_id);
   clone.find("button").attr("data-renterid", trip.renter_id);
-  clone.find("a").attr("href", `/detail.html?id=${trip.house_id}&startDate=&endDate=&people_count=`);
+  clone
+    .find("a")
+    .attr(
+      "href",
+      `/detail.html?id=${trip.house_id}&startDate=&endDate=&people_count=`
+    );
   clone.removeAttr("style");
 }
 
@@ -147,8 +152,8 @@ async function buttonAction(e) {
     let renter_id = e.target.dataset.renterid;
 
     if (buttonType === "加入黑名單") {
-      let userDecision = confirm('確定將此user加入黑名單？');
-      if(userDecision){
+      let userDecision = confirm("確定將此user加入黑名單？");
+      if (userDecision) {
         let headers = {
           "Content-Type": "application/json",
           Accept: "application/json",

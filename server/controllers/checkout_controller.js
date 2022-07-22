@@ -22,10 +22,6 @@ const checkout = async (req, res) => {
       refund_duetime,
     } = req.body.bookoingInfo;
 
-    // const landlord_id = await checkoutQuery.getLandlordID(
-    //   req.body.bookoingInfo.house_id
-    // );
-
     let [landlord_id] = await conn.query(
       "SELECT landlord_id FROM house WHERE id=?",
       req.body.bookoingInfo.house_id
@@ -52,7 +48,7 @@ const checkout = async (req, res) => {
       booking.refund_duetime = refund_duetime;
     }
 
-    // const bookingResult = await checkoutQuery.createBooking(booking);
+    //create booking
     let [bookingResult] = await conn.query(
       "INSERT INTO booking SET ?",
       booking
@@ -86,15 +82,8 @@ const checkout = async (req, res) => {
 
     //check payment result
     if (payResult.data.status === 0) {
-      //update order status to paid
-      // await checkoutQuery.updateBookingPaid(orderNum);
+      //create payment and update booking
       await conn.query("UPDATE booking SET paid=1 WHERE id=?", orderNum);
-      //create item in payment table
-      // await checkoutQuery.createPayment([
-      //   orderNum,
-      //   payResult.data["rec_trade_id"],
-      //   payResult.data["transaction_time_millis"],
-      // ]);
       await conn.query(
         "INSERT INTO payment (booking_id, rec_trade_id, created_at) VALUES (?,?,?)",
         [
