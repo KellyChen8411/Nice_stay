@@ -123,11 +123,7 @@ const houseDatail = async (req, res) => {
     amenity[1] = IMAGE_URL_PREFIX + amenity[1];
   });
   //get review
-  const reviewData = await houseQuery.houseReview([
-    id,
-    // houseData.landlord_id,
-    id,
-  ]);
+  const reviewData = await houseQuery.houseReview([id, id]);
 
   //get landlordRate
   let landLordRate = await houseQuery.landLordRate(houseData.landlord_id);
@@ -190,10 +186,10 @@ const selectTrip = async (req, res) => {
     }
   }
 
-  const user_id = req.user.id;
-  const userTrip = await houseQuery.selectTrip(user_id, requestType);
+  const userID = req.user.id;
+  const userTrip = await houseQuery.selectTrip(userID, requestType);
 
-  // mysql2 會轉date時間，將時間轉回台灣日期
+  // node will transfer time to UTC time, transfer back to Taipei time
   userTrip.forEach((trip) => {
     trip.checkin_date = moment(trip.checkin_date)
       .tz("Asia/Taipei")
@@ -208,13 +204,13 @@ const selectTrip = async (req, res) => {
 };
 
 const checkRefund = async (req, res) => {
-  const booking_id = req.query.booking_id;
+  const bookingID = req.query.booking_id;
   const requestCancelTime = parseInt(req.query.requestCancelTime);
-  let dueTime = await houseQuery.getRefundDue(booking_id);
+  let dueTime = await houseQuery.getRefundDue(bookingID);
   dueTime = parseInt(dueTime);
 
   if (dueTime >= requestCancelTime) {
-    await houseQuery.updateBooking(booking_id);
+    await houseQuery.updateBooking(bookingID);
     return res.json({ cancel: true });
   } else {
     res.json({ cancel: false });
@@ -233,8 +229,8 @@ const landlordHouse = async (req, res) => {
     err.type = "forbidden";
     throw err;
   }
-  let landlord_id = req.user.id;
-  const houses = await houseQuery.landlordHouse(landlord_id);
+  let landlordID = req.user.id;
+  const houses = await houseQuery.landlordHouse(landlordID);
   houses.forEach((house) => {
     house.image_url = IMAGE_URL_PREFIX + house.image_url;
   });
@@ -242,10 +238,10 @@ const landlordHouse = async (req, res) => {
 };
 
 const houseHistroyData = async (req, res) => {
-  const landlord_id = req.user.id;
-  const house_id = req.query.id;
+  const landlordID = req.user.id;
+  const houseID = req.query.id;
 
-  const house = await houseQuery.houseHistroyData(landlord_id, house_id);
+  const house = await houseQuery.houseHistroyData(landlordID, houseID);
   if (house.length === 0) {
     const err = new Error("權限不足");
     err.type = "forbidden";
@@ -347,33 +343,33 @@ const deleteHouse = async (req, res) => {
 };
 
 const likeHouse = async (req, res) => {
-  const user_id = req.user.id;
-  const house_id = req.query.id;
-  await houseQuery.likeHouse(user_id, house_id);
-  const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
+  const userID = req.user.id;
+  const houseID = req.query.id;
+  await houseQuery.likeHouse(userID, houseID);
+  const favoriteList = await houseQuery.selectUserFavoriteHouse(userID);
 
   res.json(favoriteList);
 };
 
 const dislikeHouse = async (req, res) => {
-  const user_id = req.user.id;
-  const house_id = req.query.id;
-  const favorite_id = await houseQuery.findFavoriteID(user_id, house_id);
+  const userID = req.user.id;
+  const houseID = req.query.id;
+  const favoriteID = await houseQuery.findFavoriteID(userID, houseID);
 
-  await houseQuery.dislikeHouse(favorite_id);
-  const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
+  await houseQuery.dislikeHouse(favoriteID);
+  const favoriteList = await houseQuery.selectUserFavoriteHouse(userID);
   res.json(favoriteList);
 };
 
 const getUserFavorite = async (req, res) => {
-  const user_id = req.user.id;
-  const favoriteList = await houseQuery.selectUserFavoriteHouse(user_id);
+  const userID = req.user.id;
+  const favoriteList = await houseQuery.selectUserFavoriteHouse(userID);
   res.json(favoriteList);
 };
 
 const getUserFavoriteDetail = async (req, res) => {
-  const user_id = req.user.id;
-  const houseDetail = await houseQuery.selectUserFavoriteHouseDetail(user_id);
+  const userID = req.user.id;
+  const houseDetail = await houseQuery.selectUserFavoriteHouseDetail(userID);
   houseDetail.forEach((house) => {
     house.image_url = IMAGE_URL_PREFIX + house.image_url;
   });
@@ -381,9 +377,9 @@ const getUserFavoriteDetail = async (req, res) => {
 };
 
 const houseBookedDate = async (req, res) => {
-  const house_id = req.query.id;
-  let bookedDate_list = await houseQuery.houseBookedDate(house_id);
-  res.json(bookedDate_list);
+  const houseID = req.query.id;
+  let bookedDateList = await houseQuery.houseBookedDate(houseID);
+  res.json(bookedDateList);
 };
 
 const checkBooking = async (req, res) => {
@@ -402,20 +398,12 @@ const checkBooking = async (req, res) => {
   res.json({ status: bookedResult.includes(id) });
 };
 
-// const houseTest = async (req, res) => {
-//   let sql = "SELECT * FROM review";
-//   const [houses] = await pool.query(sql);
-
-//   res.json(houses);
-// };
-
 module.exports = {
   createHouse,
   selectAllHouse,
   houseSearch,
   houseDatail,
   houseNearby,
-  // houseTest,
   selectTrip,
   checkRefund,
   leftreview,

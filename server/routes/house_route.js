@@ -15,7 +15,6 @@ const {
   houseSearch,
   houseDatail,
   houseNearby,
-  houseTest,
   selectTrip,
   checkRefund,
   leftreview,
@@ -84,8 +83,6 @@ router
 router.route("/houses/detail/:id").get(util.wrapAsync(houseDatail));
 
 router.route("/houses/nearby").get(util.wrapAsync(houseNearby));
-
-router.route("/houses/test").get(upload.array(), util.wrapAsync(houseTest));
 
 router
   .route("/houses/trip")
