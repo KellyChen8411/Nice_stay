@@ -53,7 +53,7 @@ util.checkLoginMiddleware = (req, res, next) => {
   }
 };
 
-util.sendBookingEmail = async (renter_name, renter_email, bookingInfo) => {
+util.sendBookingEmail = async (renterName, renterEmail, bookingInfo) => {
   const {
     checkin_date,
     checkout_date,
@@ -80,11 +80,11 @@ util.sendBookingEmail = async (renter_name, renter_email, bookingInfo) => {
 
   let info = await transporter.sendMail({
     from: "kellychen841106@gmail.com", // sender address
-    to: renter_email, // list of receivers
+    to: renterEmail, // list of receivers
     subject: "Hello ✔", // Subject line
     text: "Hello world?", // plain text body
     html: pug.renderFile(`${process.cwd()}/views/booking.pug`, {
-      name: renter_name,
+      name: renterName,
       checkin_date,
       checkout_date,
       room_price,
