@@ -2,58 +2,60 @@ const { pool } = require("./mysqlcon");
 
 const houseQuery = {};
 
-houseQuery.createHouse = async (house_data, image_url, amenity_item) => {
+houseQuery.createHouse = async (houseData, imageData, amenityData) => {
   const conn = await pool.getConnection();
   try {
     await conn.query("START TRANSACTION");
 
     let createTime = Date.now();
-    house_data.created_at = createTime;
-    house_data.updated_at = createTime;
+    houseData.created_at = createTime;
+    houseData.updated_at = createTime;
+
+    //insert into house table
     const [houseResult] = await conn.query(
       "INSERT INTO house SET ?",
-      house_data
+      houseData
     );
-    const houde_id = houseResult.insertId;
+    const houdeID = houseResult.insertId;
 
     //create image and amenity data
-    let image_data = [];
-    image_url.forEach((imageUrl) => {
-      let temp = [houde_id];
+    let imageURLs = [];
+    imageData.forEach((imageUrl) => {
+      let temp = [houdeID];
       temp.push(imageUrl);
-      image_data.push(temp);
+      imageURLs.push(temp);
     });
 
-    let amenity_data = [];
-    amenity_item.forEach((item) => {
-      let temp = [houde_id];
+    let amenityList = [];
+    amenityData.forEach((item) => {
+      let temp = [houdeID];
       temp.push(item);
-      amenity_data.push(temp);
+      amenityList.push(temp);
     });
 
-    const [imageResult] = await conn.query(
-      "INSERT INTO image (house_id, image_url) VALUES ?",
-      [image_data]
-    );
+    //insert into image table
+    await conn.query("INSERT INTO image (house_id, image_url) VALUES ?", [
+      imageURLs,
+    ]);
 
-    const [amenityResult] = await conn.query(
+    //insert into house_amenity table
+    await conn.query(
       "INSERT INTO house_amenity (house_id, amenity_id) VALUES ?",
-      [amenity_data]
+      [amenityList]
     );
 
     await conn.query("COMMIT");
-    return houde_id;
+    return houdeID;
   } catch (error) {
     await conn.query("ROLLBACK");
-    console.log(error);
-    return -1;
+    throw error;
   } finally {
     await conn.release();
   }
 };
 
 houseQuery.updateHouse = async (
-  house_id,
+  houseID,
   updateHouseData,
   sideImageData,
   updateSideImage,
@@ -66,7 +68,7 @@ houseQuery.updateHouse = async (
     //update house table
     await conn.query("UPDATE house SET ? WHERE id=?", [
       updateHouseData,
-      house_id,
+      houseID,
     ]);
 
     //update (side)image table
@@ -80,12 +82,12 @@ houseQuery.updateHouse = async (
     }
 
     //delete amenity table
-    let [id_list] = await conn.query(
+    let [idList] = await conn.query(
       "SELECT JSON_ARRAYAGG(id) AS id_list FROM house_amenity WHERE house_id=?",
-      house_id
+      houseID
     );
     await conn.query("DELETE FROM house_amenity WHERE id in (?)", [
-      id_list[0].id_list,
+      idList[0].id_list,
     ]);
     //reinsert into amenity table
     await conn.query(
@@ -95,6 +97,49 @@ houseQuery.updateHouse = async (
 
     await conn.query("COMMIT");
     return;
+  } catch (error) {
+    await conn.query("ROLLBACK");
+    throw error;
+  } finally {
+    await conn.release();
+  }
+};
+
+houseQuery.deleteHouse = async (houseID) => {
+  const conn = await pool.getConnection();
+  console.log("enter delete house model");
+  try {
+    await conn.query("START TRANSACTION");
+
+    //delete data from image table
+    let [idListImage] = await conn.query(
+      "SELECT JSON_ARRAYAGG(id) AS id_list FROM image WHERE house_id=?",
+      houseID
+    );
+    idListImage = idListImage[0].id_list;
+    await conn.query("DELETE FROM image WHERE id in (?)", [idListImage]);
+    //delete data from amenity table
+    let [idListAmenity] = await conn.query(
+      "SELECT JSON_ARRAYAGG(id) AS id_list FROM house_amenity WHERE house_id=?",
+      houseID
+    );
+    idListAmenity = idListAmenity[0].id_list;
+    await conn.query("DELETE FROM house_amenity WHERE id in (?)", [
+      idListAmenity,
+    ]);
+    //delete data from house table
+    await conn.query("DELETE FROM house WHERE id=?", houseID);
+
+    //select images for house
+    let [images] = await pool.query(
+      "SELECT a.id, a.image_url AS mainimage_list, b.sideimage_list FROM house a left join (SELECT house_id, JSON_ARRAYAGG(image_url) AS sideimage_list FROM image group by house_id) b ON a.id=b.house_id WHERE a.id=?",
+      houseID
+    );
+
+    images = [images[0].mainimage_list, ...images[0].sideimage_list];
+
+    await conn.query("COMMIT");
+    return images;
   } catch (error) {
     await conn.query("ROLLBACK");
     throw error;
@@ -124,18 +169,18 @@ houseQuery.checkBooking = async (dates) => {
   return bookedHouseID;
 };
 
-houseQuery.checkAmentity = async (amenity_id) => {
+houseQuery.checkAmentity = async (amenityIDs) => {
   let sql =
     "SELECT house_id, json_arrayagg(amenity_id) as amenity_array FROM house_amenity WHERE amenity_id IN (?) GROUP BY house_id; ";
-  const [result] = await pool.query(sql, [amenity_id]);
+  const [result] = await pool.query(sql, [amenityIDs]);
 
-  const house_id = [];
+  const houseIDs = [];
   result.forEach((item) => {
-    if (item.amenity_array.length === amenity_id.length) {
-      house_id.push(item.house_id);
+    if (item.amenity_array.length === amenityIDs.length) {
+      houseIDs.push(item.house_id);
     }
   });
-  return house_id;
+  return houseIDs;
 };
 
 houseQuery.houseSearch = async (
@@ -144,30 +189,21 @@ houseQuery.houseSearch = async (
   paging,
   itemNum
 ) => {
-  let prefix_sql = "SELECT a.*, b.name as city_name FROM  (";
-  let suffix_sql = ") a left join city b on a.city_id = b.id";
-  let middle_sql = "SELECT * FROM house ";
-  let sql_binding = [];
-  let condition_count = selectConditions.length - 1;
+  let prefixSQL = "SELECT a.*, b.name as city_name FROM  (";
+  let suffixSQL = ") a left join city b on a.city_id = b.id";
+  let middleSQL = "SELECT * FROM house WHERE 1=1";
+  let sqlBinding = [];
   let startDate;
   let endDate;
   let startPrice;
   let endPrice;
   let itemStartNum = paging * 6;
-  let count = 0;
   for (let i = 0; i < selectConditions.length; i++) {
     let selectionCondition = selectConditions[i];
     switch (selectionCondition[0]) {
       case "area":
-        if (count == 0) {
-          middle_sql += "WHERE ";
-        }
-        middle_sql += "city_id=?";
-        sql_binding.push(selectionCondition[1]);
-        count++;
-        if (i !== condition_count) {
-          middle_sql += " AND ";
-        }
+        middleSQL += " AND city_id=?";
+        sqlBinding.push(selectionCondition[1]);
         break;
       case "startDate":
         startDate = selectionCondition[1];
@@ -183,79 +219,37 @@ houseQuery.houseSearch = async (
           endDate,
         ]);
         if (bookHouseID.length !== 0) {
-          if (count == 0) {
-            middle_sql += "WHERE ";
-          }
-          middle_sql += "id NOT in (?)";
-          sql_binding.push(bookHouseID);
-          count++;
-          if (i !== condition_count) {
-            middle_sql += " AND ";
-          }
+          middleSQL += " AND id NOT in (?)";
+          sqlBinding.push(bookHouseID);
         }
         break;
       case "people":
         if (selectionCondition[1] != 0) {
-          if (count == 0) {
-            middle_sql += "WHERE ";
-          }
-          middle_sql += "people_count>=?";
-          sql_binding.push(selectionCondition[1]);
-          count++;
-          if (i !== condition_count) {
-            middle_sql += " AND ";
-          }
+          middleSQL += " AND people_count>=?";
+          sqlBinding.push(selectionCondition[1]);
         }
         break;
       case "pet":
-        if (count == 0) {
-          middle_sql += "WHERE ";
-        }
-        middle_sql += "pet=1";
-        count++;
-        if (i !== condition_count) {
-          middle_sql += " AND ";
-        }
+        middleSQL += " AND pet=1";
         break;
       case "start_price":
         startPrice = selectionCondition[1];
         break;
       case "end_price":
         endPrice = selectionCondition[1];
-        if (count == 0) {
-          middle_sql += "WHERE ";
-        }
-        middle_sql += "(price BETWEEN ? AND ?)";
-        sql_binding.push(startPrice);
-        sql_binding.push(endPrice);
-        count++;
-        if (i !== condition_count) {
-          middle_sql += " AND ";
-        }
+        middleSQL += " AND (price BETWEEN ? AND ?)";
+        sqlBinding.push(startPrice);
+        sqlBinding.push(endPrice);
         break;
       case "house_type":
-        if (count == 0) {
-          middle_sql += "WHERE ";
-        }
-        middle_sql += "category_id IN (?)";
-        sql_binding.push(selectionCondition[1]);
-        count++;
-        if (i !== condition_count) {
-          middle_sql += " AND ";
-        }
+        middleSQL += " AND category_id IN (?)";
+        sqlBinding.push(selectionCondition[1]);
         break;
       case "amenity":
-        const house_id = await houseQuery.checkAmentity(selectionCondition[1]);
-        if (house_id.length !== 0) {
-          if (count == 0) {
-            middle_sql += "WHERE ";
-          }
-          middle_sql += "id in (?)";
-          sql_binding.push(house_id);
-          count++;
-          if (i !== condition_count) {
-            middle_sql += " AND ";
-          }
+        const houseIDs = await houseQuery.checkAmentity(selectionCondition[1]);
+        if (houseIDs.length !== 0) {
+          middleSQL += " AND id in (?)";
+          sqlBinding.push(houseIDs);
         }
         break;
       default:
@@ -263,7 +257,7 @@ houseQuery.houseSearch = async (
     }
   }
 
-  let sql = prefix_sql + middle_sql + suffix_sql;
+  let sql = prefixSQL + middleSQL + suffixSQL;
 
   //check if order consition is needed
   if (queryCondition === 1) {
@@ -272,13 +266,13 @@ houseQuery.houseSearch = async (
     sql += " ORDER BY price ASC, id";
   }
 
-  const [houseSelect] = await pool.query(sql, sql_binding);
+  const [houseSelect] = await pool.query(sql, sqlBinding);
   let houseCount = houseSelect.length;
   sql += " LIMIT ?, ?";
-  sql_binding.push(itemStartNum);
-  sql_binding.push(itemNum);
+  sqlBinding.push(itemStartNum);
+  sqlBinding.push(itemNum);
 
-  const [result] = await pool.query(sql, sql_binding);
+  const [result] = await pool.query(sql, sqlBinding);
 
   let searchData = { data: result, houseCount };
   return searchData;
@@ -363,12 +357,6 @@ houseQuery.houseHistroyData = async (landlord_id, house_id) => {
   const [result] = await pool.query(sql, [landlord_id, house_id]);
   return result;
 };
-
-// houseQuery.updateHouse = async (updateHouseDate, house_id) => {
-//   let sql = "UPDATE house SET ? WHERE id=?";
-//   const [result] = await pool.query(sql, [updateHouseDate, house_id]);
-//   return result;
-// };
 
 houseQuery.updateSideImage = async (new_url, old_url) => {
   let sql = "UPDATE image SET image_url=? WHERE image_url=?";

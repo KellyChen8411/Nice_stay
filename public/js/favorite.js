@@ -18,7 +18,9 @@ $(async function () {
     }
 
     //fetch house data
-    const houseRes = await fetch(`/api/1.0/houses/favoriteDetail`, { headers });
+    const houseRes = await fetch(`/api/1.0/houses/favoriteDetail`, {
+      headers,
+    });
     const houses = await houseRes.json();
     if (houseRes.status === 200) {
       if (houses.length !== 0) {

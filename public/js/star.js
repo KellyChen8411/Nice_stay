@@ -508,15 +508,21 @@
                 // for jsdom and IE9+
                 style.innerHTML = cssText;
                 style.sheet.cssText = cssText;
-                insertStyleElement(style, { insertAt: extraOptions.insertAt });
+                insertStyleElement(style, {
+                  insertAt: extraOptions.insertAt,
+                });
               } else if (style.styleSheet) {
                 // for IE8 and below
-                insertStyleElement(style, { insertAt: extraOptions.insertAt });
+                insertStyleElement(style, {
+                  insertAt: extraOptions.insertAt,
+                });
                 style.styleSheet.cssText = cssText;
               } else {
                 // for Chrome, Firefox, and Safari
                 style.appendChild(document.createTextNode(cssText));
-                insertStyleElement(style, { insertAt: extraOptions.insertAt });
+                insertStyleElement(style, {
+                  insertAt: extraOptions.insertAt,
+                });
               }
             },
           };

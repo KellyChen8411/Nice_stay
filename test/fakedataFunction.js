@@ -18,7 +18,7 @@ const tables = [
 ];
 
 async function truncateData() {
-    console.log('truncate start')
+  console.log("truncate start");
   if (process.env.NODE_ENV !== "test") {
     return;
   }
@@ -30,11 +30,11 @@ async function truncateData() {
     sql = `TRUNCATE ${table}`;
     await conn.query(sql);
   });
-  const [ houses ] = await conn.query("SELECT * FROM house");
+  const [houses] = await conn.query("SELECT * FROM house");
   await conn.query("SET FOREIGN_KEY_CHECKS = ?", 1);
   await conn.query("COMMIT");
   await conn.release();
-  console.log('truncate end')
+  console.log("truncate end");
 
   return;
 }

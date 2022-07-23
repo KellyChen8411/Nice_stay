@@ -179,7 +179,8 @@ util.deleteImageFromS3Multi = async (deleteImageList) => {
 
 util.getImagePathOnS3 = (imageWholePath) => {
   return imageWholePath.slice(process.env.CLOUDFRONT_DOMAIN.length);
-  // return imageWholePath.replace(/(.+\w\/)(.+)/,"/$2");
 };
+
+util.concateImageURL = () => {};
 
 module.exports = util;

@@ -50,7 +50,9 @@ async function submitMainSearch() {
       ////////////////////////////////////////////////////////////////////////////
       //get user favorite house and render
       let houseThisPage = houseDatas.data.map((house) => house.id);
-      let favoriteRes = await fetch("/api/1.0/houses/favorite", { headers });
+      let favoriteRes = await fetch("/api/1.0/houses/favorite", {
+        headers,
+      });
       let favoriteData = await favoriteRes.json();
       if (favoriteRes.status === 200) {
         if (favoriteData !== null) {
@@ -138,7 +140,9 @@ async function detailSearch(e) {
       ////////////////////////////////////////////////////////////////////////////
       //get user favorite house and render
       let houseThisPage = houseDatas.data.map((house) => house.id);
-      let favoriteRes = await fetch("/api/1.0/houses/favorite", { headers });
+      let favoriteRes = await fetch("/api/1.0/houses/favorite", {
+        headers,
+      });
       let favoriteData = await favoriteRes.json();
       if (favoriteRes.status === 200) {
         if (favoriteData !== null) {

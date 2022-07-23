@@ -1,11 +1,10 @@
 require("dotenv").config();
 const houseQuery = require("../models/house_model");
 const axios = require("axios");
-const AWS = require("aws-sdk");
 const util = require("../../util/util");
 const { validationResult } = require("express-validator");
 const moment = require("moment-timezone");
-const { pool } = require("../models/mysqlcon");
+const IMAGE_URL_PREFIX = process.env.CLOUDFRONT_DOMAIN;
 
 const createHouse = async (req, res) => {
   //validate user input
@@ -13,27 +12,33 @@ const createHouse = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({ error: errors.array() });
   }
-
-  const house_data = req.body;
-  let amenityList = JSON.parse(house_data.amenity);
-  delete house_data.amenity;
-  house_data.landlord_id = req.user.id;
-  if (house_data.refund_type === "0") {
-    delete house_data.refund_duration;
+  //prepare create data
+  const houseData = req.body;
+  let amenityData = JSON.parse(houseData.amenity);
+  delete houseData.amenity;
+  houseData.landlord_id = req.user.id;
+  if (houseData.refund_type === "0") {
+    delete houseData.refund_duration;
   }
 
   // upload Image
-  const mainImg_url = await util.uploadImageToS3(req.files, "mainImg");
-  const sideImg1_url = await util.uploadImageToS3(req.files, "sideImg1");
-  const sideImg2_url = await util.uploadImageToS3(req.files, "sideImg2");
+  const [mainImgURL, sideImg1URL, sideImg2URL] =
+    await util.uploadImageToS3Multi(req.files, [0, 1, 2]);
+  // const mainImgURL = await util.uploadImageToS3(req.files, "mainImg");
+  // const sideImg1URL = await util.uploadImageToS3(req.files, "sideImg1");
+  // const sideImg2URL = await util.uploadImageToS3(req.files, "sideImg2");
+  console.log("create house");
+  console.log(mainImgURL);
+  console.log(sideImg1URL);
+  console.log(sideImg2URL);
 
-  house_data.image_url = mainImg_url;
-  const image_data = [sideImg1_url, sideImg2_url];
+  houseData.image_url = mainImgURL;
+  const imageData = [sideImg1URL, sideImg2URL];
 
   const createResult = await houseQuery.createHouse(
-    house_data,
-    image_data,
-    amenityList
+    houseData,
+    imageData,
+    amenityData
   );
 
   res.json({ house_id: createResult });
@@ -46,13 +51,15 @@ const selectAllHouse = async (req, res) => {
   const houseCount = await houseQuery.allHouseCount();
   const totalPage = Math.ceil(houseCount / 6);
   let APIData = { totalPage };
+
+  //select 7 houses per time to check next page
   if (houses.length === 7) {
     APIData.next_paging = paging + 1;
     houses.pop();
   }
-  const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN;
+
   houses.forEach((house) => {
-    house.image_url = imageURL_prefix + house.image_url;
+    house.image_url = IMAGE_URL_PREFIX + house.image_url;
   });
   APIData.data = houses;
 
@@ -62,7 +69,7 @@ const selectAllHouse = async (req, res) => {
 const houseSearch = async (req, res) => {
   let queryCondition = req.body;
   let orderCondition = 0; //0 means no order, 1 means DESC and 2 means ASC
-  //take order key out
+  //seperate order property
   if ("price_order" in queryCondition) {
     orderCondition = parseInt(queryCondition.price_order);
     delete queryCondition.price_order;
@@ -72,12 +79,15 @@ const houseSearch = async (req, res) => {
   const paging = parseInt(req.query.paging);
   const itemNum = 7;
 
+  //search for houses meeting condition
   const selectData = await houseQuery.houseSearch(
     queryCondition,
     orderCondition,
     paging,
     itemNum
   );
+
+  //check total page and next page
   let houses = selectData.data;
   let houseCount = selectData.houseCount;
   const totalPage = Math.ceil(houseCount / 6);
@@ -87,9 +97,8 @@ const houseSearch = async (req, res) => {
     houses.pop();
   }
 
-  const imageURL_prefix = process.env.CLOUDFRONT_DOMAIN;
   houses.forEach((house) => {
-    house.image_url = imageURL_prefix + house.image_url;
+    house.image_url = IMAGE_URL_PREFIX + house.image_url;
   });
   APIData.data = houses;
 
@@ -100,18 +109,18 @@ const houseDatail = async (req, res) => {
   const { id } = req.params;
   //get house data
   const houses = await houseQuery.houseDatail(id);
+
   houses[0].sideImages_url = [];
   houses.forEach((house) => {
-    house.image_url = process.env.CLOUDFRONT_DOMAIN + house.image_url;
-    houses[0].sideImages_url.push(
-      process.env.CLOUDFRONT_DOMAIN + house.sideImage_url
-    );
+    house.image_url = IMAGE_URL_PREFIX + house.image_url;
+    houses[0].sideImages_url.push(IMAGE_URL_PREFIX + house.sideImage_url);
   });
   let houseData = houses[0];
   //get amenity
   const amenityData = await houseQuery.houseAmentity(id);
+
   amenityData.forEach((amenity) => {
-    amenity[1] = process.env.CLOUDFRONT_DOMAIN + amenity[1];
+    amenity[1] = IMAGE_URL_PREFIX + amenity[1];
   });
   //get review
   const reviewData = await houseQuery.houseReview([
@@ -192,7 +201,7 @@ const selectTrip = async (req, res) => {
     trip.checkout_date = moment(trip.checkout_date)
       .tz("Asia/Taipei")
       .format("YYYY-MM-DD");
-    trip.image_url = process.env.CLOUDFRONT_DOMAIN + trip.image_url;
+    trip.image_url = IMAGE_URL_PREFIX + trip.image_url;
   });
 
   res.json(userTrip);
@@ -227,7 +236,7 @@ const landlordHouse = async (req, res) => {
   let landlord_id = req.user.id;
   const houses = await houseQuery.landlordHouse(landlord_id);
   houses.forEach((house) => {
-    house.image_url = process.env.CLOUDFRONT_DOMAIN + house.image_url;
+    house.image_url = IMAGE_URL_PREFIX + house.image_url;
   });
   res.json(houses);
 };
@@ -243,17 +252,17 @@ const houseHistroyData = async (req, res) => {
     throw err;
   }
 
-  house[0].image_url = process.env.CLOUDFRONT_DOMAIN + house[0].image_url;
+  house[0].image_url = IMAGE_URL_PREFIX + house[0].image_url;
 
   house[0].sideimage_list = house[0].sideimage_list.map(
-    (sideimage_url) => process.env.CLOUDFRONT_DOMAIN + sideimage_url
+    (sideimage_url) => IMAGE_URL_PREFIX + sideimage_url
   );
 
   res.json(house);
 };
 
 const updateHouse = async (req, res) => {
-  let house_id = req.query.id;
+  let houseID = req.query.id;
   let { deleteImg, amenity } = req.body;
   deleteImg = JSON.parse(deleteImg);
   amenity = JSON.parse(amenity);
@@ -298,13 +307,13 @@ const updateHouse = async (req, res) => {
 
   let updateAmenityData = [];
   for (let i = 0; i < amenity.length; i++) {
-    let temp = [house_id, amenity[i]];
+    let temp = [houseID, amenity[i]];
     updateAmenityData.push(temp);
   }
 
   //update table in RDS
   await houseQuery.updateHouse(
-    house_id,
+    houseID,
     updateHouseData,
     sideImages,
     updateSideImage,
@@ -320,54 +329,21 @@ const updateHouse = async (req, res) => {
 };
 
 const deleteHouse = async (req, res) => {
-  const house_id = req.query.id;
-  const conn = await pool.getConnection();
+  const houseID = req.query.id;
 
   const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
-  const remainBooking = await houseQuery.checkBookingForDelete(house_id, today);
+  const remainBooking = await houseQuery.checkBookingForDelete(houseID, today);
 
   //cannot delete house, if there is booking existing
   if (remainBooking.length !== 0) {
     return res.status(500).json({ status: "still has booking" });
   }
 
-  try {
-    await conn.query("START TRANSACTION");
-    //delete data from image table
-    let [id_list_image] = await conn.query(
-      "SELECT JSON_ARRAYAGG(id) AS id_list FROM image WHERE house_id=?",
-      house_id
-    );
-    id_list_image = id_list_image[0].id_list;
-    await conn.query("DELETE FROM image WHERE id in (?)", [id_list_image]);
-    //delete data from amenity table
-    let [id_list_amenity] = await conn.query(
-      "SELECT JSON_ARRAYAGG(id) AS id_list FROM house_amenity WHERE house_id=?",
-      house_id
-    );
-    id_list_amenity = id_list_amenity[0].id_list;
-    await conn.query("DELETE FROM house_amenity WHERE id in (?)", [
-      id_list_amenity,
-    ]);
-    //delete data from house table
-    await conn.query("DELETE FROM house WHERE id=?", house_id);
+  //delete
+  const images = await houseQuery.deleteHouse(houseID);
+  await util.deleteImageFromS3Multi(images);
 
-    //delete image in S3
-    const [result] = await pool.query(
-      "SELECT a.id, a.image_url AS mainimage_list, b.sideimage_list FROM house a left join (SELECT house_id, JSON_ARRAYAGG(image_url) AS sideimage_list FROM image group by house_id) b ON a.id=b.house_id WHERE a.id=?",
-      house_id
-    );
-    const imageList = [result[0].mainimage_list, ...result[0].sideimage_list];
-    await util.deleteImageFromS3Multi(imageList);
-
-    await conn.query("COMMIT");
-    return res.json({ status: "succeed" });
-  } catch (error) {
-    await conn.query("ROLLBACK");
-    throw error;
-  } finally {
-    await conn.release();
-  }
+  res.json({ status: "succeed" });
 };
 
 const likeHouse = async (req, res) => {
@@ -399,7 +375,7 @@ const getUserFavoriteDetail = async (req, res) => {
   const user_id = req.user.id;
   const houseDetail = await houseQuery.selectUserFavoriteHouseDetail(user_id);
   houseDetail.forEach((house) => {
-    house.image_url = process.env.CLOUDFRONT_DOMAIN + house.image_url;
+    house.image_url = IMAGE_URL_PREFIX + house.image_url;
   });
   res.json(houseDetail);
 };
@@ -426,12 +402,12 @@ const checkBooking = async (req, res) => {
   res.json({ status: bookedResult.includes(id) });
 };
 
-const houseTest = async (req, res) => {
-  let sql = "SELECT * FROM review";
-  const [houses] = await pool.query(sql);
+// const houseTest = async (req, res) => {
+//   let sql = "SELECT * FROM review";
+//   const [houses] = await pool.query(sql);
 
-  res.json(houses);
-};
+//   res.json(houses);
+// };
 
 module.exports = {
   createHouse,
@@ -439,7 +415,7 @@ module.exports = {
   houseSearch,
   houseDatail,
   houseNearby,
-  houseTest,
+  // houseTest,
   selectTrip,
   checkRefund,
   leftreview,

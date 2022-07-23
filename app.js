@@ -186,7 +186,7 @@ io.on("connection", (socket) => {
 
 app.use((error, req, res, next) => {
   console.log("Enter express error handling Middleware");
-  // console.log(error);
+  console.log(error);
   if (error instanceof multer.MulterError) {
     return res.status(403).json({ error: error.message });
   }
