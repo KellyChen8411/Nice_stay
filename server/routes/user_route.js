@@ -23,12 +23,10 @@ router.route("/users/signup").post(
     body("signup_confirmPass")
       .trim()
       .custom((value, { req }) => {
-        // 確認密碼欄位的值需要和密碼欄位的值相符
+        // confirm password
         if (value !== req.body.signup_password) {
-          // 驗證失敗時的錯誤訊息
           throw new Error("兩次輸入的密碼不相同");
         }
-        // 成功驗證回傳 true
         return true;
       }),
   ],

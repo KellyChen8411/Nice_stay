@@ -88,8 +88,8 @@ const addBlackList = async (req, res) => {
 };
 
 const updateUserRole = async (req, res) => {
-  const user_id = req.user.id;
-  await userQuery.updateUserRole(user_id);
+  const userID = req.user.id;
+  await userQuery.updateUserRole(userID);
   //regenerate token
   delete req.user.iat;
   delete req.user.exp;

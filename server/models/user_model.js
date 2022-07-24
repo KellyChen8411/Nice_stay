@@ -20,14 +20,14 @@ userQuery.addBlackList = async (values) => {
   await pool.query(sql, values);
 };
 
-userQuery.updateUserRole = async (user_id) => {
+userQuery.updateUserRole = async (userID) => {
   let sql = "UPDATE user SET user_role=2 WHERE id=?";
-  await pool.query(sql, user_id);
+  await pool.query(sql, userID);
 };
 
-userQuery.checkUserBlacklist = async (landlord_id, renter_id) => {
+userQuery.checkUserBlacklist = async (landlordID, renterID) => {
   let sql = "SELECT * FROM blacklist WHERE landlord_id=? AND renter_id=?";
-  const [result] = await pool.query(sql, [landlord_id, renter_id]);
+  const [result] = await pool.query(sql, [landlordID, renterID]);
   return result;
 };
 

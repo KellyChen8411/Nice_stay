@@ -3,9 +3,9 @@ const axios = require("axios");
 
 const checkoutQuery = {};
 
-checkoutQuery.getLandlordID = async (house_id) => {
+checkoutQuery.getLandlordID = async (houseID) => {
   let sql = "SELECT landlord_id FROM house WHERE id=?";
-  const [result] = await pool.query(sql, house_id);
+  const [result] = await pool.query(sql, houseID);
   return result[0].landlord_id;
 };
 
