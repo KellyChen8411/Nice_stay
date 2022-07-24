@@ -18,7 +18,7 @@ jobs:
         uses: docker-practice/actions-setup-docker@master
       
       - name: check docker version
-        uses: docker version
+        run: docker version
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
