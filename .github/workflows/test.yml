@@ -22,6 +22,9 @@ jobs:
       
       - name: pull mysql docker image
         run: docker pull mysql:8
+      
+      - name: docker run mysql
+        run: docker run --name mysql-con -p 3306:3306 -d -e MYSQL_ROOT_PASSWORD=${{secrets.DB_PASSWORD_TEST_NEW}} mysql:8
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
