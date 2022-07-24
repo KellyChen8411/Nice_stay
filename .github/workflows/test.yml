@@ -20,14 +20,14 @@ jobs:
           set -x
           docker version
 
-      - name: pull mysql docker image
-        run: docker pull mysql:8
+      # - name: pull mysql docker image
+      #   run: docker pull mysql:8
 
-      - name: docker run mysql
-        run: docker run --name mysql-con -p 3306:3306 -d -e MYSQL_ROOT_PASSWORD=${{secrets.DB_PASSWORD_TEST_NEW}} mysql:8
+      # - name: docker run mysql
+      #   run: docker run --name mysql-con -p 3306:3306 -d -e MYSQL_ROOT_PASSWORD=${{secrets.DB_PASSWORD_TEST_NEW}} mysql:8
 
-      -name: import test database into mysql container
-        run: docker exec -i mysql-con mysql -uroot -p${{secrets.DB_PASSWORD_TEST_NEW}} < ./nice_stay_RDS_backup_structure_20220724.sql
+      # -name: import test database into mysql container
+      #   run: docker exec -i mysql-con mysql -uroot -p${{secrets.DB_PASSWORD_TEST_NEW}} < ./nice_stay_RDS_backup_structure_20220724.sql
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
