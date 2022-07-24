@@ -13,10 +13,10 @@ const pool = mysql.createPool({
 
 const poolTest = mysql.createPool({
   connectionLimit: 10,
-  host: process.env.DB_HOST_TEST,
-  user: process.env.DB_USER_TEST,
-  password: process.env.DB_PASSWORD_TEST,
-  database: process.env.DB_DATABASE_TEST,
+  host: process.env.DB_HOST_TEST_NEW,
+  user: process.env.DB_USER_TEST_NEW,
+  password: process.env.DB_PASSWORD_TEST_NEW,
+  database: process.env.DB_DATABASE_TEST_NEW,
   // timezone: 'utc'
 });
 

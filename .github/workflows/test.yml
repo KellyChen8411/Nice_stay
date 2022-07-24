@@ -14,10 +14,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: check current path
-        run: pwd
-      - name: check files 
-        run: ls
+      # - name: check current path
+      #   run: pwd
+      # - name: check files 
+      #   run: ls
+
+      - name: docker run mysql
+        run: |
+          docker pull mysql:8
+          docker run --name mysql-con -p 3306:3306 -d -e MYSQL_ROOT_PASSWORD=${{secrets.DB_PASSWORD_TEST_NEW}} mysql:8
+
+      -name: import test database into mysql container
+        run: docker exec -i mysql-con mysql -uroot -p${{secrets.DB_PASSWORD_TEST_NEW}} < ./nice_stay_RDS_backup_structure_20220724.sql
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -31,4 +39,5 @@ jobs:
         run: npm install
 
       - name: "Run Test"
-        run: NODE_ENV=test API_VERSION=1.0 DB_HOST=${{secrets.DB_HOST}} DB_USER_TEST=${{secrets.DB_USER_TEST}} DB_PASSWORD_TEST=${{secrets.DB_PASSWORD_TEST}} DB_DATABASE_TEST=${{secrets.DB_DATABASE_TEST}} CLOUDFRONT_DOMAIN=${{secrets.CLOUDFRONT_DOMAIN}} mocha --timeout 10000 --exit
+        run: NODE_ENV=test API_VERSION=1.0 DB_HOST_TEST_NEW=${{secrets.DB_HOST_TEST_NEW}} DB_USER_TEST_NEW=${{secrets.DB_USER_TEST_NEW}} DB_PASSWORD_TEST_NEW=${{secrets.DB_PASSWORD_TEST_NEW}} DB_DATABASE_TEST_NEW=${{secrets.DB_DATABASE_TEST_NEW}} CLOUDFRONT_DOMAIN=${{secrets.CLOUDFRONT_DOMAIN}} mocha --timeout 10000 --exit
+        # run: NODE_ENV=test API_VERSION=1.0 DB_HOST=${{secrets.DB_HOST}} DB_USER_TEST=${{secrets.DB_USER_TEST}} DB_PASSWORD_TEST=${{secrets.DB_PASSWORD_TEST}} DB_DATABASE_TEST=${{secrets.DB_DATABASE_TEST}} CLOUDFRONT_DOMAIN=${{secrets.CLOUDFRONT_DOMAIN}} mocha --timeout 10000 --exit
