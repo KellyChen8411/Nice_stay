@@ -14,8 +14,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-        run: pwd
-        run: ls
+      - name: check current path and files 
+      - run: pwd
+      - run: ls
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
@@ -28,8 +29,9 @@ jobs:
       - name: Install package
         run: npm install
 
-        run: pwd
-        run: ls
+      - name: check current path and files2
+      - run: pwd
+      - run: ls
 
       - name: "Run Test"
         run: NODE_ENV=test API_VERSION=1.0 DB_HOST=${{secrets.DB_HOST}} DB_USER_TEST=${{secrets.DB_USER_TEST}} DB_PASSWORD_TEST=${{secrets.DB_PASSWORD_TEST}} DB_DATABASE_TEST=${{secrets.DB_DATABASE_TEST}} CLOUDFRONT_DOMAIN=${{secrets.CLOUDFRONT_DOMAIN}} mocha --timeout 10000 --exit
