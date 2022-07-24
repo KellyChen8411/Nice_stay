@@ -14,9 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: install docker
-        uses: docker-practice/actions-setup-docker@master
-      
       - name: check docker version
         run: docker version
       
