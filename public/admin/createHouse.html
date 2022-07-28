@@ -4,7 +4,7 @@
     <title>Nice Stay</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/x-icon" href="../images/Nlogo2.jpg" />
+    <link rel="icon" type="image/x-icon" href="../images/NlogoFavIcon.png" />
     <link rel="stylesheet" href="../css/basic_nav_footer_loadlord.css" />
     <link rel="stylesheet" href="../css/jquery-ui.min.css" />
     <link rel="stylesheet" href="../css/semantic.min.css" />
@@ -42,7 +42,7 @@
             <div class="houseDatail_item">
               <h4>標題</h4>
               <div class="field">
-                <input id="title" type="text" name="title" />
+                <input id="title" type="text" name="title" required="required"/>
               </div>
             </div>
 
@@ -78,12 +78,12 @@
                 </div>
                 <div class="field">
                   <label>地區</label>
-                  <input id="region" type="text" name="region" />
+                  <input id="region" type="text" name="region" required="required"/>
                 </div>
               </div>
 
               <div class="field">
-                <input type="text" name="address" id="address" />
+                <input type="text" name="address" id="address" required="required"/>
               </div>
             </div>
 
@@ -112,6 +112,7 @@
                       name="people_count"
                       class="config_input"
                       value="1"
+                      required="required"
                     />
                     <div class="add_btn" data-type="0">+</div>
                   </div>
@@ -125,6 +126,7 @@
                       name="bed_count"
                       class="config_input"
                       value="1"
+                      required="required"
                     />
                     <div class="add_btn" data-type="1">+</div>
                   </div>
@@ -138,6 +140,7 @@
                       name="room_count"
                       class="config_input"
                       value="1"
+                      required="required"
                     />
                     <div class="add_btn" data-type="2">+</div>
                   </div>
@@ -151,6 +154,7 @@
                       name="bathroom_count"
                       class="config_input"
                       value="1"
+                      required="required"
                     />
                     <div class="add_btn" data-type="3">+</div>
                   </div>
@@ -168,6 +172,7 @@
                       name="price"
                       id="room_price"
                       class="roomprice_input"
+                      required="required"
                     />
                   </div>
                   <div class="priceSlider_con">
@@ -181,6 +186,7 @@
                       name="tax_percentage"
                       id="tax_fee"
                       class="roomprice_input"
+                      required="required"
                     />
                   </div>
                   <div class="priceSlider_con">
@@ -194,6 +200,7 @@
                       name="cleanfee_percentage"
                       id="clean_fee"
                       class="roomprice_input"
+                      required="required"
                     />
                   </div>
                   <div class="priceSlider_con">
@@ -347,7 +354,7 @@
           <div class="image_con">
             <h2>
               照片&nbsp&nbsp<small style="color: gray"
-                >檔案大小限制:500MB/張</small
+                >檔案大小限制:500KB/張</small
               >
             </h2>
             <div class="main_imge">
@@ -360,6 +367,7 @@
                     type="file"
                     onchange="readURL(this, 0);"
                     accept="image/*"
+                    required="required"
                   />
                   <div class="drag-text">
                     <h3>封面照片</h3>
@@ -401,6 +409,7 @@
                       type="file"
                       onchange="readURL(this, 1);"
                       accept="image/*"
+                      required="required"
                     />
                     <div class="drag-text">
                       <h3>拖拉或選擇檔案</h3>
@@ -441,6 +450,7 @@
                       type="file"
                       onchange="readURL(this, 2);"
                       accept="image/*"
+                      required="required"
                     />
                     <div class="drag-text">
                       <h3>拖拉或選擇檔案</h3>

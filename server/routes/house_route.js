@@ -3,7 +3,7 @@ const util = require("../../util/util");
 const multer = require("multer");
 let upload = multer({
   limits: {
-    // 限制上傳檔案的大小為 500MB
+    // 限制上傳檔案的大小為 500KB
     fileSize: 500000,
   },
 });

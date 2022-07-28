@@ -62,6 +62,12 @@ function renderData(house) {
   clone.find("p:nth-child(3)").text(`建立時間: ${create_time}`);
   clone.find("p:nth-child(4)").text(`最近更新時間: ${update_time}`);
   clone.find("button").attr("data-houseid", house.id);
+  clone
+    .find("a")
+    .attr(
+      "href",
+      `/detail.html?id=${house.house_id}&startDate=&endDate=&people_count=`
+    );
   clone.removeAttr("style");
 }
 
