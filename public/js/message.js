@@ -163,6 +163,9 @@ $("button").click(sendMessage);
 
 function sendMessage() {
   let content = $("#msg").val();
+  if(content === ''){
+    return
+  }
   $("#msg").val("");
   const created_at = Date.now();
   socket.emit("privateMessage", {
