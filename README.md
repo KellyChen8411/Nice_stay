@@ -105,6 +105,10 @@ https://user-images.githubusercontent.com/41458099/181506240-65674af6-9643-4066-
 
 https://user-images.githubusercontent.com/41458099/181507035-6decb433-1b35-4fa7-bf48-7cb31d82842d.mp4
 
+### 3. Common Features
+- Real-time communication platform
+
+https://user-images.githubusercontent.com/41458099/181516770-f7ad96b7-03f0-475f-a0bd-eaf36546d11d.mp4
 
 ## Contact
 * **Author:** <a href="https://github.com/KellyChen8411" target="_blank">Hsin-Tzu, Chen</a>
