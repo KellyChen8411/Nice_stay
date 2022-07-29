@@ -8,19 +8,19 @@ enables guests to connect with communities in a more authentic way.
 **Test Accounts:**
 
 - Guest
-  - email: test1@test.com
+  - email: <span>demo_host</span>@test.com
   - password: 123456
 
 - Host
-  - email: test2@test.com
+  - email: <span>demo_guest</span>@test.com
   - password: 123456
 
 ## Table of content
-- [Technologies](#Technologies)
-- [Architecture](#Architecture)
-- [Database Schema](#the-header)
-- [Features](#the-header)
-- [Contact](#the-header)
+- [Technologies](#technologies)
+- [Architecture](#architecture)
+- [Database Schema](#database-schema)
+- [Features](#features)
+- [Contact](#contact)
 
 ## Technologies
 ### Back-End
@@ -32,10 +32,8 @@ enables guests to connect with communities in a more authentic way.
 ### Front-End
 - HTML
 - CSS
-- JavaScript
 - JavaScript + AJAX + jQuery
 - jQuery UI
-- moment.js
 ### Cloud Service (AWS)
 - Elastic Compute Cloud (EC2)
 - Simple Storage Service (S3)
@@ -60,8 +58,60 @@ enables guests to connect with communities in a more authentic way.
 - Agile: Trello (SCRUM)
 
 ## Architecture
-### CI/CD
-![CI/CD](https://d278985kbhjfo4.cloudfront.net/CICD_new.png)
-### Back-End System
-![Back-End System](https://d278985kbhjfo4.cloudfront.net/backendSystem.png)
+### **CI/CD**
+![CICD](https://user-images.githubusercontent.com/41458099/181502502-855b030b-857f-436e-a33e-773b684d3a25.png)
+### **Back-End System**
+![backendSystem](https://user-images.githubusercontent.com/41458099/181502550-05b5779b-9537-409f-98f5-1caff65fe50e.png)
+
+## Database Schema
+![dbSchema](https://user-images.githubusercontent.com/41458099/181502399-f277a577-988b-4dbd-a8bb-270827a8d9e9.png)
+
+## Features
+### 1. Guest Features
+- General and detailed search
+  - Search options can be composited flexibly
+  - Get six houses per time by paging to accelarate content delivery
+ 
+https://user-images.githubusercontent.com/41458099/181503406-b6a10c25-4c4a-4d8d-80f7-243417511a7a.mp4
+
+- User friendly design to help find ideal accommodation
+  - Booking cancellation time will be adjust based on time zone
+  - Customized date picker for every house by disabling booked date
+  - Displayed nearby services and facilities
+
+https://user-images.githubusercontent.com/41458099/181504850-845ab69d-1338-4c8b-a747-25b6c14e5531.mp4
+
+
+- Book or cancel accommodation
+  - Hosts will get message from guests when their houses are booked or canceled
+
+https://user-images.githubusercontent.com/41458099/181504900-ccee96f1-199f-4589-9715-9f3bc4956c65.mp4
+
+- Leave comments or rating
+  - One booking can leave comment only once
+
+https://user-images.githubusercontent.com/41458099/181505529-49b2ab12-cc3f-444d-8b86-34dcdedde66b.mp4
+
+### 2. Host Features
+- Create, edit, and delete house
+  - Images are stored on AWS S3 
+  - When edit or delete, unused images will be deleted on S3 simultaneously
+  - House cannot be deleted when there is booking existing
+
+https://user-images.githubusercontent.com/41458099/181506240-65674af6-9643-4066-9246-0c91b3985a6a.mp4
+
+- Blacklist mechanism
+  - Guest in blacklist cannot book houses of the host
+
+https://user-images.githubusercontent.com/41458099/181507035-6decb433-1b35-4fa7-bf48-7cb31d82842d.mp4
+
+### 3. Common Features
+- Real-time communication platform
+
+https://user-images.githubusercontent.com/41458099/181516770-f7ad96b7-03f0-475f-a0bd-eaf36546d11d.mp4
+
+## Contact
+* **Author:** <a href="https://github.com/KellyChen8411" target="_blank">Hsin-Tzu, Chen</a>
+* **Email:** kellychen841106@gmail.com
+
 
