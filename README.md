@@ -7,11 +7,11 @@ enables guests to connect with communities in a more authentic way.
 
 **Test Accounts:**
 
-- Guest
+- Host
   - email: <span>demo_host</span>@test.com
   - password: 123456
 
-- Host
+- Guest
   - email: <span>demo_guest</span>@test.com
   - password: 123456
 
@@ -24,34 +24,21 @@ enables guests to connect with communities in a more authentic way.
 
 ## Technologies
 ### Back-End
-- Node.js
-- Express
-- Linux
-- Nginx
-- Docker
+- Node.js, Express, Linux, Nginx, Docker
 ### Front-End
-- HTML
-- CSS
-- JavaScript + AJAX + jQuery
-- jQuery UI
+- HTML, CSS, JavaScript, AJAX, jQuery, jQuery UI
 ### Cloud Service (AWS)
-- Elastic Compute Cloud (EC2)
-- Simple Storage Service (S3)
-- Relational Database Service (RDS)
-- CloudFront
+- Elastic Compute Cloud (EC2), Simple Storage Service (S3), Relational Database Service (RDS), CloudFront
 ### Database
 - MySQL
 ### WebSocket
 - Socket.IO
 ### Test
-- Mocha
-- Chai
-- Sinon
+- Mocha, Chai, Sinon
 ### CI / CD
 - GitHub Actions
 ### Networking
-- HTTP & HTTPS
-- Domain Name System
+- HTTP & HTTPS, Domain Name System
 ### Others
 - Design Pattern: MVC
 - Version Control: Git, GitHub, Docker Hub
@@ -70,12 +57,12 @@ enables guests to connect with communities in a more authentic way.
 ### 1. Guest Features
 - General and detailed search
   - Search options can be composited flexibly
-  - Get six houses per time by paging to accelarate content delivery
+  - Get six houses per time by paging to accelerate content delivery
  
 https://user-images.githubusercontent.com/41458099/181503406-b6a10c25-4c4a-4d8d-80f7-243417511a7a.mp4
 
-- User friendly design to help find ideal accommodation
-  - Booking cancellation time will be adjust based on time zone
+- User-friendly design
+  - Adjusted booking cancellation time based on time zone
   - Customized date picker for every house by disabling booked date
   - Displayed nearby services and facilities
 
@@ -83,11 +70,11 @@ https://user-images.githubusercontent.com/41458099/181504850-845ab69d-1338-4c8b-
 
 
 - Book or cancel accommodation
-  - Hosts will get message from guests when their houses are booked or canceled
+  - Hosts will get messages from guests when their houses are booked or canceled
 
 https://user-images.githubusercontent.com/41458099/181504900-ccee96f1-199f-4589-9715-9f3bc4956c65.mp4
 
-- Leave comments or rating
+- Leave comments or ratings
   - One booking can leave comment only once
 
 https://user-images.githubusercontent.com/41458099/181505529-49b2ab12-cc3f-444d-8b86-34dcdedde66b.mp4
@@ -95,13 +82,13 @@ https://user-images.githubusercontent.com/41458099/181505529-49b2ab12-cc3f-444d-
 ### 2. Host Features
 - Create, edit, and delete house
   - Images are stored on AWS S3 
-  - When edit or delete, unused images will be deleted on S3 simultaneously
-  - House cannot be deleted when there is booking existing
+  - When editing or deleting, unused images will be deleted on S3 simultaneously
+  - House cannot be deleted when there is any booking existing
 
 https://user-images.githubusercontent.com/41458099/181506240-65674af6-9643-4066-9246-0c91b3985a6a.mp4
 
 - Blacklist mechanism
-  - Guest in blacklist cannot book houses of the host
+  - Guests blacklisted by hosts cannot book their houses
 
 https://user-images.githubusercontent.com/41458099/181507035-6decb433-1b35-4fa7-bf48-7cb31d82842d.mp4
 
