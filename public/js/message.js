@@ -160,12 +160,18 @@ function renderMessage(message_list) {
 }
 
 $("button").click(sendMessage);
+// $("#msg").keypress(sendMessage);
 
 function sendMessage() {
   let content = $("#msg").val();
   if(content === ''){
     return
   }
+  if(content.replace(/\s/g, '') === ''){
+    $("#msg").val("");
+    return
+  }
+
   $("#msg").val("");
   const created_at = Date.now();
   socket.emit("privateMessage", {

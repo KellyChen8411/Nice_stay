@@ -30,7 +30,7 @@ submitForm.submit(getToken);
 async function getToken(e) {
   e.preventDefault();
   let actionType = e.target.dataset.type;
-  console.log(actionType);
+  
   let data = new FormData(submitForm[0]);
   let URL;
   if (actionType === "signin") {

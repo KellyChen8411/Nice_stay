@@ -165,7 +165,7 @@ async function createHouse(e) {
               headers,
             });
             const newtokenResult = await newTokenRes.json();
-            console.log(newtokenResult);
+            
             if (newTokenRes.status === 200) {
               localStorage.setItem("token", newtokenResult.new_token);
             }

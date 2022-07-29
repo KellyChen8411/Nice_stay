@@ -3,7 +3,7 @@ var citys_list = $("#area");
 async function fetchCityData() {
   let cityDatas = await fetch("/api/1.0/citys/all");
   cityDatas = await cityDatas.json();
-  console.log(cityDatas);
+  
   renderCityData(cityDatas);
 }
 

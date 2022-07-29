@@ -235,11 +235,7 @@ async function buttonAction(e) {
       $("#review_landlord").text(landlordInfo);
       modal.style.display = "block";
 
-      // $('#review_outter').toggleClass("DSHide", false);
-      // let widthPosition = e.target.getBoundingClientRect().left + 200;
-      // let scrollHeight = $(window).scrollTop() + 100;
-      // console.log(e.target.getBoundingClientRect().left)
-      // $('#review_outter').attr("style", `top: ${scrollHeight}px; left:${widthPosition}px`)
+
     } else if (buttonType === "重新預定") {
       window.location.href = `/detail.html?id=${house_id}`;
     } else if (buttonType === "連絡房東") {

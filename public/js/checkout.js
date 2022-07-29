@@ -46,7 +46,7 @@ async function checkOut() {
 
   TPDirect.card.getPrime(async function (result) {
     if (result.status !== 0) {
-      // console.err('getPrime error');
+      
       alert("付款失敗");
       return;
     }
@@ -85,7 +85,7 @@ async function checkOut() {
 
     let fetchStatus = resultFetch.status;
     let finalResult = await resultFetch.json();
-    console.log(finalResult);
+    
     if (fetchStatus === 200) {
       let sendEmailInfo = finalResult;
       sendEmailInfo = JSON.stringify(sendEmailInfo);
@@ -124,7 +124,7 @@ async function checkOut() {
         (response) => {
           if (response === "ok") {
             alert(
-              `感謝預定\n您的預訂編號為${finalResult.orderNum}\n已將預訂詳情寄至您的email\n`
+              `感謝預定\n您的預訂編號為${finalResult.orderNum}`
             );
             window.location.href = "/trip.html";
           }

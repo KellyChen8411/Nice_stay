@@ -23,11 +23,11 @@ async function checkForLogin() {
     $("#logoutBtn").click(Logout);
 
     if (finalResult.role === 2) {
-      console.log($("#landlordContainer").text());
+      
       $("#landlordContainer").text("切換至出租模式");
     }
     if (window.location.pathname === "/") {
-      console.log("update token");
+      
       //update token
       localStorage.setItem("token", finalResult.new_token);
     }
