@@ -1,5 +1,6 @@
 const params = new URLSearchParams(window.location.search);
 let checkout = params.get("checkout");
+let demo = params.get("demo");
 
 let submitForm = $("#submitform");
 $("#SignIn_btn").click(showSignInForm);
@@ -59,4 +60,13 @@ async function getToken(e) {
   } else {
     alert(finalResult.error);
   }
+}
+
+//for demo
+if(demo === "host"){
+  $("input[name=signin_email]").val('demo_host@test.com');
+  $("input[name=signin_password]").val('123456');
+}else if(demo === "guest"){
+  $("input[name=signin_email]").val('demo_guest@test.com');
+  $("input[name=signin_password]").val('123456');
 }
