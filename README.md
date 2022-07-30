@@ -15,6 +15,12 @@ enables guests to connect with communities in a more authentic way.
   - email: <span>demo_guest</span>@test.com
   - password: 123456
 
+**One-Click Login:**
+
+Automatically fill out email and password for test accounts 
+  - [Host](https://nicestay.life/login.html?demo=host)
+  - [Guest](https://nicestay.life/login.html?demo=guest)
+
 ## Table of content
 - [Technologies](#technologies)
 - [Architecture](#architecture)
@@ -45,10 +51,11 @@ enables guests to connect with communities in a more authentic way.
 - Agile: Trello (SCRUM)
 
 ## Architecture
-### **CI/CD**
-![CICD](https://user-images.githubusercontent.com/41458099/181502502-855b030b-857f-436e-a33e-773b684d3a25.png)
 ### **Back-End System**
 ![backendSystem](https://user-images.githubusercontent.com/41458099/181502550-05b5779b-9537-409f-98f5-1caff65fe50e.png)
+
+### **CI/CD**
+![CICD](https://user-images.githubusercontent.com/41458099/181502502-855b030b-857f-436e-a33e-773b684d3a25.png)
 
 ## Database Schema
 ![dbSchema](https://user-images.githubusercontent.com/41458099/181502399-f277a577-988b-4dbd-a8bb-270827a8d9e9.png)
@@ -72,12 +79,8 @@ https://user-images.githubusercontent.com/41458099/181504850-845ab69d-1338-4c8b-
 - Book or cancel accommodation
   - Hosts will get messages from guests when their houses are booked or canceled
 
-https://user-images.githubusercontent.com/41458099/181504900-ccee96f1-199f-4589-9715-9f3bc4956c65.mp4
-
 - Leave comments or ratings
   - One booking can leave comment only once
-
-https://user-images.githubusercontent.com/41458099/181505529-49b2ab12-cc3f-444d-8b86-34dcdedde66b.mp4
 
 ### 2. Host Features
 - Create, edit, and delete house
@@ -89,8 +92,6 @@ https://user-images.githubusercontent.com/41458099/181506240-65674af6-9643-4066-
 
 - Blacklist mechanism
   - Guests blacklisted by hosts cannot book their houses
-
-https://user-images.githubusercontent.com/41458099/181507035-6decb433-1b35-4fa7-bf48-7cb31d82842d.mp4
 
 ### 3. Common Features
 - Real-time communication platform
