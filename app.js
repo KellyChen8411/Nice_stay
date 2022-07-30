@@ -25,23 +25,19 @@ app.use("/api/" + process.env.API_VERSION, [
 //socket.io
 io.on("connection", (socket) => {
   let user_room;
-  let owner_id; //聊天室owner的user id
-  let owner_role; //聊天室owner的role (renter or landlord)
+  let owner_id; //user id for chatroom owner
+  let owner_role; //role for chatroom owner (renter or landlord)
   let sql;
-  console.log(`a user connected id:${socket.id}`);
 
   //user join room
   socket.on("user_join", async (userInfo, callback) => {
     user_room = userInfo.user_room;
     socket.join(userInfo.user_room);
-    // socket.role = user_room;
-    console.log(`User join room: ${userInfo.user_room}`);
-    // console.log(io.sockets.adapter.rooms.get(user_room).size);
-    //取與使用者聊天過的其他人
+
+    //get users in chat room
     const owner = userInfo.user_room.split("_");
     owner_id = owner[0];
     owner_role = owner[1];
-    // sql = "SELECT b.name as user_name, c.receiver_id FROM  user b right join (SELECT distinct a.receiver_id FROM (SELECT receiver_id as receiver_id FROM message WHERE sender_id=? AND sender_role=? union all SELECT sender_id as receiver_id FROM message WHERE receiver_id=? AND receiver_role=?) a) c ON b.id=c.receiver_id";
     sql =
       "select y.*, z.read_status FROM (SELECT b.name as user_name, c.receiver_id FROM  user b right join (SELECT distinct a.receiver_id FROM (SELECT receiver_id as receiver_id FROM message WHERE sender_id=? AND sender_role=? union all SELECT sender_id as receiver_id FROM message WHERE receiver_id=? AND receiver_role=?) a) c ON b.id=c.receiver_id) y left join (SELECT sender_id, count(*) read_status FROM message WHERE receiver_id=? and receiver_role=? and status=0 group by sender_id) z ON y.receiver_id=z.sender_id";
     const [receiver] = await pool.query(sql, [
@@ -52,14 +48,10 @@ io.on("connection", (socket) => {
       owner_id,
       owner_role,
     ]);
-    // if(owner_role === '1'){
 
-    // }else{
-
-    // }
-    //取與第一個user的聊天紀錄
+    //get messages with first user in chat room
     if (receiver.length === 0) {
-      //若無聊天紀錄
+      //no message
       return callback({ receiver });
     } else {
       let talker_id = receiver[0].receiver_id;
@@ -104,7 +96,7 @@ io.on("connection", (socket) => {
       owner_name,
       created_at,
     } = messageInfo;
-    //將訊息存進資料庫
+    //save message in DB
     sql =
       "INSERT INTO message (sender_id, receiver_id, content, sender_role, receiver_role, status, created_at) VALUES (?,?,?,?,?,0,?)";
     let [insertMsg] = await pool.query(sql, [
@@ -116,8 +108,8 @@ io.on("connection", (socket) => {
       created_at,
     ]);
     let insertMsgID = insertMsg.insertId;
-    //發訊息給對方
-    console.log(`send message to user in room: ${talker_id}_${talker_role}`);
+    //send message to talker
+    
     socket.to(`${talker_id}_${talker_role}`).emit("privateMessage", {
       sender_name: owner_name,
       sender_id: owner_id,
@@ -138,7 +130,7 @@ io.on("connection", (socket) => {
       owner_name,
       created_at,
     } = messageInfo;
-    //將訊息存進資料庫
+    //save message in DB
     sql =
       "INSERT INTO message (sender_id, receiver_id, content, sender_role, receiver_role, status, created_at) VALUES (?,?,?,?,?,0,?)";
     let [insertMsg] = await pool.query(sql, [
@@ -150,8 +142,7 @@ io.on("connection", (socket) => {
       created_at,
     ]);
     let insertMsgID = insertMsg.insertId;
-    //發訊息給對方
-    console.log(`send message to user in room: ${talker_id}_${talker_role}`);
+    //send message to talker
     socket.to(`${talker_id}_${talker_role}`).emit("privateMessage", {
       sender_name: owner_name,
       sender_id: owner_id,
@@ -162,13 +153,13 @@ io.on("connection", (socket) => {
     callback("ok");
   });
 
-  //現場更新訊息為已讀
+  //mark message as read when receiver is now in the window with sender
   socket.on("readMessage", async (insertMsgID) => {
     sql = `UPDATE message SET status=1 WHERE id=${insertMsgID}`;
     await pool.query(sql, insertMsgID);
   });
 
-  //後續更新訊息為已讀
+  //mark message as read after receiver click in the window with sender
   socket.on("readAllMessage", async (updateInfo) => {
     let { owner_id, talker_id, owner_role } = updateInfo;
     sql =
