@@ -18,8 +18,8 @@ enables guests to connect with communities in a more authentic way.
 **One-Click Login:**
 
 Automatically fill out email and password for test accounts 
-  - [Host](https://nicestay.life/login.html?demo=host)
-  - [Guest](https://nicestay.life/login.html?demo=guest)
+  - <a href="https://nicestay.life/login.html?demo=host" target="_blank">Host</a>
+  - <a href="https://nicestay.life/login.html?demo=guest" target="_blank">Guest</a>
 
 ## Table of content
 - [Technologies](#technologies)
@@ -75,7 +75,6 @@ https://user-images.githubusercontent.com/41458099/181503406-b6a10c25-4c4a-4d8d-
 
 https://user-images.githubusercontent.com/41458099/181504850-845ab69d-1338-4c8b-a747-25b6c14e5531.mp4
 
-
 - Book or cancel accommodation
   - Hosts will get messages from guests when their houses are booked or canceled
 
@@ -88,15 +87,14 @@ https://user-images.githubusercontent.com/41458099/181504850-845ab69d-1338-4c8b-
   - When editing or deleting, unused images will be deleted on S3 simultaneously
   - House cannot be deleted when there is any booking existing
 
-https://user-images.githubusercontent.com/41458099/181506240-65674af6-9643-4066-9246-0c91b3985a6a.mp4
+https://user-images.githubusercontent.com/41458099/181877061-ad1443b9-9b2a-4969-9ba0-64b4dc39d27d.mp4
 
 - Blacklist mechanism
   - Guests blacklisted by hosts cannot book their houses
 
 ### 3. Common Features
 - Real-time communication platform
-
-https://user-images.githubusercontent.com/41458099/181516770-f7ad96b7-03f0-475f-a0bd-eaf36546d11d.mp4
+![C1](https://user-images.githubusercontent.com/41458099/181876938-cda852ad-de8e-44a1-b242-3c1a428d7fda.gif)
 
 ## Contact
 * **Author:** <a href="https://github.com/KellyChen8411" target="_blank">Hsin-Tzu, Chen</a>
