@@ -36,8 +36,6 @@ a {
   padding: 5px 15px;
   background: #b3225c;
   color: #fff;
-  /* background: var(--light-color);
-	color: var(--dark-color-a); */
   border: 0;
   font-size: 17px;
 }
@@ -129,10 +127,13 @@ a {
   color: #777;
 }
 
+.message{
+  white-space: pre-line;
+}
+
 .chat-form-container {
   border-top: 1px solid #ede1e1;
   padding: 20px 30px;
-  /* background-color: var(--dark-color-a); */
 }
 
 .chat-form-container form {

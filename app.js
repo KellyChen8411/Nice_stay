@@ -170,13 +170,16 @@ io.on("connection", (socket) => {
     await pool.query(sql, [unreadmsg_id]);
   });
 
-  socket.on("disconnect", () => {
-    console.log(`user disconnected. id: ${user_room}`);
-  });
+});
+
+//404 page not found
+app.use(function(req, res) {
+  res.status(404).redirect('/notfound.html')
 });
 
 app.use((error, req, res, next) => {
   console.log("Enter express error handling Middleware");
+  console.log(error);
   if (error instanceof multer.MulterError) {
     return res.status(403).json({ error: error.message });
   }
