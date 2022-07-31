@@ -6,7 +6,7 @@ let headers = {
   Authorization: `Bearer ${token}`,
 };
 
-/////////////log out function
+//log out function
 function Logout() {
   localStorage.removeItem("token");
   window.location.href = "/";
@@ -52,13 +52,13 @@ function renderData(house) {
   let clone = $("#trip_con").clone().appendTo(trip_inner);
   clone.find("img").attr("src", house.image_url);
   clone.find("h4").text(`${house.city_name} ${house.title}`);
-  // clone.find("h4").attr('id', `houseName${house.house_id}`);
+  
   clone
     .find("p:nth-child(2)")
     .text(
       `${house.people_count}位.${house.room_count}間臥室.${house.bed_count}張床.${house.bathroom_count}間衛浴`
     );
-  // clone.find("p:nth-child(2)").attr('id', `landLordName${house.house_id}`);
+  
   clone.find("p:nth-child(3)").text(`建立時間: ${create_time}`);
   clone.find("p:nth-child(4)").text(`最近更新時間: ${update_time}`);
   clone.find("button").attr("data-houseid", house.id);
@@ -66,7 +66,7 @@ function renderData(house) {
     .find("a")
     .attr(
       "href",
-      `/detail.html?id=${house.house_id}&startDate=&endDate=&people_count=`
+      `/detail.html?id=${house.id}&startDate=&endDate=&people_count=`
     );
   clone.removeAttr("style");
 }
@@ -77,9 +77,7 @@ $("#trip_inner").click(buttonAction);
 async function buttonAction(e) {
   if (e.target.nodeName === "BUTTON") {
     let buttonType = e.target.innerText;
-    // let booking_id = e.target.dataset.bookingid;
     let house_id = e.target.dataset.houseid;
-    // let renter_id = e.target.dataset.renterid;
 
     if (buttonType === "編輯房源") {
       window.location.href = `/admin/createHouse.html?edit=${true}&id=${house_id}`;
