@@ -14,7 +14,7 @@ let headers = {
 let modalMsg = document.getElementById("myModal_msg");
 let closeModal = document.getElementsByClassName("close_msg")[0];
 
-/////////////log out function
+//log out function
 function Logout() {
   localStorage.removeItem("token");
   window.location.href = "/";
