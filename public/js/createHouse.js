@@ -1,3 +1,5 @@
+let regionDatas;
+
 //config area (count)
 $("#config_con").click(changeConfigCount);
 
@@ -94,11 +96,15 @@ function alertStatus() {
 }
 
 //render city
-var citys_list = $("#city");
+let citys_list = $("#city");
+let regions_list = $("#region");
 async function fetchCityData() {
   let cityDatas = await fetch("/api/1.0/citys/all");
   cityDatas = await cityDatas.json();
   renderCityData(cityDatas);
+  //get region data for rendering later
+  regionDatas = await fetch("/api/1.0/citys/region");
+  regionDatas = await regionDatas.json();
 }
 function renderCityData(datas) {
   datas.map((data) => {
@@ -107,7 +113,25 @@ function renderCityData(datas) {
     citys_list.append(new_option);
   });
 }
+function renderRegionData(datas) {
+  datas.map((data) => {
+    let new_option = $(`<option>${data}</option>`);
+    new_option.attr("value", data);
+    regions_list.append(new_option);
+  });
+}
 fetchCityData();
+//render regions when city changed
+$("#city").change(function(e){
+  regions_list.html('');
+  let selectedIndex = parseInt($("#city").val());
+  if($("#city").val() >= 9){
+    selectedIndex --;
+  }
+  let city_name = $("#city")[0].options[selectedIndex].text;
+  let regions = regionDatas[city_name];
+  renderRegionData(regions);
+})
 
 //送出建立資料
 
@@ -159,9 +183,13 @@ async function createHouse(e) {
 
   //transfer address to geolocation
   //concate address
-  let city_id = data.get("city_id");
+  let city_id = parseInt(data.get("city_id"));
+  if(city_id >= 9){
+    city_id --;
+  }
   let city = $("#city")[0].options[city_id].text;
-  let address = `${city}市${data.get("region")}區${data.get("address")}`;
+  // let address = `${city}市${data.get("region")}區${data.get("address")}`;
+  let address = `${city}${data.get("region")}${data.get("address")}`;
   data.set("address", address);
   let geocoder = new google.maps.Geocoder();
   geocoder.geocode(

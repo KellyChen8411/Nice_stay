@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const util = require("../../util/util");
 
-const { selectAllCity } = require("../controllers/city_controller");
+const { selectAllCity, selectAllRegion } = require("../controllers/city_controller");
 
 router.route("/citys/all").get(util.wrapAsync(selectAllCity));
+router.route("/citys/region").get(util.wrapAsync(selectAllRegion));
 
 module.exports = router;
