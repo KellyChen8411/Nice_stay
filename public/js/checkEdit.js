@@ -15,6 +15,7 @@ let headers = {
 };
 
 if (isedit !== null) {
+  alert("溫馨提醒: 除地址外的資訊皆可修改");
   getHistroyData(house_id);
 }
 

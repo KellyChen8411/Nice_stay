@@ -93,6 +93,22 @@ function alertStatus() {
   }
 }
 
+//render city
+var citys_list = $("#city");
+async function fetchCityData() {
+  let cityDatas = await fetch("/api/1.0/citys/all");
+  cityDatas = await cityDatas.json();
+  renderCityData(cityDatas);
+}
+function renderCityData(datas) {
+  datas.map((data) => {
+    let new_option = $(`<option>${data.name}</option>`);
+    new_option.attr("value", data.id);
+    citys_list.append(new_option);
+  });
+}
+fetchCityData();
+
 //送出建立資料
 
 let submitForm = $("#submitForm");
@@ -100,6 +116,11 @@ let submitForm = $("#submitForm");
 submitForm.submit(createHouse);
 
 async function createHouse(e) {
+  e.preventDefault();
+  let userDecision = confirm("若地址輸入不精確\n將會從您所輸入的資訊找尋大約位置\n請再次確認地址\n送出後將無法再修改地址");
+  if(!userDecision){
+    return
+  }
   //確認字數
   if(calculateStringLength($("textarea").val()) > 1000){
     alert("房源描述超過字數限制");
@@ -118,7 +139,7 @@ async function createHouse(e) {
     },
   });
 
-  e.preventDefault();
+
   let data = new FormData(submitForm[0]);
   //check facility
   data.append("amenity", JSON.stringify([...facilityList.keys()]));
@@ -166,6 +187,7 @@ async function createHouse(e) {
         let finalResult = await featchResponse.json();
         $.unblockUI();
         if(fetchStatus === 413){
+          $.unblockUI();
           alert(`建立失敗,原因: 照片檔案過大`);
           return
         }
@@ -267,6 +289,7 @@ async function sendEditData(e) {
     });
     let fetchStatus = featchResponse.status;
     if(fetchStatus === 413){
+      $.unblockUI();
       alert(`編輯失敗,原因: 照片檔案過大`);
       return
     }
