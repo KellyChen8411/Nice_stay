@@ -282,21 +282,19 @@ submitForm.submit(sendReview);
 
 async function sendReview(e) {
   e.preventDefault();
-  // let reviewInfo = {
-  //   house_id: e.target.dataset.houseid,
-  //   landlord_id:
-  // }
+
   let landlord_rate = landLordRating.getRating();
   let house_rate = houseRating.getRating();
+  let review_content = $("textarea").val().replace(/\n+/g, '\n').replaceAll('\n', ' ').trim();
   if (landlord_rate === null || house_rate === null) {
     alert("請填寫完整!");
-  } else if ($("textarea").val().length > 100) {
+  } else if (review_content.length > 100) {
     alert("評論超過字數限制");
   } else {
     //left review
     let review_info = {
       booking_id: e.target.dataset.bookingid,
-      comment: $("textarea").val(),
+      comment: review_content,
       house_rate,
       landlord_rate,
       created_at: Date.now(),
