@@ -15,6 +15,11 @@ function changeConfigCount(e) {
   }
 }
 
+function calculateStringLength(str){ 
+  str = str.replaceAll('\n', '');
+	return str.replace(/[^\x00-\xff]/g,"xx").length;
+}
+
 //price area
 $(function () {
   $("#price_slider").slider({
@@ -95,6 +100,11 @@ let submitForm = $("#submitForm");
 submitForm.submit(createHouse);
 
 async function createHouse(e) {
+  //確認字數
+  if(calculateStringLength($("textarea").val()) > 1000){
+    alert("房源描述超過字數限制");
+    return
+  }
   //等待畫面
   $.blockUI({
     message: "房源建立中，請稍後",
@@ -112,6 +122,8 @@ async function createHouse(e) {
   let data = new FormData(submitForm[0]);
   //check facility
   data.append("amenity", JSON.stringify([...facilityList.keys()]));
+  //clean white space for description
+  data.set("description", $("textarea").val().replace(/\n+/g, '\n').trim());
   //clean unit for price
   data.set("price", data.get("price").slice(1));
   data.set("tax_percentage", data.get("tax_percentage").slice(0, -1));
@@ -153,6 +165,10 @@ async function createHouse(e) {
         let fetchStatus = featchResponse.status;
         let finalResult = await featchResponse.json();
         $.unblockUI();
+        if(fetchStatus === 413){
+          alert(`建立失敗,原因: 照片檔案過大`);
+          return
+        }
         if (fetchStatus === 200) {
           alert(`建立成功，您的房源編號是${finalResult.house_id}`);
           if (user_role === 2) {
@@ -200,6 +216,12 @@ async function sendEditData(e) {
   let lackOfUpload = false;
   e.preventDefault();
 
+   //確認字數
+   if(calculateStringLength($("textarea").val()) > 1000){
+    alert("房源描述超過字數限制");
+    return
+  }
+
   //確認被刪除的照片是否上傳
   let deleteImgIndex = Object.keys(deleteImgList);
   deleteImgIndex.forEach((imgindex, index) => {
@@ -215,6 +237,8 @@ async function sendEditData(e) {
     let data = new FormData(submitForm[0]);
     data.append("deleteImg", JSON.stringify(deleteImgList));
     data.append("amenity", JSON.stringify([...facilityList.keys()]));
+    //clean white space for description
+    data.set("description", $("textarea").val().replace(/\n+/g, '\n').trim());
     //clean unit for price
     data.set("price", data.get("price").slice(1));
     data.set("tax_percentage", data.get("tax_percentage").slice(0, -1));
@@ -242,6 +266,10 @@ async function sendEditData(e) {
       body: data,
     });
     let fetchStatus = featchResponse.status;
+    if(fetchStatus === 413){
+      alert(`編輯失敗,原因: 照片檔案過大`);
+      return
+    }
     let fetchData = await featchResponse.json();
     $.unblockUI();
     if (fetchStatus === 200) {
