@@ -40,7 +40,7 @@ let houseArea_container = $("#houseArea");
 
 function renderHouseData(datas) {
   datas.map((data) => {
-    var clone = $("#houseItem").clone().appendTo(houseArea_container);
+    let clone = $("#houseItem").clone().appendTo(houseArea_container);
     clone.find("img").attr("src", data.image_url);
     clone.find("img").attr("data-id", data.id);
     clone.find("a").attr("data-id", data.id);
@@ -58,14 +58,12 @@ function Logout() {
 houseArea_container.click(addToFavorite);
 
 async function addToFavorite(e) {
-  
   if (e.target.nodeName === "I") {
     if (localStorage.getItem("token") === null) {
       alert("欲收藏房源請先登入");
     } else {
       let house_id = e.target.parentElement.dataset.id;
       if (e.target.classList.contains("grey")) {
-        
         //收藏
         const fetchRes = await fetch(
           `/api/1.0/houses/likeHouse?id=${house_id}`,
@@ -74,12 +72,10 @@ async function addToFavorite(e) {
         const finalResult = await fetchRes.json();
         if (fetchRes.status === 200) {
           userFavoriteList = finalResult;
-          
         }
         e.target.classList.toggle("grey");
         e.target.classList.toggle("red");
       } else if (e.target.classList.contains("red")) {
-        
         //取消收藏
         const fetchRes = await fetch(
           `/api/1.0/houses/dislikeHouse?id=${house_id}`,
@@ -88,7 +84,6 @@ async function addToFavorite(e) {
         const finalResult = await fetchRes.json();
         if (fetchRes.status === 200) {
           userFavoriteList = finalResult;
-          
         }
         e.target.classList.toggle("grey");
         e.target.classList.toggle("red");

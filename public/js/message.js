@@ -6,11 +6,11 @@ let user_room; //存user room name的全域變數
 const socket = io({ autoConnect: false });
 let activeuser_id; //現在正在跟哪一個user聊天
 
-/////////// element need to manipulate
+//element need to manipulate
 const user_outter = $("#user_outter");
 const message_outter = $("#message_outter");
 
-/////////////log out function
+//log out function
 function Logout() {
   localStorage.removeItem("token");
   window.location.href = "/";
@@ -160,16 +160,15 @@ function renderMessage(message_list) {
 }
 
 $("button").click(sendMessage);
-// $("#msg").keypress(sendMessage);
 
 function sendMessage() {
   let content = $("#msg").val();
-  if(content === ''){
-    return
+  if (content === "") {
+    return;
   }
-  if(content.replace(/\s/g, '') === ''){
+  if (content.replace(/\s/g, "") === "") {
     $("#msg").val("");
-    return
+    return;
   }
 
   $("#msg").val("");

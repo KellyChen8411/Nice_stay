@@ -23,11 +23,9 @@ async function checkForLogin() {
     $("#logoutBtn").click(Logout);
 
     if (finalResult.role === 2) {
-      
       $("#landlordContainer").text("切換至出租模式");
     }
     if (window.location.pathname === "/") {
-      
       //update token
       localStorage.setItem("token", finalResult.new_token);
     }

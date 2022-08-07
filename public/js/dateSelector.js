@@ -8,8 +8,8 @@ $(function () {
       minDate: 0,
     })
     .on("change", function () {
-      var currentDate = from.datepicker("getDate");
-      var nextDate = new Date(currentDate.valueOf() + 1000 * 3600 * 24);
+      let currentDate = from.datepicker("getDate");
+      let nextDate = new Date(currentDate.valueOf() + 1000 * 3600 * 24);
       to.datepicker("option", "minDate", nextDate);
     })
     .on("click", function () {

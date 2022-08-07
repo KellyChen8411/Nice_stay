@@ -5,25 +5,26 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const userSignUp = async (req, res) => {
-  const { signup_name, signup_email, signup_password, signup_confirmPass } = req.body;
+  const { signup_name, signup_email, signup_password, signup_confirmPass } =
+    req.body;
   let userID;
   //validate user input
-  if(signup_name.trim() === ""){
+  if (signup_name.trim() === "") {
     const err = Error("請輸入姓名");
     err.type = "userInputM";
     throw err;
   }
-  if(signup_email.trim() === ""){
+  if (signup_email.trim() === "") {
     const err = Error("請輸入email");
     err.type = "userInputM";
     throw err;
   }
-  if(signup_password.trim() === ""){
+  if (signup_password.trim() === "") {
     const err = Error("請輸入密碼");
     err.type = "userInputM";
     throw err;
   }
-  if(signup_confirmPass.trim() === ""){
+  if (signup_confirmPass.trim() === "") {
     const err = Error("請輸入確認密碼");
     err.type = "userInputM";
     throw err;
@@ -68,12 +69,12 @@ const userSignIn = async (req, res) => {
   let userInfo;
 
   //validate user input
-  if(signin_email.trim() === ""){
+  if (signin_email.trim() === "") {
     const err = Error("請輸入email");
     err.type = "userInputM";
     throw err;
   }
-  if(signin_password.trim() === ""){
+  if (signin_password.trim() === "") {
     const err = Error("請輸入密碼");
     err.type = "userInputM";
     throw err;

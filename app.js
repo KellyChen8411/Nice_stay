@@ -109,7 +109,7 @@ io.on("connection", (socket) => {
     ]);
     let insertMsgID = insertMsg.insertId;
     //send message to talker
-    
+
     socket.to(`${talker_id}_${talker_role}`).emit("privateMessage", {
       sender_name: owner_name,
       sender_id: owner_id,
@@ -169,27 +169,24 @@ io.on("connection", (socket) => {
     sql = "UPDATE message SET status=1 WHERE id IN (?)";
     await pool.query(sql, [unreadmsg_id]);
   });
-
 });
 
 //404 page not found
-app.use(function(req, res) {
-  res.status(404).redirect('/notfound.html')
+app.use(function (req, res) {
+  res.status(404).redirect("/notfound.html");
 });
 
 app.use((error, req, res, next) => {
-  console.log("Enter express error handling Middleware");
-  console.log(error);
   if (error instanceof multer.MulterError) {
     return res.status(403).json({ error: error.message });
   }
   if (error.type === "userExist") {
     return res.status(401).json({ error: error.message });
-  }else if (error.type === "tokenExpire") {
+  } else if (error.type === "tokenExpire") {
     return res.status(401).json({ error: "請先登入" });
   } else if (error.type === "userInput") {
     return res.status(400).json({ error: error.message });
-  }else if (error.type === "userInputM") {
+  } else if (error.type === "userInputM") {
     return res.status(401).json({ error: error.message });
   } else if (error.type === "forbidden") {
     return res.status(403).json({ error: error.message });

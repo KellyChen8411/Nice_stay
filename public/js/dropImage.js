@@ -1,6 +1,6 @@
 function readURL(input, num) {
   if (input.files && input.files[0]) {
-    var reader = new FileReader();
+    let reader = new FileReader();
 
     reader.onload = function (e) {
       $(`#image-upload-wrap${num}`).hide();
@@ -55,4 +55,3 @@ $(`#image-upload-wrap2`).bind("dragover", function () {
 $(`#image-upload-wrap2`).bind("dragleave", function () {
   $(`#image-upload-wrap2`).removeClass("image-dropping");
 });
-

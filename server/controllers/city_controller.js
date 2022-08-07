@@ -8,7 +8,7 @@ const selectAllCity = async (req, res) => {
 const selectAllRegion = async (req, res) => {
   const regionDatas = await cityQuery.selectAllRegion();
   let regions = {};
-  for(item of regionDatas){
+  for (item of regionDatas) {
     regions[item.city] = item.regions;
   }
   res.json(regions);
@@ -16,5 +16,5 @@ const selectAllRegion = async (req, res) => {
 
 module.exports = {
   selectAllCity,
-  selectAllRegion
+  selectAllRegion,
 };

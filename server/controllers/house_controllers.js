@@ -24,13 +24,6 @@ const createHouse = async (req, res) => {
   // upload Image
   const [mainImgURL, sideImg1URL, sideImg2URL] =
     await util.uploadImageToS3Multi(req.files, [0, 1, 2]);
-  // const mainImgURL = await util.uploadImageToS3(req.files, "mainImg");
-  // const sideImg1URL = await util.uploadImageToS3(req.files, "sideImg1");
-  // const sideImg2URL = await util.uploadImageToS3(req.files, "sideImg2");
-  console.log("create house");
-  console.log(mainImgURL);
-  console.log(sideImg1URL);
-  console.log(sideImg2URL);
 
   houseData.image_url = mainImgURL;
   const imageData = [sideImg1URL, sideImg2URL];
@@ -152,7 +145,7 @@ const houseNearby = async (req, res) => {
     URL = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat}%2C${lon}&radius=1000&type=convenience_store&key=${process.env.GOOGLEAPI_KEY}`;
   }
 
-  var config = {
+  let config = {
     method: "get",
     url: URL,
     headers: {},
@@ -258,7 +251,7 @@ const houseHistroyData = async (req, res) => {
 };
 
 const updateHouse = async (req, res) => {
-  let houseID = req.query.id;
+  let houseID = req.params.id;
   let { deleteImg, amenity } = req.body;
   deleteImg = JSON.parse(deleteImg);
   amenity = JSON.parse(amenity);
@@ -325,7 +318,7 @@ const updateHouse = async (req, res) => {
 };
 
 const deleteHouse = async (req, res) => {
-  const houseID = req.query.id;
+  const houseID = req.params.id;
 
   const today = moment().tz("Asia/Taipei").format("YYYY-MM-DD");
   const remainBooking = await houseQuery.checkBookingForDelete(houseID, today);

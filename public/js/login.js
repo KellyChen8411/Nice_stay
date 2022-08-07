@@ -31,7 +31,7 @@ submitForm.submit(getToken);
 async function getToken(e) {
   e.preventDefault();
   let actionType = e.target.dataset.type;
-  
+
   let data = new FormData(submitForm[0]);
   let URL;
   if (actionType === "signin") {
@@ -63,10 +63,10 @@ async function getToken(e) {
 }
 
 //for demo
-if(demo === "host"){
-  $("input[name=signin_email]").val('demo_host@test.com');
-  $("input[name=signin_password]").val('123456');
-}else if(demo === "guest"){
-  $("input[name=signin_email]").val('demo_guest@test.com');
-  $("input[name=signin_password]").val('123456');
+if (demo === "host") {
+  $("input[name=signin_email]").val("demo_host@test.com");
+  $("input[name=signin_password]").val("123456");
+} else if (demo === "guest") {
+  $("input[name=signin_email]").val("demo_guest@test.com");
+  $("input[name=signin_password]").val("123456");
 }

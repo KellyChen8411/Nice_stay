@@ -17,9 +17,9 @@ function changeConfigCount(e) {
   }
 }
 
-function calculateStringLength(str){ 
-  str = str.replaceAll('\n', '');
-	return str.replace(/[^\x00-\xff]/g,"xx").length;
+function calculateStringLength(str) {
+  str = str.replaceAll("\n", "");
+  return str.replace(/[^\x00-\xff]/g, "xx").length;
 }
 
 //price area
@@ -99,7 +99,7 @@ function alertStatus() {
 let citys_list = $("#city");
 let regions_list = $("#region");
 async function fetchCityData() {
-  let cityDatas = await fetch("/api/1.0/citys/all");
+  let cityDatas = await fetch("/api/1.0/citys");
   cityDatas = await cityDatas.json();
   renderCityData(cityDatas);
   //get region data for rendering later
@@ -122,16 +122,16 @@ function renderRegionData(datas) {
 }
 fetchCityData();
 //render regions when city changed
-$("#city").change(function(e){
-  regions_list.html('');
+$("#city").change(function (e) {
+  regions_list.html("");
   let selectedIndex = parseInt($("#city").val());
-  if($("#city").val() >= 9){
-    selectedIndex --;
+  if ($("#city").val() >= 9) {
+    selectedIndex--;
   }
   let city_name = $("#city")[0].options[selectedIndex].text;
   let regions = regionDatas[city_name];
   renderRegionData(regions);
-})
+});
 
 //送出建立資料
 
@@ -141,14 +141,16 @@ submitForm.submit(createHouse);
 
 async function createHouse(e) {
   e.preventDefault();
-  let userDecision = confirm("若地址輸入不精確\n將會從您所輸入的資訊找尋大約位置\n請再次確認地址\n送出後將無法再修改地址");
-  if(!userDecision){
-    return
+  let userDecision = confirm(
+    "若地址輸入不精確\n將會從您所輸入的資訊找尋大約位置\n請再次確認地址\n送出後將無法再修改地址"
+  );
+  if (!userDecision) {
+    return;
   }
   //確認字數
-  if(calculateStringLength($("textarea").val()) > 1000){
+  if (calculateStringLength($("textarea").val()) > 1000) {
     alert("房源描述超過字數限制");
-    return
+    return;
   }
   //等待畫面
   $.blockUI({
@@ -163,18 +165,17 @@ async function createHouse(e) {
     },
   });
 
-
   let data = new FormData(submitForm[0]);
   //check facility
   data.append("amenity", JSON.stringify([...facilityList.keys()]));
   //clean white space for description
-  data.set("description", $("textarea").val().replace(/\n+/g, '\n').trim());
+  data.set("description", $("textarea").val().replace(/\n+/g, "\n").trim());
   //clean unit for price
   data.set("price", data.get("price").slice(1));
   data.set("tax_percentage", data.get("tax_percentage").slice(0, -1));
   data.set("cleanfee_percentage", data.get("cleanfee_percentage").slice(0, -1));
   //send data
-  let URL = "/api/1.0/houses/create";
+  let URL = "/api/1.0/houses";
   let token = localStorage.getItem("token");
   let headers = {
     Accept: "application/json",
@@ -184,8 +185,8 @@ async function createHouse(e) {
   //transfer address to geolocation
   //concate address
   let city_id = parseInt(data.get("city_id"));
-  if(city_id >= 9){
-    city_id --;
+  if (city_id >= 9) {
+    city_id--;
   }
   let city = $("#city")[0].options[city_id].text;
   // let address = `${city}市${data.get("region")}區${data.get("address")}`;
@@ -214,10 +215,10 @@ async function createHouse(e) {
         let fetchStatus = featchResponse.status;
         let finalResult = await featchResponse.json();
         $.unblockUI();
-        if(fetchStatus === 413){
+        if (fetchStatus === 413) {
           $.unblockUI();
           alert(`建立失敗,原因: 照片檔案過大`);
-          return
+          return;
         }
         if (fetchStatus === 200) {
           alert(`建立成功，您的房源編號是${finalResult.house_id}`);
@@ -231,7 +232,7 @@ async function createHouse(e) {
               headers,
             });
             const newtokenResult = await newTokenRes.json();
-            
+
             if (newTokenRes.status === 200) {
               localStorage.setItem("token", newtokenResult.new_token);
             }
@@ -266,10 +267,10 @@ async function sendEditData(e) {
   let lackOfUpload = false;
   e.preventDefault();
 
-   //確認字數
-   if(calculateStringLength($("textarea").val()) > 1000){
+  //確認字數
+  if (calculateStringLength($("textarea").val()) > 1000) {
     alert("房源描述超過字數限制");
-    return
+    return;
   }
 
   //確認被刪除的照片是否上傳
@@ -288,7 +289,7 @@ async function sendEditData(e) {
     data.append("deleteImg", JSON.stringify(deleteImgList));
     data.append("amenity", JSON.stringify([...facilityList.keys()]));
     //clean white space for description
-    data.set("description", $("textarea").val().replace(/\n+/g, '\n').trim());
+    data.set("description", $("textarea").val().replace(/\n+/g, "\n").trim());
     //clean unit for price
     data.set("price", data.get("price").slice(1));
     data.set("tax_percentage", data.get("tax_percentage").slice(0, -1));
@@ -310,16 +311,16 @@ async function sendEditData(e) {
       },
     });
 
-    let URL = `/api/1.0/houses/updateHouse?id=${house_id}`;
+    let URL = `/api/1.0/houses/${house_id}`;
     let featchResponse = await fetch(URL, {
       method: "PATCH",
       body: data,
     });
     let fetchStatus = featchResponse.status;
-    if(fetchStatus === 413){
+    if (fetchStatus === 413) {
       $.unblockUI();
       alert(`編輯失敗,原因: 照片檔案過大`);
-      return
+      return;
     }
     let fetchData = await featchResponse.json();
     $.unblockUI();

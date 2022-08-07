@@ -9,7 +9,7 @@ checkoutQuery.getLandlordID = async (houseID) => {
   return result[0].landlord_id;
 };
 
-async function tappayPayByPrime(prime, userInfo, booking, orderNum){
+async function tappayPayByPrime(prime, userInfo, booking, orderNum) {
   //Complete payment with Pay by Prime API
   const payURL = "https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime";
   const postData = {
@@ -34,7 +34,7 @@ async function tappayPayByPrime(prime, userInfo, booking, orderNum){
   };
   const payResult = await axios.post(payURL, postData, { headers });
 
-  return payResult
+  return payResult;
 }
 
 checkoutQuery.checkout = async (prime, userInfo, booking) => {
@@ -50,9 +50,14 @@ checkoutQuery.checkout = async (prime, userInfo, booking) => {
     );
 
     const orderNum = bookingResult.insertId;
-    
+
     //call tappay Pay by Prime API
-    const payResult = await tappayPayByPrime(prime, userInfo, booking, orderNum);
+    const payResult = await tappayPayByPrime(
+      prime,
+      userInfo,
+      booking,
+      orderNum
+    );
 
     //check payment result
     if (payResult.data.status === 0) {
@@ -70,18 +75,17 @@ checkoutQuery.checkout = async (prime, userInfo, booking) => {
       await conn.query("COMMIT");
       return { bookingInfo: booking, orderNum, renterInfo };
     }
-    
+
     const err = Error("結帳失敗");
     err.type = "paymentFail";
     throw err;
   } catch (error) {
-    console.log('checkout should roll back');
+    console.log("checkout should roll back");
     await conn.query("ROLLBACK");
     throw error;
   } finally {
     await conn.release();
   }
-}
-
+};
 
 module.exports = checkoutQuery;

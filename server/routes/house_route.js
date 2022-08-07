@@ -30,7 +30,7 @@ const {
   checkBooking,
 } = require("../controllers/house_controllers");
 
-router.route("/houses/create").post(
+router.route("/houses").post(
   util.checkLoginMiddleware,
   upload.fields([
     { name: "mainImg", maxCount: 1 },
@@ -74,13 +74,11 @@ router.route("/houses/create").post(
   util.wrapAsync(createHouse)
 );
 
-router.route("/houses/all").get(util.wrapAsync(selectAllHouse));
+router.route("/houses").get(util.wrapAsync(selectAllHouse));
 
 router
   .route("/houses/search")
   .post(upload.array(), util.wrapAsync(houseSearch));
-
-router.route("/houses/detail/:id").get(util.wrapAsync(houseDatail));
 
 router.route("/houses/nearby").get(util.wrapAsync(houseNearby));
 
@@ -104,7 +102,7 @@ router
   .route("/houses/houseHistroyData")
   .get(util.checkLoginMiddleware, util.wrapAsync(houseHistroyData));
 
-router.route("/houses/updateHouse").patch(
+router.route("/houses/:id").patch(
   upload.fields([
     { name: "mainImg", maxCount: 1 },
     { name: "sideImg1", maxCount: 1 },
@@ -113,7 +111,7 @@ router.route("/houses/updateHouse").patch(
   util.wrapAsync(updateHouse)
 );
 
-router.route("/houses/deleteHouse").delete(util.wrapAsync(deleteHouse));
+router.route("/houses/:id").delete(util.wrapAsync(deleteHouse));
 
 router
   .route("/houses/likeHouse")
@@ -134,5 +132,7 @@ router
 router.route("/houses/bookedDate").get(util.wrapAsync(houseBookedDate));
 
 router.route("/houses/checkBooking").get(util.wrapAsync(checkBooking));
+
+router.route("/houses/:id").get(util.wrapAsync(houseDatail));
 
 module.exports = router;

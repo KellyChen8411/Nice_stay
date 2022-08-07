@@ -3,7 +3,6 @@ const checkoutQuery = require("../models/checkout_model");
 const util = require("../../util/util");
 
 const checkout = async (req, res) => {
-
   const userInfo = req.user;
   const { prime } = req.body;
   const {

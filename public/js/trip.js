@@ -234,8 +234,6 @@ async function buttonAction(e) {
       $("#review_house").text(houseInfo);
       $("#review_landlord").text(landlordInfo);
       modal.style.display = "block";
-
-
     } else if (buttonType === "重新預定") {
       window.location.href = `/detail.html?id=${house_id}`;
     } else if (buttonType === "連絡房東") {
@@ -285,7 +283,11 @@ async function sendReview(e) {
 
   let landlord_rate = landLordRating.getRating();
   let house_rate = houseRating.getRating();
-  let review_content = $("textarea").val().replace(/\n+/g, '\n').replaceAll('\n', ' ').trim();
+  let review_content = $("textarea")
+    .val()
+    .replace(/\n+/g, "\n")
+    .replaceAll("\n", " ")
+    .trim();
   if (landlord_rate === null || house_rate === null) {
     alert("請填寫完整!");
   } else if (review_content.length > 100) {

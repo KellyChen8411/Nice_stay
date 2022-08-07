@@ -9,7 +9,7 @@ let detailSearchFormData;
 let houseArea_container = $("#houseArea");
 
 async function fetchHouseData() {
-  let houseDatas = await fetch("/api/1.0/houses/all?paging=0");
+  let houseDatas = await fetch("/api/1.0/houses?paging=0");
   houseDatas = await houseDatas.json();
   renderHouseData(houseDatas.data);
 
@@ -57,7 +57,7 @@ async function changePage(e) {
     // let URL;
     let houseDatas;
     if (selectType === "initial") {
-      houseDatas = await fetch(`/api/1.0/houses/all?paging=${page}`);
+      houseDatas = await fetch(`/api/1.0/houses?paging=${page}`);
     } else if (selectType === "mainSearch") {
       let searchURL = `/api/1.0/houses/search?paging=${page}`;
       const req = new Request(searchURL, {
@@ -103,10 +103,10 @@ async function changePage(e) {
 }
 
 //render city
-var citys_list = $("#area");
+let citys_list = $("#area");
 
 async function fetchCityData() {
-  let cityDatas = await fetch("/api/1.0/citys/all");
+  let cityDatas = await fetch("/api/1.0/citys");
   cityDatas = await cityDatas.json();
   renderCityData(cityDatas);
 }
@@ -114,7 +114,7 @@ async function fetchCityData() {
 //render amenity
 let infer_list = $("#infer_list");
 async function fetchAmenityData() {
-  let amenityDatas = await fetch("/api/1.0/amenities/all");
+  let amenityDatas = await fetch("/api/1.0/amenities");
   amenityDatas = await amenityDatas.json();
   renderAmenityData(amenityDatas);
 }
@@ -127,7 +127,7 @@ fetchAmenityData();
 
 function renderHouseData(datas) {
   datas.map((data) => {
-    var clone = $("#houseItem").clone().appendTo(houseArea_container);
+    let clone = $("#houseItem").clone().appendTo(houseArea_container);
     clone.find("img").attr("src", data.image_url);
     clone.find("img").attr("data-id", data.id);
     clone.find("a").attr("data-id", data.id);

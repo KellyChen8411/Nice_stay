@@ -13,18 +13,18 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-      
+
       - name: check docker version
         run: docker version
-      
+
       - name: pull mysql docker image
         run: docker pull mysql:8
-      
+
       - name: docker run mysql
         run: |
           docker run --name mysql-con -p 3306:3306 -d -e MYSQL_ROOT_PASSWORD=${{secrets.DB_PASSWORD_TEST_NEW}} mysql:8
           docker ps
-      
+
       - name: Sleep for 20 seconds
         run: sleep 20s
         shell: bash
@@ -45,4 +45,3 @@ jobs:
 
       - name: "Run Test"
         run: NODE_ENV=test API_VERSION=1.0 DB_HOST_TEST_NEW=${{secrets.DB_HOST_TEST_NEW}} DB_USER_TEST_NEW=${{secrets.DB_USER_TEST_NEW}} DB_PASSWORD_TEST_NEW=${{secrets.DB_PASSWORD_TEST_NEW}} DB_DATABASE_TEST_NEW=${{secrets.DB_DATABASE_TEST_NEW}} CLOUDFRONT_DOMAIN=${{secrets.CLOUDFRONT_DOMAIN}} mocha --timeout 10000 --exit
-

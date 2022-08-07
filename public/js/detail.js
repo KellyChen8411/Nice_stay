@@ -1,5 +1,5 @@
 let map;
-var markers = []; //marker array
+let markers = []; //marker array
 let house_lat;
 let house_lon;
 let roomfee;
@@ -89,7 +89,7 @@ function computeRoomPrice(startDate, endDate) {
 }
 
 async function rederData() {
-  let detailData = await fetch(`/api/1.0/houses/detail/${house_id}`);
+  let detailData = await fetch(`/api/1.0/houses/${house_id}`);
   detailData = await detailData.json();
   houseData = detailData.house;
   let amenityData = detailData.amenity;
@@ -300,13 +300,13 @@ async function getNearbyInfo(e) {
     //create info window
     let infoWindow = new google.maps.InfoWindow();
 
-    for (var i = 0; i < nearbyLocations.length; i++) {
-      var position = new google.maps.LatLng(
+    for (let i = 0; i < nearbyLocations.length; i++) {
+      let position = new google.maps.LatLng(
         nearbyLocations[i].lat,
         nearbyLocations[i].lon
       );
 
-      var marker = new google.maps.Marker({
+      let marker = new google.maps.Marker({
         position: position,
         map: map,
       });
@@ -413,13 +413,13 @@ async function datepicker_booked() {
         numberOfMonths: 1,
         minDate: 0,
         beforeShowDay: function (date) {
-          var dateString = jQuery.datepicker.formatDate("yy-mm-dd", date);
+          let dateString = jQuery.datepicker.formatDate("yy-mm-dd", date);
           return [dateRange.indexOf(dateString) == -1];
         },
       })
       .on("change", function () {
-        var currentDate = from.datepicker("getDate");
-        var nextDate = new Date(currentDate.valueOf() + 1000 * 3600 * 24);
+        let currentDate = from.datepicker("getDate");
+        let nextDate = new Date(currentDate.valueOf() + 1000 * 3600 * 24);
         to.datepicker("option", "minDate", nextDate);
       })
       .on("click", function () {
@@ -432,7 +432,7 @@ async function datepicker_booked() {
         numberOfMonths: 1,
         minDate: "+1d",
         beforeShowDay: function (date) {
-          var dateString = jQuery.datepicker.formatDate("yy-mm-dd", date);
+          let dateString = jQuery.datepicker.formatDate("yy-mm-dd", date);
           return [dateRange.indexOf(dateString) == -1];
         },
       }));

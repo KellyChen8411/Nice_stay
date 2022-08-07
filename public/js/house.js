@@ -52,13 +52,13 @@ function renderData(house) {
   let clone = $("#trip_con").clone().appendTo(trip_inner);
   clone.find("img").attr("src", house.image_url);
   clone.find("h4").text(`${house.city_name} ${house.title}`);
-  
+
   clone
     .find("p:nth-child(2)")
     .text(
       `${house.people_count}位.${house.room_count}間臥室.${house.bed_count}張床.${house.bathroom_count}間衛浴`
     );
-  
+
   clone.find("p:nth-child(3)").text(`建立時間: ${create_time}`);
   clone.find("p:nth-child(4)").text(`最近更新時間: ${update_time}`);
   clone.find("button").attr("data-houseid", house.id);
@@ -104,10 +104,9 @@ async function buttonAction(e) {
             },
           });
 
-          const fetchRes = await fetch(
-            `/api/1.0/houses/deleteHouse?id=${house_id}`,
-            { method: "DELETE" }
-          );
+          const fetchRes = await fetch(`/api/1.0/houses/${house_id}`, {
+            method: "DELETE",
+          });
 
           const fetchStatus = fetchRes.status;
           const finalResult = await fetchRes.json();

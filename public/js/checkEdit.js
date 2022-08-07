@@ -102,7 +102,7 @@ async function getHistroyData(house_id) {
 
     //image
     let imageURL_list = [house.image_url, ...house.sideimage_list];
-    
+
     for (let i = 0; i < 3; i++) {
       $(`#image-upload-wrap${i}`).hide();
 
