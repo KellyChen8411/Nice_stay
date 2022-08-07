@@ -12,28 +12,28 @@ describe("delete house", () => {
   });
 
   it("house still has booking (date: checkin date is today)", async () => {
-    const res = await requester.delete("/api/1.0/houses/deleteHouse?id=16");
+    const res = await requester.delete("/api/1.0/houses/16");
 
     expect(res.statusCode).to.equal(500);
     expect(res.body.status).to.equal("still has booking");
   });
 
   it("house still has booking (date: booked period across today)", async () => {
-    const res = await requester.delete("/api/1.0/houses/deleteHouse?id=17");
+    const res = await requester.delete("/api/1.0/houses/17");
 
     expect(res.statusCode).to.equal(500);
     expect(res.body.status).to.equal("still has booking");
   });
 
   it("house still has booking (date: booked period in the future)", async () => {
-    const res = await requester.delete("/api/1.0/houses/deleteHouse?id=21");
+    const res = await requester.delete("/api/1.0/houses/21");
 
     expect(res.statusCode).to.equal(500);
     expect(res.body.status).to.equal("still has booking");
   });
 
   it("house does not have any booking", async () => {
-    const res = await requester.delete("/api/1.0/houses/deleteHouse?id=18");
+    const res = await requester.delete("/api/1.0/houses/18");
 
     sinon.assert.callCount(stubDelete, 1);
 
@@ -58,7 +58,7 @@ describe("delete house", () => {
   });
 
   it("booking for house all ended (date: booked period before today)", async () => {
-    const res = await requester.delete("/api/1.0/houses/deleteHouse?id=19");
+    const res = await requester.delete("/api/1.0/houses/19");
 
     sinon.assert.callCount(stubDelete, 2);
 
@@ -91,7 +91,7 @@ describe("delete house", () => {
   });
 
   it("booking for house all ended (date: checkout date equal today)", async () => {
-    const res = await requester.delete("/api/1.0/houses/deleteHouse?id=20");
+    const res = await requester.delete("/api/1.0/houses/20");
 
     sinon.assert.callCount(stubDelete, 3);
 

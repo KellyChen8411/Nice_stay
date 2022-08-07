@@ -3,7 +3,7 @@ const { expect, requester } = require("./setup");
 
 describe("houseIndexPage", () => {
   it("get house in index page", async () => {
-    let houseData = await requester.get("/api/1.0/houses/all?paging=0");
+    let houseData = await requester.get("/api/1.0/houses?paging=0");
 
     houseData = houseData.body.data;
 

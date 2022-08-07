@@ -46,7 +46,7 @@ describe("update house", () => {
 
   it("Update 3 images", async () => {
     const res = await requester
-      .patch("/api/1.0/houses/updateHouse?id=15")
+      .patch("/api/1.0/houses/15")
       .send({ deleteImg: threeImagesData, amenity: amenityData });
 
     //check testDoubles is called
@@ -84,7 +84,7 @@ describe("update house", () => {
 
   it("Upload main image", async () => {
     const res = await requester
-      .patch("/api/1.0/houses/updateHouse?id=15")
+      .patch("/api/1.0/houses/15")
       .send({ deleteImg: mainImagesData, amenity: amenityData });
 
     //check testDoubles is called
@@ -113,7 +113,7 @@ describe("update house", () => {
 
   it("Upload side image", async () => {
     const res = await requester
-      .patch("/api/1.0/houses/updateHouse?id=15")
+      .patch("/api/1.0/houses/15")
       .send({ deleteImg: sideImagesData, amenity: amenityData });
 
     //check testDoubles is called
@@ -142,7 +142,7 @@ describe("update house", () => {
 
   it("No image uploaded", async () => {
     const res = await requester
-      .patch("/api/1.0/houses/updateHouse?id=15")
+      .patch("/api/1.0/houses/15")
       .send({ deleteImg: "{}", amenity: amenityData });
 
     //check testDoubles is not called
@@ -174,7 +174,7 @@ describe("update house", () => {
     errorS3.type = "S3error";
     stubUpload.throws(errorS3);
     const res = await requester
-      .patch("/api/1.0/houses/updateHouse?id=15")
+      .patch("/api/1.0/houses/15")
       .send({ deleteImg: threeImagesData, amenity: amenityData });
 
     //check testDoubles is not called
